@@ -1,0 +1,10 @@
+# ignore all objects, compiled files
+*.o
+*_test
+
+# ignore all libraries
+*.so
+*.a
+
+# doxygen docs
+doc/
