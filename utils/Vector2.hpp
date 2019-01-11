@@ -1,5 +1,6 @@
 /**
   *   @file Vector2.hpp
+  *   @author Lauri Westerholm
   *   @brief Vector2 Header
   *   @details Contains class for representing 2D-vectors
   */
@@ -25,10 +26,35 @@ class Vector2
     Vector2(T x, T y);
 
     /**
+      *   @brief Empty constructor
+      *   @remark sets x and y to 0
+      */
+    Vector2();
+
+    /**
       *   @brief Copy constructor
       *   @param vector2 Vector2 instance to be copied
       */
     Vector2(const Vector2<T>& vector2);
+
+    /**
+      *   @brief Get x value
+      *   @return x
+      */
+    T getX();
+
+    /**
+      *   @brief Get y value
+      *   @return y
+      */
+    T getY();
+
+    /**
+      *   @brief Update x and y values
+      *   @param x new x value
+      *   @param y new y value
+      */
+    void update(T x, T y);
 
     /**
       *   @brief Assignment operator
@@ -37,16 +63,33 @@ class Vector2
     Vector2<T>& operator=(const Vector2<T>& vector2);
 
     /**
-      *   @brief Get x value
-      *   @return x
+      *   @brief Equality implementation
+      *   @param vector Vector2 which is used as comparison
+      *   @return true if x and y equal, otherwise false
       */
-    inline T getX();
+    bool operator==(const Vector2& vector);
+
+    Vector2<T>& operator*=(T mult);
 
     /**
-      *   @brief Get y value
-      *   @return y
+      *   @brief multiplication overload
+      *   @param vect1 the first passed Vector2
+      *   @param vect2 the second passed Vector2
+      *   @return Vector2 which is original vectors multiplied
       */
-    inline T getY();
+    friend Vector2<T> operator*(const Vector2<T>& vect1, const Vector2<T>& vect2) {
+      return Vector2<T>(vect1.x * vect2.x, vect1.y * vect2.y);
+    }
+
+    /**
+      *   @brief addition overload
+      *   @param vect1 the first passed Vector2
+      *   @param vect2 the second passed Vector2
+      *   @return Vector2 which is sum of the original vectors
+      */
+    friend Vector2<T> operator+(const Vector2<T>& vect1, const Vector2<T>& vect2) {
+      return Vector2<T>(vect1.x + vect2.x, vect1.y + vect2.y);
+    }
 
     /**
       *   @brief <<-operator overload
@@ -64,7 +107,7 @@ class Vector2
     T y;
 };
 
-/*  Define shorter keyword */
+/*  Define shorter keywords */
 #define Vector2f Vector2<float> /**< Macro for float Vector2 */
 #define Vector2i Vector2<int> /**< Macro for int Vector2 */
 #define Vector2d Vector2<double> /**< Macro for double Vector2 */
