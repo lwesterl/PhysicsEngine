@@ -10,14 +10,14 @@ OBJECTS=$(SRC:.cpp=.o)
 OBJ=$(notdir $(OBJECTS))
 
 
-all: $(OBJECTS) $(EXE)
+all:	$(EXE)
 
 #compile objects
 %.o:	%.cpp
 	$(CC) $(CFLAGS) -c $< -o $(notdir $@)
 
 #compile all tests
-%.exe:	%.cpp
+%.exe:	%.cpp $(OBJECTS)
 	$(CC) $(CFLAGS) ${OBJ} $< -o $@
 
 clean:
