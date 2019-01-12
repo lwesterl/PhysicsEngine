@@ -85,6 +85,12 @@ int main() {
   assert(test13 > test11 && test13 > test12);
   assert(test12 < test13);
   assert(!(test12 < test11));
+  pe::Vector2u test14(20, 10);
+  assert(test11 >= test14);
+  pe::Vector2u test15(3, 10);
+  assert(test15 <= test14);
+  pe::Vector2u test16 = test15;
+  assert(test16 >= test15 && test16 <= test15);
   std::cout << "Test succesful" << std::endl;
 
   std::cout << "All tests passed" << std::endl;
