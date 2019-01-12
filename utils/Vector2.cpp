@@ -43,11 +43,6 @@ namespace pe {
   }
 
   template<typename T>
-  bool Vector2<T>::operator==(const Vector2& vector) {
-    return ( (x == vector.x) && (y == vector.y) );
-  }
-
-  template<typename T>
   Vector2<T>& Vector2<T>::operator*=(T mult) {
     this->x *= mult;
     this->y *= mult;

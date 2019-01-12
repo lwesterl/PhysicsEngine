@@ -69,13 +69,41 @@ namespace pe {
       Vector2<T>& operator=(const Vector2<T>& vector2);
 
       /**
+        *   @brief Multiplication by number
+        *   @param mult multiplier
+        *   @return updated Vector2 refence
+        */
+      Vector2<T>& operator*=(T mult);
+
+      /**
         *   @brief Equality implementation
-        *   @param vector Vector2 which is used as comparison
+        *   @param vect1 the first passed Vector2
+        *   @param vect2 the second passed Vector2
         *   @return true if x and y equal, otherwise false
         */
-      bool operator==(const Vector2& vector);
+      friend bool operator==(const Vector2<T>& vect1, const Vector2<T>& vect2) {
+        return ( (vect1.x == vect2.x) && (vect1.y == vect2.y) );
+      }
 
-      Vector2<T>& operator*=(T mult);
+      /**
+        *   @brief Greater than overload
+        *   @param vect1 the first passed Vector2
+        *   @param vect2 the second passed Vector2
+        *   @return true if vect1 x and y are greater than those of vect2
+        */
+      friend bool operator>(const Vector2<T>& vect1, const Vector2<T>& vect2) {
+        return ( (vect1.x > vect2.x) && (vect1.y > vect2.y) );
+      }
+
+      /**
+        *   @brief Less than overload
+        *   @param vect1 the first passed Vector2
+        *   @param vect2 the second passed Vector2
+        *   @return true if vect1 x and y are less than those of vect2
+        */
+      friend bool operator<(const Vector2<T>& vect1, const Vector2<T>& vect2) {
+        return ( (vect1.x < vect2.x) && (vect1.y < vect2.y) );
+      }
 
       /**
         *   @brief multiplication overload
