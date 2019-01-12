@@ -3,9 +3,10 @@
 CC=g++ -std=c++17
 CFLAGS=-Wall -pedantic -Wextra -g
 UTILS=../utils/
+SOURCE=../src/
 TESTS=$(wildcard *_test.cpp)
 EXE=$(TESTS:.cpp=.exe)
-SRC=$(wildcard $(UTILS)*.cpp)
+SRC=$(wildcard $(UTILS)*.cpp $(SOURCE)*.cpp)
 OBJECTS=$(SRC:.cpp=.o)
 OBJ=$(notdir $(OBJECTS))
 
