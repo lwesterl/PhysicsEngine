@@ -106,6 +106,26 @@ namespace pe {
       }
 
       /**
+        *   @brief Greater than or equal to overload
+        *   @param vect1 the first passed Vector2
+        *   @param vect2 the second passed Vector2
+        *   @return true if vect1 x and y are greater or equal than those of vect2
+        */
+      friend bool operator>=(const Vector2<T>& vect1, const Vector2<T>& vect2) {
+        return ( (vect1.x >= vect2.x) && (vect1.y >= vect2.y) );
+      }
+
+      /**
+        *   @brief Less than or equal to overload
+        *   @param vect1 the first passed Vector2
+        *   @param vect2 the second passed Vector2
+        *   @return true if vect1 x and y are less than or equal to those of vect2
+        */
+      friend bool operator<=(const Vector2<T>& vect1, const Vector2<T>& vect2) {
+        return ( (vect1.x <= vect2.x) && (vect1.y <= vect2.y) );
+      }
+
+      /**
         *   @brief multiplication overload
         *   @param vect1 the first passed Vector2
         *   @param vect2 the second passed Vector2
