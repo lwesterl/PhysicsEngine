@@ -8,7 +8,7 @@
 
 #include "../utils/Vector2.hpp"
 #include <iostream>
-#include <assert.h>
+#include <cassert>
 
 /**
   *   @brief Test main
@@ -76,6 +76,16 @@ int main() {
   assert(test9.getX() == 80200 && test9.getY() == 60400);
   assert(test10.getX() == 10 && test10.getY() == 10);
   std::cout << "Test successful" << std::endl;
+
+  // greater than and smaller than operator tests
+  std::cout << std::endl << "Greater and smaller than tests" << std::endl;
+  pe::Vector2u test11(20, 40);
+  pe::Vector2u test12(18, 41);
+  pe::Vector2u test13(130, 45);
+  assert(test13 > test11 && test13 > test12);
+  assert(test12 < test13);
+  assert(!(test12 < test11));
+  std::cout << "Test succesful" << std::endl;
 
   std::cout << "All tests passed" << std::endl;
 
