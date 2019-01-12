@@ -63,18 +63,28 @@ namespace pe {
           */
         const std::deque<Vector2f>& getFrame();
 
+        /**
+          *   @brief Check whether a point is inside shape or not
+          *   @param point to be checked
+          *   @return true if point is inside, otherwise false
+          */
+        bool isInside(Vector2f& point);
+
 
       private:
 
         /**
           *   @brief Calculate polygon center of mass
-          *   @details assigns center of mass to mass_center
+          *   @details assigns center of mass to mass_center. Uses basic formula which defines
+          *   centroid for polygon shapes
           */
         void CenterMass();
 
 
         Vector2f mass_center; /**< This should be object mass center point */
         std::deque<Vector2f> frame; /**< Object frame, polygon of connected Vector2f */
+        Vector2f* max = nullptr; /**< Should point to the biggest entry in frame */
+        Vector2f* min = nullptr; /**< Should point to the smallest entry in frame */
 
     };
 }// end of namespace pe

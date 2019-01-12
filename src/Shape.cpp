@@ -10,7 +10,7 @@
 namespace pe {
 
   // Empty constructor
-  Shape::Shape(){}
+  Shape::Shape() {}
 
   // Box shape constructor
   Shape::Shape(Vector2f left_upper, float width, float height) {
@@ -18,6 +18,9 @@ namespace pe {
     frame.push_back( Vector2f(left_upper.getX() + width, left_upper.getY()) );
     frame.push_back( Vector2f(left_upper.getX() + width, left_upper.getY() + height) );
     frame.push_back( Vector2f(left_upper.getX(), left_upper.getY() + height) );
+    // assign min and max vectors
+    *min = frame[0];
+    *max = frame[3];
     CenterMass();
   }
 
@@ -49,6 +52,16 @@ namespace pe {
     return frame;
   }
 
+  // Check if point is inside Shape
+  bool Shape::isInside(Vector2f& point) {
+    // first do rough and quick check
+    if (max == nullptr || min == nullptr) return false;
+    if (point > *max || point < *min) return false;
+    // now point can be inside or outside Shape
+
+
+  }
+
   // Center of polygon mass
   void Shape::CenterMass() {
     float central_x = 0.f;
@@ -56,12 +69,19 @@ namespace pe {
     float A = 0.f;
     if (frame.size() > 2) {
       float temp = 0;
-      for (unsigned i = 0; i < frame.size() - 1; i++) {
-        temp = frame[i].getX() * frame[i + 1].getY() - frame[i + 1].getX() - frame[i].getY();
+      unsigned i = 0;
+      for (; i < frame.size() - 1; i++) {
+        temp = frame[i].getX() * frame[i + 1].getY() - frame[i + 1].getX() * frame[i].getY();
         A += temp;
         central_x += temp * (frame[i].getX() + frame[i + 1].getX());
         central_y += temp * (frame[i].getY() + frame[i + 1].getY());
       }
+      // add the final values to make the polygon complete
+      temp = frame[i].getX() * frame[0].getY() - frame[0].getX() * frame[i].getY();
+      A += temp;
+      central_x += temp * (frame[i].getX() + frame[0].getX());
+      central_y += temp * (frame[i].getY() + frame[0].getY());
+
       A *= 0.5;
       // use area to determine correct center of mass
       if (A) {
