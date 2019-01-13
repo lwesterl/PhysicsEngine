@@ -93,6 +93,17 @@ int main() {
   assert(test16 >= test15 && test16 <= test15);
   std::cout << "Test succesful" << std::endl;
 
+  // dot product test
+  std::cout << std::endl << "dotProduct tests" << std::endl;
+  pe::Vector2i test17(10, 10);
+  pe::Vector2i test18(2, 3);
+  assert(test17.dotProduct(test18) == 50 && 50 == test18.dotProduct(test17));
+  pe::Vector2f test19(25.f, 5.f);
+  pe::Vector2f test20(4.f, -8.f);
+  assert(dotProduct(test19, test20) == test19.dotProduct(test20));
+  std::cout << dotProduct(test19, test20) << " == 60" << std::endl;
+  std::cout << "Test succesful" << std::endl;
+
   std::cout << "All tests passed" << std::endl;
 
   return 0;
