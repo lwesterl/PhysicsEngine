@@ -13,14 +13,17 @@ namespace pe {
   Shape::Shape() {}
 
   // Box shape constructor
-  Shape::Shape(Vector2f left_upper, float width, float height) {
-    frame.push_back(left_upper);
-    frame.push_back( Vector2f(left_upper.getX() + width, left_upper.getY()) );
-    frame.push_back( Vector2f(left_upper.getX() + width, left_upper.getY() + height) );
-    frame.push_back( Vector2f(left_upper.getX(), left_upper.getY() + height) );
+  Shape::Shape(float width, float height) {
+    width = std::abs(width);
+    height = std::abs(height);
+    frame.push_back( Vector2f(0.f, 0.f) );
+    frame.push_back( Vector2f(width, 0.f) );
+    frame.push_back( Vector2f(width, height) );
+    frame.push_back( Vector2f(0.f, height) );
+    frame.push_back( Vector2f(0.f, 0.f) ); // now the box is closed
     // assign min and max vectors
-    *min = frame[0];
-    *max = frame[3];
+    min = &frame[0];
+    max = &frame[2];
     CenterMass();
   }
 
@@ -29,6 +32,7 @@ namespace pe {
     for (Vector2f item : shape.frame) {
       frame.push_back(item);
     }
+    FindMinMax();
     CenterMass();
   }
 
@@ -38,6 +42,7 @@ namespace pe {
     for (Vector2f item : shape.frame) {
       frame.push_back(item);
     }
+    FindMinMax();
     CenterMass();
     return *this;
   }
@@ -52,14 +57,36 @@ namespace pe {
     return frame;
   }
 
-  // Check if point is inside Shape
-  bool Shape::isInside(Vector2f& point) {
-    // first do rough and quick check
-    if (max == nullptr || min == nullptr) return false;
-    if (point > *max || point < *min) return false;
-    // now point can be inside or outside Shape
+  // Get min
+  Vector2f Shape::getMin() {
+    Vector2f vect;
+    if (min != nullptr) {
+      vect = *min;
+    }
+    return vect;
+  }
 
+  // Get max
+  Vector2f Shape::getMax() {
+    Vector2f vect;
+    if (max != nullptr) {
+      vect = *max;
+    }
+    return vect;
+  }
 
+  void Shape::FindMinMax() {
+    min = nullptr;
+    max = nullptr;
+    if (frame.size()) {
+      min = &frame[0];
+      max = &frame[0];
+
+      for (unsigned i = 1; i < frame.size(); i++) {
+        if (frame[i] <= *min) min = &frame[i];
+        if (frame[i] >= *max) max = &frame[i];
+      }
+    }
   }
 
   // Center of polygon mass
@@ -67,7 +94,7 @@ namespace pe {
     float central_x = 0.f;
     float central_y = 0.f;
     float A = 0.f;
-    if (frame.size() > 2) {
+    if (frame.size() > 3) {
       float temp = 0;
       unsigned i = 0;
       for (; i < frame.size() - 1; i++) {
@@ -76,11 +103,6 @@ namespace pe {
         central_x += temp * (frame[i].getX() + frame[i + 1].getX());
         central_y += temp * (frame[i].getY() + frame[i + 1].getY());
       }
-      // add the final values to make the polygon complete
-      temp = frame[i].getX() * frame[0].getY() - frame[0].getX() * frame[i].getY();
-      A += temp;
-      central_x += temp * (frame[i].getX() + frame[0].getX());
-      central_y += temp * (frame[i].getY() + frame[0].getY());
 
       A *= 0.5;
       // use area to determine correct center of mass
@@ -95,7 +117,7 @@ namespace pe {
       }
 
     }
-    else if (frame.size() == 2) {
+    else if (frame.size() == 3) {
       // line shape
       central_x = (frame[0].getX() + frame[1].getX()) / 2.f;
       central_y = (frame[0].getY() + frame[1].getY()) / 2.f;

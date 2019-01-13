@@ -9,6 +9,7 @@
 
 #include "../utils/Vector2.hpp"
 #include <deque>
+#include <cmath>
 
 /**
   *   @namespace pe
@@ -35,8 +36,9 @@ namespace pe {
           *   @param left_upper position of the box left upper corner
           *   @param width box width
           *   @param height box height
+          *   @remark width and height should be > 0 (abs is taken)
           */
-        Shape(Vector2f left_upper, float width, float height);
+        Shape(float width, float height);
 
         /**
           *   @brief Copy constructor
@@ -64,14 +66,27 @@ namespace pe {
         const std::deque<Vector2f>& getFrame();
 
         /**
-          *   @brief Check whether a point is inside shape or not
-          *   @param point to be checked
-          *   @return true if point is inside, otherwise false
+          *   @brief Get min
+          *   @return Vector2f matching min
+          *   @details Returns an empty pe::Vector2f if min is nullptr
           */
-        bool isInside(Vector2f& point);
+        Vector2f getMin();
+
+        /**
+          *   @brief Get max
+          *   @return Vector2f matching max
+          *   @details Returns an empty pe::Vector2f if max is nullptr
+          */
+        Vector2f getMax();
 
 
       private:
+
+        /**
+          *   @brief Search through frame to find min and max Vector2fs
+          *   @details Sets pointer to correct frame indexes
+          */
+        void FindMinMax();
 
         /**
           *   @brief Calculate polygon center of mass
