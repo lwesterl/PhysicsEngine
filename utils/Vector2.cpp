@@ -36,6 +36,11 @@ namespace pe {
   }
 
   template<typename T>
+  float Vector2<T>::dotProduct(const Vector2<T>& vector) {
+    return x * vector.x + y * vector.y;
+  }
+
+  template<typename T>
   Vector2<T>& Vector2<T>::operator=(const Vector2<T>& vector2) {
     this->x = vector2.x;
     this->y = vector2.y;

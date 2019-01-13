@@ -63,6 +63,14 @@ namespace pe {
       void update(T x, T y);
 
       /**
+        *   @brief Dot product for Vector2
+        *   @param vector another Vector2 in relation dot product is calculated
+        *   @return dot product of the vectors
+        *   @remark dotProduct also available as external function
+        */
+      float dotProduct(const Vector2<T>& vector);
+
+      /**
         *   @brief Assignment operator
         *   @param vector2 Reference instance
         */
@@ -153,6 +161,17 @@ namespace pe {
       friend std::ostream& operator<<(std::ostream &os, const Vector2<T> &vector2) {
         os << "X: " << vector2.x << ", Y: " << vector2.y << std::endl;
         return os;
+      }
+
+      /**
+        *   @brief Function implementation for dotproduct
+        *   @param vect1 1st Vector2
+        *   @param vect2 2nd Vector2
+        *   @return dot product of the vectors
+        *   @remark dotProduct also available as member method
+        */
+      friend float dotProduct(const Vector2<T>& vect1, const Vector2<T>& vect2) {
+        return vect1.x * vect2.x + vect1.y * vect2.y;
       }
 
 
