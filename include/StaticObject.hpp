@@ -21,11 +21,18 @@ namespace pe {
   class StaticObject: public PhysicsObject
   {
     public:
+
+      /**
+        *   @brief Empty constructor
+        */
+        StaticObject();
+
       /**
         *   @brief Constructor for StaticObject
         *   @param shape Shape which matches to the StaticObject
         */
+
       StaticObject(Shape *shape);
-    private:
+
   };
 }// enf of namespace pe

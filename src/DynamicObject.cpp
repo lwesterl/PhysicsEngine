@@ -9,6 +9,9 @@
 
 namespace pe {
 
+  // Empty constructor
+  DynamicObject::DynamicObject(): PhysicsObject() {}
+
   // Constructor
   DynamicObject::DynamicObject(Shape *shape, float density):
   PhysicsObject(shape, density, false, ObjectType::DynamicObject) {}

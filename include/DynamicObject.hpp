@@ -24,10 +24,15 @@ namespace pe {
       public:
 
         /**
+          *   @brief Empty constructor
+          */
+        DynamicObject();
+
+        /**
           *   @brief Constructor for DynamicOject
           *   @param shape Shape which matches to the DynamicOject
           *   @param density 2D density of the object
-          */   
+          */
         DynamicObject(Shape *shape, float density);
 
       private:
