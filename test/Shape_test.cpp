@@ -48,6 +48,13 @@ int main() {
   assert(test2.getMax() == pe::Vector2f(100.f, 100.f));
   std::cout << "Test succesful" << std::endl;
 
+  std::cout << std::endl << "getArea test" << std::endl;
+  pe::Shape test3;
+  assert(test3.getArea() == 0.f);
+  pe::Shape test4(30.f, 10.f);
+  assert(test4.getArea() == 300.f);
+  std::cout << "Test succesful" << std::endl;
+
   std::cout << std::endl << "All test succesfully completed" << std::endl;
 
   return 0;
