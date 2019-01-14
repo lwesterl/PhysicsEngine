@@ -35,13 +35,14 @@ namespace pe {
           */
         PhysicsProperties(float density, float area, bool static_object = false);
 
-        Vector2f velocity; // velocity (x, y)
-        Vector2f acceloration; // acceloration (x, y)
-        Vector2f force; // force (x, y)
-        Vector2f position; // this should be same as the center of mass for the Shape
-        float density;
-        float elasticity;
-        float inverse_mass;
+        Vector2f velocity; /**< Velocity (x, y) */
+        Vector2f acceloration; /**< Acceloration (x, y) */
+        Vector2f force; /**< Force (x, y) */
+        Vector2f position; /**< Actual position of the object in PhysicsWorld, normally relating to the center of mass of the Shape */
+        Vector2f origin_transform; /**< Transform from the object center of mass to user defined point */
+        float density; /**< 2D density of the object */
+        float elasticity; /**< Bounciness of the object */
+        float inverse_mass; /**< Inverse of the object mass */
 
       private:
 
