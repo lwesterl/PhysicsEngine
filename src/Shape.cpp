@@ -10,7 +10,7 @@
 namespace pe {
 
   // Empty constructor
-  Shape::Shape() {}
+  Shape::Shape(): area(0.f) {}
 
   // Box shape constructor
   Shape::Shape(float width, float height) {
@@ -75,6 +75,11 @@ namespace pe {
     return vect;
   }
 
+  // Get area
+  float Shape::getArea() {
+    return area;
+  }
+
   void Shape::FindMinMax() {
     min = nullptr;
     max = nullptr;
@@ -123,6 +128,8 @@ namespace pe {
       central_y = (frame[0].getY() + frame[1].getY()) / 2.f;
     }
 
+    // also update area
+    area = A;
     mass_center = Vector2f(central_x, central_y);
   }
 

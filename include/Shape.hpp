@@ -79,6 +79,12 @@ namespace pe {
           */
         Vector2f getMax();
 
+        /**
+          *   @brief Get area of the Shape
+          *   @return area
+          */
+        float getArea();
+
 
       private:
 
@@ -91,7 +97,7 @@ namespace pe {
         /**
           *   @brief Calculate polygon center of mass
           *   @details assigns center of mass to mass_center. Uses basic formula which defines
-          *   centroid for polygon shapes
+          *   centroid for polygon shapes. Calculates also area of Shape
           */
         void CenterMass();
 
@@ -100,6 +106,7 @@ namespace pe {
         std::deque<Vector2f> frame; /**< Object frame, polygon of connected Vector2f */
         Vector2f* max = nullptr; /**< Should point to the biggest entry in frame */
         Vector2f* min = nullptr; /**< Should point to the smallest entry in frame */
+        float area; /**< Area of the Spape */
 
     };
 }// end of namespace pe
