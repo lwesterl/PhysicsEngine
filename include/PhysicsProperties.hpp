@@ -7,6 +7,7 @@
 #pragma once
 
 #include "../utils/Vector2.hpp"
+#include <cmath>
 
 
 namespace pe {
@@ -24,12 +25,15 @@ namespace pe {
         /*  Member variables */
         static float GravityX; /**< X dimansional gravity (- left) */
         static float GravityY; /**< Y dimansional gravity (- upwards) */
+        static float SizeScale; /**< Scale between shape area to area used in physic calculations, this should be adjusted based on shape sizes used */
 
         /**
           *   @brief Constructor
-          *   @param density object density (used to calculate mass)
+          *   @param density object density, 2d-density, (used to calculate mass)
+          *   @param static_object pass true if object should be static, by default false
+          *   @remark both density and elasticity should be positive (abs is taken)
           */
-        PhysicsProperties(float density, float elasticity);
+        PhysicsProperties(float density, float area, bool static_object = false);
 
         Vector2f velocity; // velocity (x, y)
         Vector2f acceloration; // acceloration (x, y)
@@ -41,7 +45,14 @@ namespace pe {
 
       private:
 
-        void CalculateInverseMass();
+        /**
+          *   @brief Calculate inverse_mass for the object
+          *   @param area area of the matching Shape
+          *   @param static_object tells whether object is static or not
+          *   @details inverse_mass for static_object is set to zero. Calculation is 2D
+          *   so density should be also 2D counterpart
+          */
+        void CalculateInverseMass(float area, bool static_object);
     };
 
 
