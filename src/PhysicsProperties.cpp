@@ -11,12 +11,15 @@ namespace pe {
 
   // Member variable initializations
   float PhysicsProperties::GravityX = 0.f;
-  float PhysicsProperties::GravityY = 9.81; // notice direction
-  float PhysicsProperties::SizeScale = 0.1;
+  float PhysicsProperties::GravityY = 9.81f; // notice direction
+  float PhysicsProperties::SizeScale = 0.1f;
+
+  // Empty constructor
+  PhysicsProperties::PhysicsProperties(): density(0.f), elasticity(0.f), inverse_mass(0.f) {}
 
   // Constructor
   PhysicsProperties::PhysicsProperties(float density, float area, bool static_object):
-  density(std::abs(density)), elasticity(0.9) {
+  density(std::abs(density)), elasticity(0.9f) {
     CalculateInverseMass(area, static_object);
   }
 

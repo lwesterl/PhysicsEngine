@@ -28,6 +28,12 @@ namespace pe {
         static float SizeScale; /**< Scale between shape area to area used in physic calculations, this should be adjusted based on shape sizes used */
 
         /**
+          *   @brief Empty constructor
+          *   @details Inits all values to 0
+          */
+        PhysicsProperties();
+
+        /**
           *   @brief Constructor
           *   @param density object density, 2d-density, (used to calculate mass)
           *   @param area Area of the martching Shape
@@ -42,7 +48,7 @@ namespace pe {
         Vector2f position; /**< Actual position of the object in PhysicsWorld, normally relating to the center of mass of the Shape */
         Vector2f origin_transform; /**< Transform from the object center of mass to user defined point */
         float density; /**< 2D density of the object */
-        float elasticity; /**< Bounciness of the object */
+        float elasticity; /**< Bounciness of the object, should be >= 0 */
         float inverse_mass; /**< Inverse of the object mass */
 
       private:
