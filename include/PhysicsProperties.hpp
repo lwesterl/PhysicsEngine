@@ -1,5 +1,5 @@
 /**
-  *   @file PhysicsProperties
+  *   @file PhysicsProperties.hpp
   *   @author Lauri Westerholm
   *   @brief Header for class PhysicsProperties
   */
@@ -30,6 +30,7 @@ namespace pe {
         /**
           *   @brief Constructor
           *   @param density object density, 2d-density, (used to calculate mass)
+          *   @param area Area of the martching Shape
           *   @param static_object pass true if object should be static, by default false
           *   @remark both density and elasticity should be positive (abs is taken)
           */

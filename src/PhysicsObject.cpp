@@ -9,8 +9,8 @@
 namespace pe {
 
   // Constructor
-  PhysicsObject::PhysicsObject(Shape *shape, float density, bool static_object):
-  shape(shape), physics(PhysicsProperties(density, shape->getArea(), static_object)) {}
+  PhysicsObject::PhysicsObject(Shape *shape, float density, bool static_object, ObjectType type):
+  shape(shape), physics(PhysicsProperties(density, shape->getArea(), static_object)), type(type) {}
 
   // Set owner object
   void PhysicsObject::setOwner(void* owner, int type) {
@@ -67,5 +67,5 @@ namespace pe {
     return physics.elasticity;
   }
 
-  
+
 }// end of namespace pe

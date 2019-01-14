@@ -33,7 +33,6 @@ namespace pe {
 
         /**
           *   @brief Constructor for box shape
-          *   @param left_upper position of the box left upper corner
           *   @param width box width
           *   @param height box height
           *   @remark width and height should be > 0 (abs is taken)

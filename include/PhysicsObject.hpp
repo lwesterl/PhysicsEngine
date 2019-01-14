@@ -45,9 +45,10 @@ namespace pe {
         *   @param shape matching Shape (pass valid Shape, otherwise causes segmentation violation)
         *   @param density tells object 2D density, used in calculating mass
         *   @param static_object tells whether object is static or not
+        *   @param type Object type (passed by lower class constructor, DynamicOject / StaticObject)
         *   @details Constructs PhysicsProperties based on the density and Shape
         */
-      PhysicsObject(Shape *shape, float density, bool static_object);
+      PhysicsObject(Shape *shape, float density, bool static_object, ObjectType type);
 
       /**
         *   @brief Set owner object
@@ -128,11 +129,11 @@ namespace pe {
 
 
     protected:
-      Shape *shape = nullptr; // polygonshape
-      PhysicsProperties physics;
-      std::pair<void*, int> owner;
-      uint16_t collision_mask; // used to detect collisions
-      ObjectType type;
+      Shape *shape = nullptr; /**< Shape matching PhysicsObject, polygon */
+      PhysicsProperties physics;  /**< PhysicsProperties of PhysicsObject */
+      std::pair<void*, int> owner; /**< Pair made out of owner object and possible int type used for it */
+      uint16_t collision_mask; /**< Bitmask used in collision detection */
+      ObjectType type;  /**< PhysicsObject type, either DynamicOject or StaticObject */
 
 
   };
