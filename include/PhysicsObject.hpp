@@ -10,6 +10,7 @@
 #include "../utils/Vector2.hpp"
 #include "../include/Shape.hpp"
 #include "../include/PhysicsProperties.hpp"
+#include <cmath>
 #include <utility>
 #include <cstdint>
 
@@ -19,14 +20,22 @@
   */
 namespace pe {
 
+
   /**
-    *   @enum ObjectType
-    *   @brief Tells whether PhysicsObject is DynamicObject or StaticObject
+    *   @namespace ObjectType
+    *   @brief Used just to avoid namespace collisions between DynamicOject and StaticObject
     */
-  enum ObjectType {
-    DynamicObject, /**< DynamicObject */
-    StaticObject  /**< StaticObject */
-  };
+  namespace ObjectType {
+
+    /**
+      *   @enum ObjectType
+      *   @brief Tells whether PhysicsObject is DynamicObject or StaticObject
+      */
+    enum ObjectType {
+      DynamicObject, /**< DynamicObject */
+      StaticObject  /**< StaticObject */
+    };
+  } // end of namespace ObjectType
 
 
   /**
@@ -41,6 +50,11 @@ namespace pe {
   {
     public:
       /**
+        *   @brif Empty constructor
+        */
+        PhysicsObject() {}
+
+      /**
         *   @brief Constructor
         *   @param shape matching Shape (pass valid Shape, otherwise causes segmentation violation)
         *   @param density tells object 2D density, used in calculating mass
@@ -48,7 +62,7 @@ namespace pe {
         *   @param type Object type (passed by lower class constructor, DynamicOject / StaticObject)
         *   @details Constructs PhysicsProperties based on the density and Shape
         */
-      PhysicsObject(Shape *shape, float density, bool static_object, ObjectType type);
+      PhysicsObject(Shape *shape, float density, bool static_object, ObjectType::ObjectType type);
 
       /**
         *   @brief Set owner object
@@ -133,7 +147,7 @@ namespace pe {
       PhysicsProperties physics;  /**< PhysicsProperties of PhysicsObject */
       std::pair<void*, int> owner; /**< Pair made out of owner object and possible int type used for it */
       uint16_t collision_mask; /**< Bitmask used in collision detection */
-      ObjectType type;  /**< PhysicsObject type, either DynamicOject or StaticObject */
+      ObjectType::ObjectType type;  /**< PhysicsObject type, either DynamicOject or StaticObject */
 
 
   };

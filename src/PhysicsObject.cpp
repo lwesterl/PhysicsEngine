@@ -9,7 +9,7 @@
 namespace pe {
 
   // Constructor
-  PhysicsObject::PhysicsObject(Shape *shape, float density, bool static_object, ObjectType type):
+  PhysicsObject::PhysicsObject(Shape *shape, float density, bool static_object, ObjectType::ObjectType type):
   shape(shape), physics(PhysicsProperties(density, shape->getArea(), static_object)), type(type) {}
 
   // Set owner object
@@ -59,7 +59,7 @@ namespace pe {
 
   // Set elasticity of PhysicsObject
   void PhysicsObject::setElasticity(float elasticity) {
-    physics.elasticity = elasticity;
+    physics.elasticity = std::abs(elasticity);
   }
 
   // Get elasticity of PhysicsObject
