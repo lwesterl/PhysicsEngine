@@ -36,6 +36,13 @@ namespace pe {
   }
 
   template<typename T>
+  void Vector2<T>::normalize() {
+    float norm = std::sqrt(x * x + y * y);
+    x = x / norm;
+    y = y / norm;
+  }
+
+  template<typename T>
   float Vector2<T>::dotProduct(const Vector2<T>& vector) {
     return x * vector.x + y * vector.y;
   }

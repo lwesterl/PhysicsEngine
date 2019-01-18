@@ -8,6 +8,7 @@
 #pragma once
 
 #include <ostream>
+#include <cmath>
 
 /**
   *   @namespace pe
@@ -61,6 +62,12 @@ namespace pe {
         *   @param y new y value
         */
       void update(T x, T y);
+
+      /**
+        *   @brief Normalize Vector2
+        *   @details Divides Vector2 by its norm
+        */
+      void normalize();
 
       /**
         *   @brief Dot product for Vector2
