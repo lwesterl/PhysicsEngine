@@ -20,7 +20,7 @@ int main() {
   shape = pe::Shape(10.f, 10.f);
   pe::Vector2f center = shape.getCenter();
   std::cout << "Center: " << center;
-  assert(center == pe::Vector2f(5.f, 5.f));
+  assert(center == pe::Vector2f(0.f, 0.f));
   pe::Shape shape2 = shape;
   assert(shape2.getCenter() == shape.getCenter());
   std::cout << "Test succesful" << std::endl;
@@ -37,15 +37,15 @@ int main() {
   assert(test1.getMin() == pe::Vector2f(0.f, 0.f));
   assert(test1.getMax() == pe::Vector2f(0.f, 0.f));
   test1 = pe::Shape(30.f, 25.f);
-  assert(test1.getMin() == pe::Vector2f(0.f, 0.f));
-  assert(test1.getMax() == pe::Vector2f(30.f, 25.f));
+  assert(test1.getMin() == pe::Vector2f(-15.f, -12.5f));
+  assert(test1.getMax() == pe::Vector2f(15.f, 12.5f));
   pe::Shape test2 = pe::Shape(100.f, -100.f); // should take abs from negative values
-  assert(test2.getMin() == pe::Vector2f(0.f, 0.f));
+  assert(test2.getMin() == pe::Vector2f(-50.f, -50.f));
   frame = test2.getFrame();
   for (auto item : frame) {
     std::cout << item;
   }
-  assert(test2.getMax() == pe::Vector2f(100.f, 100.f));
+  assert(test2.getMax() == pe::Vector2f(50.f, 50.f));
   std::cout << "Test succesful" << std::endl;
 
   std::cout << std::endl << "getArea test" << std::endl;
