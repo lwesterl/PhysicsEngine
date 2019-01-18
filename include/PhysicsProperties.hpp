@@ -42,6 +42,14 @@ namespace pe {
           */
         PhysicsProperties(float density, float area, bool static_object = false);
 
+        /**
+          *   @brief Use this to set new position
+          *   @details This method takes origin_transform into account so this is
+          *   safer to use than directly setting position
+          *   @param pos new position
+          */
+        void setPosition(Vector2f pos);
+
         Vector2f velocity; /**< Velocity (x, y) */
         Vector2f acceloration; /**< Acceloration (x, y) */
         Vector2f force; /**< Force (x, y) */

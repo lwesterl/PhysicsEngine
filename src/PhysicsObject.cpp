@@ -39,7 +39,7 @@ namespace pe {
 
   // Set PhysicsObject position in PhysicsWorld
   void PhysicsObject::setPosition(Vector2f position) {
-    physics.position = position;
+    physics.setPosition(position);
   }
 
   // Get PhysicsObject position in PhysicsWorld

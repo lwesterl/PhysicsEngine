@@ -23,6 +23,11 @@ namespace pe {
     CalculateInverseMass(area, static_object);
   }
 
+  // Set position
+  void PhysicsProperties::setPosition(Vector2f pos) {
+    position = pos + origin_transform;
+  }
+
   // Calculate inverse of the object mass
   void PhysicsProperties::CalculateInverseMass(float area, bool static_object) {
     if (static_object) inverse_mass = 0.f;
