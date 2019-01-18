@@ -14,13 +14,13 @@ namespace pe {
 
   // Box shape constructor
   Shape::Shape(float width, float height) {
-    width = std::abs(width);
-    height = std::abs(height);
-    frame.push_back( Vector2f(0.f, 0.f) );
-    frame.push_back( Vector2f(width, 0.f) );
+    width = std::abs(width) / 2.f;
+    height = std::abs(height) / 2.f;
+    frame.push_back( Vector2f(-width, -height) );
+    frame.push_back( Vector2f(width, -height) );
     frame.push_back( Vector2f(width, height) );
-    frame.push_back( Vector2f(0.f, height) );
-    frame.push_back( Vector2f(0.f, 0.f) ); // now the box is closed
+    frame.push_back( Vector2f(-width, height) );
+    frame.push_back( Vector2f(-width, -height) ); // now the box is closed
     // assign min and max vectors
     min = &frame[0];
     max = &frame[2];
