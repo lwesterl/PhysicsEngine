@@ -104,7 +104,15 @@ int main() {
   std::cout << dotProduct(test19, test20) << " == 60" << std::endl;
   std::cout << "Test succesful" << std::endl;
 
-  std::cout << "All tests passed" << std::endl;
+  // normalize test
+  std::cout << std::endl << "normaze test" << std::endl;
+  pe::Vector2f test21(23.f, 39.f);
+  test21.normalize();
+  std::cout << "after normalized: " << test21;
+  assert(test21.getX() * test21.getX() + test21.getY() * test21.getY() == 1.f);
+  std::cout << "Test succesful" << std::endl;
+
+  std::cout << std::endl << "All tests passed" << std::endl;
 
   return 0;
 }
