@@ -9,6 +9,7 @@
 
 #include "../utils/Vector2.hpp"
 #include <deque>
+#include <vector>
 #include <cmath>
 
 /**
@@ -84,6 +85,22 @@ namespace pe {
           */
         float getArea();
 
+        /**
+          *   @brief Get how many edges there are in the Shape
+          *   @details Should be frame.size() - 1 for all polygon Shapes
+          *   @return amount of edges
+          *   @remark returns 0 if frame is empty
+          */
+        int getEdges();
+
+        /**
+          *   @brief Get axis of the Shape
+          *   @return axis
+          *   @details These axis are used by CollisionDetection. They are precomputed
+          *   after Shape is created to save compute time in CollisionDetection
+          */
+        std::vector<Vector2f>& getAxis();
+
 
       private:
 
@@ -100,9 +117,17 @@ namespace pe {
           */
         void CenterMass();
 
+        /**
+          *   @brief Calculate axis of the Shape
+          *   @remark This can't be called before frame is fully created and it must be
+          *   called from constructor or when frame is changed
+          */
+        void FindAxis();
+
 
         Vector2f mass_center; /**< This should be object mass center point */
         std::deque<Vector2f> frame; /**< Object frame, polygon of connected Vector2f */
+        std::vector<Vector2f> axis; /**< Object axes, formet from edges */
         Vector2f* max = nullptr; /**< Should point to the biggest entry in frame */
         Vector2f* min = nullptr; /**< Should point to the smallest entry in frame */
         float area; /**< Area of the Spape */

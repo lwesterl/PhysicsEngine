@@ -25,6 +25,7 @@ namespace pe {
     min = &frame[0];
     max = &frame[2];
     CenterMass();
+    FindAxis();
   }
 
   //  Copy constructor
@@ -34,6 +35,7 @@ namespace pe {
     }
     FindMinMax();
     CenterMass();
+    FindAxis();
   }
 
   // Assignment overload
@@ -44,6 +46,7 @@ namespace pe {
     }
     FindMinMax();
     CenterMass();
+    FindAxis();
     return *this;
   }
 
@@ -78,6 +81,17 @@ namespace pe {
   // Get area
   float Shape::getArea() {
     return area;
+  }
+
+  // Get amount of edges
+  int Shape::getEdges() {
+    int edges = frame.size();
+    return edges > 0 ? edges -1 : 0;
+  }
+
+  // Get axis
+  std::vector<Vector2f>& Shape::getAxis() {
+    return axis;
   }
 
   void Shape::FindMinMax() {
@@ -131,6 +145,17 @@ namespace pe {
     // also update area
     area = A;
     mass_center = Vector2f(central_x, central_y);
+  }
+
+  // Calculate axis of the Shape
+  void Shape::FindAxis() {
+    int len = getEdges();
+    axis = std::vector<Vector2f> (len);
+    for (int i = 0; i < len; i++) {
+      // axis should be perpendicular to edges of the Shape (-y, x) and |axis| = 1
+      axis[i] = Vector2f(-(frame[i + 1].getY() - frame[i].getY()), frame[i + 1].getX() - frame[i].getX());
+      axis[i].normalize();
+    }
   }
 
 }// end of namespace pe
