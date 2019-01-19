@@ -23,14 +23,14 @@ int main() {
   assert(center == pe::Vector2f(0.f, 0.f));
   pe::Shape shape2 = shape;
   assert(shape2.getCenter() == shape.getCenter());
-  std::cout << "Test succesful" << std::endl;
+  std::cout << "Test successful" << std::endl;
 
   std::cout << std::endl << "getFrame test" << std::endl;
   std::deque<pe::Vector2f> frame = shape2.getFrame();
   for (auto item : frame) {
     std::cout << item;
   }
-  std::cout << "Test succesful" << std::endl;
+  std::cout << "Test successful" << std::endl;
 
   std::cout << std::endl << "getMin and getMax test" << std::endl;
   pe::Shape test1;
@@ -46,14 +46,27 @@ int main() {
     std::cout << item;
   }
   assert(test2.getMax() == pe::Vector2f(50.f, 50.f));
-  std::cout << "Test succesful" << std::endl;
+  std::cout << "Test successful" << std::endl;
 
   std::cout << std::endl << "getArea test" << std::endl;
   pe::Shape test3;
   assert(test3.getArea() == 0.f);
   pe::Shape test4(30.f, 10.f);
   assert(test4.getArea() == 300.f);
-  std::cout << "Test succesful" << std::endl;
+  std::cout << "Test successful" << std::endl;
+
+  std::cout << std::endl << "getAxis test" << std::endl;
+  pe::Shape test5;
+  assert(test5.getEdges() == 0);
+  assert(test5.getAxis() == std::vector<pe::Vector2f>(0));
+  test5 = pe::Shape(30.f, 20.f);
+  assert(test5.getEdges() == 4);
+  std::cout << "Axis:" << std::endl;
+  std::vector<pe::Vector2f>& axis = test5.getAxis();
+  for (auto &item : axis) {
+    std::cout << item;
+  }
+  std::cout << "Test successful" << std::endl;
 
   std::cout << std::endl << "All test succesfully completed" << std::endl;
 
