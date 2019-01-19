@@ -78,6 +78,24 @@ namespace pe {
       float dotProduct(const Vector2<T>& vector);
 
       /**
+        *   @brief Rotate Vector2
+        *   @param angle Rotation angle in radians
+        *   @details This cannot work for integers: only practical for floats and
+        *   doubles. unsigned is absolute no no. angle must be in radians and counter-
+        *   clockwise
+        *   @return updated Vector2
+        */
+      Vector2<T>& rotate(T angle);
+
+      /**
+        *   @brief Get Vector2 angle
+        *   @return angle in radians
+        *   @remark This is practical for only floats and doubles. Don't use this
+        *   for Vector2<unsigned>
+        */
+      T getAngle();
+
+      /**
         *   @brief Assignment operator
         *   @param vector2 Reference instance
         */

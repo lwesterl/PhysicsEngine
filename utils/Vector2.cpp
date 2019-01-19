@@ -48,6 +48,24 @@ namespace pe {
   }
 
   template<typename T>
+  Vector2<T>& Vector2<T>::rotate(T angle) {
+    if (angle != 0) {
+      T sin = std::sin(angle);
+      T cos = std::cos(angle);
+      T x1 = x;
+      T y1 = y;
+      x = cos * x1 - sin * y1;
+      y = sin * x1 + cos * y1;
+    }
+    return *this;
+  }
+
+  template<typename T>
+  T Vector2<T>::getAngle() {
+    return std::atan2(y, x);
+  }
+
+  template<typename T>
   Vector2<T>& Vector2<T>::operator=(const Vector2<T>& vector2) {
     this->x = vector2.x;
     this->y = vector2.y;
