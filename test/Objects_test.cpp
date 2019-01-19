@@ -27,7 +27,7 @@ int main() {
   pe::PhysicsObject dyn1 = pe::DynamicObject(&shape, 10.f);
   pe::PhysicsObject static4 = pe::StaticObject(&shape);
   assert(dyn1.getShape() == static4.getShape());
-  std::cout << "test succesful" << std::endl;
+  std::cout << "test successful" << std::endl;
 
   std::cout << std::endl << "setOwner and getOwner test" << std::endl;
   std::cout << "owner: " << dyn1.getOwner() << " == nullptr" << std::endl;
@@ -37,7 +37,7 @@ int main() {
   assert(static_cast<pe::StaticObject*>(dyn1.getOwner()) == &static1);
   dyn1.setOwner(nullptr, 100);
   assert(dyn1.getOwner() == nullptr && dyn1.getOwnerType() == 100);
-  std::cout << "test succesful" << std::endl;
+  std::cout << "test successful" << std::endl;
 
   std::cout << std::endl << "getPhysics test" << std::endl;
   pe::PhysicsProperties &physics = dyn1.getPhysics();
@@ -46,7 +46,7 @@ int main() {
   assert(1.f / physics.inverse_mass == shape.getArea() * physics.density * pe::PhysicsProperties::SizeScale);
   physics.density = 100.f;
   assert(dyn1.getPhysics().density == 100.f);
-  std::cout << "test succesful" << std::endl;
+  std::cout << "test successful" << std::endl;
 
   std::cout << std::endl << "setPosition and getPosition test" << std::endl;
   pe::Shape shape2(20.f, 15.f);
@@ -55,14 +55,14 @@ int main() {
   static5.setPosition(pe::Vector2f(-13.f, 90.f));
   assert(static5.getPosition() == pe::Vector2f(-13.f, 90.f));
   assert(static5.getPhysics().position == pe::Vector2f(-13.f, 90.f));
-  std::cout << "test succesful" << std::endl;
+  std::cout << "test successful" << std::endl;
 
   std::cout << std::endl << "setOriginTransform and getOriginTransform test" << std::endl;
   pe::DynamicObject dyn2(&shape2, 1.f);
   dyn2.setOriginTransform(pe::Vector2f(-5.f, 100.f));
   assert(dyn2.getOriginTransform() == pe::Vector2f(-5.f, 100.f));
   assert(dyn2.getOriginTransform() == dyn2.getPhysics().origin_transform);
-  std::cout << "test succesful" << std::endl;
+  std::cout << "test successful" << std::endl;
 
   std::cout << std::endl << "setElasticity and getElasticity test" << std::endl;
   std::cout << "elasticity: " << dyn2.getElasticity() << std::endl;
@@ -71,7 +71,7 @@ int main() {
   assert(dyn2.getElasticity() == 3.f); // should take abs
   pe::PhysicsObject static6 = pe::StaticObject();
   assert(static6.getElasticity() == 0.f);
-  std::cout << "test succesful" << std::endl;
+  std::cout << "test successful" << std::endl;
 
   std::cout << "All tests passed" << std::endl;
   return 0;

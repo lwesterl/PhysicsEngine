@@ -44,7 +44,7 @@ int main() {
   assert(pe::CollisionDetection::calculateCollision(&dyn3, &dyn1));
   dyn3.setPosition(pe::Vector2f(255.f, 253.f));
   assert(pe::CollisionDetection::calculateCollision(&dyn3, &dyn1) == false);
-  std::cout << "test succesful" << std::endl;
+  std::cout << "test successful" << std::endl;
 
   std::cout << std::endl << "All tests passed" << std::endl;
   return 0;
