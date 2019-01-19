@@ -91,7 +91,7 @@ int main() {
   assert(test15 <= test14);
   pe::Vector2u test16 = test15;
   assert(test16 >= test15 && test16 <= test15);
-  std::cout << "Test succesful" << std::endl;
+  std::cout << "Test successful" << std::endl;
 
   // dot product test
   std::cout << std::endl << "dotProduct tests" << std::endl;
@@ -102,7 +102,7 @@ int main() {
   pe::Vector2f test20(4.f, -8.f);
   assert(dotProduct(test19, test20) == test19.dotProduct(test20));
   std::cout << dotProduct(test19, test20) << " == 60" << std::endl;
-  std::cout << "Test succesful" << std::endl;
+  std::cout << "Test successful" << std::endl;
 
   // normalize test
   std::cout << std::endl << "normaze test" << std::endl;
@@ -110,7 +110,18 @@ int main() {
   test21.normalize();
   std::cout << "after normalized: " << test21;
   assert(test21.getX() * test21.getX() + test21.getY() * test21.getY() == 1.f);
-  std::cout << "Test succesful" << std::endl;
+  std::cout << "Test successful" << std::endl;
+
+  // rotation test
+  std::cout << std::endl << "rotate test" << std::endl;
+  pe::Vector2f test22(0.f, 1.f);
+  test22.rotate(M_PI);
+  std::cout << "After rotation (x = 0.f and y = -1.f): " << test22;
+  pe::Vector2f test23(20.f, 23.f);
+  test23.rotate(M_PI * 2.f);
+  std::cout << "After rotation (x = 20.f, y = 23.f): " << test23;
+  //assert(test23.getX() == 20.f && test23.getY() == 23.f);
+  std::cout << "Test successful" << std::endl;
 
   std::cout << std::endl << "All tests passed" << std::endl;
 
