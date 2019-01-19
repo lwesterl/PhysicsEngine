@@ -10,6 +10,9 @@
 #include "../utils/Vector2.hpp"
 #include "PhysicsObject.hpp"
 #include "PhysicsProperties.hpp"
+#include <vector>
+#include <deque>
+#include <limits>
 
 
 /**
@@ -24,6 +27,15 @@ namespace pe {
     *   @details These functions should be called periodically from PhysicsWorld
     */
   namespace CollisionDetection {
+
+    /**
+      *   @struct Projection
+      *   @brief Struct used to for store Shape projection results
+      */
+    struct Projection {
+      float min; /**< min projection result */
+      float max; /**< max projection result */
+    };
 
     /**
       *   @brief Calculate collision between PhysicsObjects
@@ -49,6 +61,26 @@ namespace pe {
       */
     bool objectsClose(PhysicsObject* obj1, PhysicsObject* obj2);
 
+    /**
+      *   @brief Project Shape on axis
+      *   @param axis axis on which Shape is projected. axis must have correct
+      *   orientation
+      *   @param position Shape position in PhysicsWorld (should be matching PhysicObject position)
+      *   @param shape Shape to be projected on axis
+      *   @param object_angle rotation angle of the shape (should match to PhysicsObject's
+      *   rotation angle in PhysicsProperties)
+      *   @return Projection with min and max projection values
+      */
+
+    struct Projection ProjectShape(Vector2f axis, Vector2f position, Shape* shape, float object_angle);
+
+    /**
+      *   @brief Check whether Projections overlap
+      *   @param proj1 1st Projection to check
+      *   @param proj2 2nd Projection to check
+      *   @return true if Projections overlap, else false 
+      */
+    bool overlap(struct Projection& proj1, struct Projection& proj2);
 
 
   } // end of namespace CollisionDetection
