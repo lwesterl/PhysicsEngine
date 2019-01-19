@@ -21,7 +21,7 @@ int main() {
   // create some Shape
   pe::Shape shape(100.f, 100.f);
 
-  std::cout << "Rough collision detection test" << std::endl;
+  std::cout << "collision detection test" << std::endl;
   pe::DynamicObject dyn1(&shape, 1.f);
   pe::DynamicObject dyn2(&shape, 1.f);
   dyn1.setPosition(pe::Vector2f(20.f, 20.f));
