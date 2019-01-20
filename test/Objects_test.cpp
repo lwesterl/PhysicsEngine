@@ -11,6 +11,7 @@
 #include "../include/PhysicsProperties.hpp"
 #include <iostream>
 #include <cassert>
+#include <list>
 
 /**
   *   @brief Test man for DynamicOject and StaticObject
@@ -18,15 +19,20 @@
 int main() {
 
   std::cout << "Constructor test" << std::endl;
+  std::list<pe::PhysicsObject*> objects;
   pe::Shape shape(100.f, 100.f);
   pe::StaticObject static1(&shape);
   pe::StaticObject static2 = pe::StaticObject(&shape);
   pe::StaticObject static3 = static2;
   assert(static1.getShape() == &shape);
   assert(static2.getShape() == static3.getShape() && static2.getShape() == static1.getShape());
-  pe::PhysicsObject dyn1 = pe::DynamicObject(&shape, 10.f);
-  pe::PhysicsObject static4 = pe::StaticObject(&shape);
+  pe::DynamicObject dyn1 = pe::DynamicObject(&shape, 10.f);
+  pe::StaticObject static4 = pe::StaticObject(&shape);
   assert(dyn1.getShape() == static4.getShape());
+  // just push some objects to the list
+  objects.push_back(&static1);
+  objects.push_back(&static2);
+  objects.push_back(&dyn1);
   std::cout << "test successful" << std::endl;
 
   std::cout << std::endl << "setOwner and getOwner test" << std::endl;
@@ -50,7 +56,7 @@ int main() {
 
   std::cout << std::endl << "setPosition and getPosition test" << std::endl;
   pe::Shape shape2(20.f, 15.f);
-  pe::PhysicsObject static5 = pe::StaticObject(&shape2);
+  pe::StaticObject static5 = pe::StaticObject(&shape2);
   assert(static5.getPosition() == pe::Vector2f(0.f, 0.f));
   static5.setPosition(pe::Vector2f(-13.f, 90.f));
   assert(static5.getPosition() == pe::Vector2f(-13.f, 90.f));
@@ -69,8 +75,22 @@ int main() {
   assert(dyn2.getElasticity() == 0.9f); // default value 0.9
   dyn2.setElasticity(-3.0);
   assert(dyn2.getElasticity() == 3.f); // should take abs
-  pe::PhysicsObject static6 = pe::StaticObject();
+  pe::StaticObject static6 = pe::StaticObject();
   assert(static6.getElasticity() == 0.f);
+  std::cout << "test successful" << std::endl;
+
+  std::cout << std::endl << "setForce and setVelocity tests" << std::endl;
+  for (auto& item : objects) {
+    item->setForce(pe::Vector2f(100.f, 0.f));
+    item->setVelocity(pe::Vector2f(345.f, 50.f));
+    if (item->getObjectType() == pe::ObjectType::DynamicObject) {
+      assert(item->getPhysics().velocity == pe::Vector2f(345.f, 50.f));
+    }
+    else {
+      assert(item->getPhysics().velocity == pe::Vector2f());
+      assert(item->getPhysics().acceloration == pe::Vector2f());
+    }
+  }
   std::cout << "test successful" << std::endl;
 
   std::cout << "All tests passed" << std::endl;
