@@ -55,6 +55,7 @@ namespace pe {
         Vector2f force; /**< Force (x, y) */
         Vector2f position; /**< Actual position of the object in PhysicsWorld, normally relating to the center of mass of the Shape */
         Vector2f origin_transform; /**< Transform from the object center of mass to user defined point */
+        float angle; /**< Rotation angle in radians */ 
         float density; /**< 2D density of the object */
         float elasticity; /**< Bounciness of the object, should be >= 0 */
         float inverse_mass; /**< Inverse of the object mass */
