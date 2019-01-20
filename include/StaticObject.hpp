@@ -34,5 +34,17 @@ namespace pe {
 
       StaticObject(Shape *shape);
 
+      /**
+        *   @brief setForce implementation, no force can be set for StaticObject
+        *   @param force not used but this way same function call can be kept
+        */
+      virtual void setForce(__attribute__((unused)) Vector2f force) override {}
+
+      /**
+        *   @brief setVelocity implementation, no velocity can be set for StaticObject
+        *   @param velocity not used but this way same function call can be kept
+        */
+      virtual void setVelocity(__attribute__((unused)) Vector2f velocity) override {}  
+
   };
 }// enf of namespace pe

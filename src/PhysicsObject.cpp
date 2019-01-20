@@ -12,6 +12,11 @@ namespace pe {
   PhysicsObject::PhysicsObject(Shape *shape, float density, bool static_object, ObjectType::ObjectType type):
   shape(shape), physics(PhysicsProperties(density, shape->getArea(), static_object)), type(type) {}
 
+  // Get ObjectType
+  ObjectType::ObjectType PhysicsObject::getObjectType() const {
+    return type;
+  }
+
   // Set owner object
   void PhysicsObject::setOwner(void* owner, int type) {
     this->owner = std::make_pair(owner, type);
@@ -23,7 +28,7 @@ namespace pe {
   }
 
   // Get owner type
-  int PhysicsObject::getOwnerType() {
+  int PhysicsObject::getOwnerType() const {
     return owner.second;
   }
 

@@ -50,7 +50,7 @@ namespace pe {
   {
     public:
       /**
-        *   @brif Empty constructor
+        *   @brief Empty constructor
         */
         PhysicsObject() {}
 
@@ -63,6 +63,12 @@ namespace pe {
         *   @details Constructs PhysicsProperties based on the density and Shape
         */
       PhysicsObject(Shape *shape, float density, bool static_object, ObjectType::ObjectType type);
+
+      /**
+        *   @brief Get ObjectType
+        *   @return type
+        */
+      ObjectType::ObjectType getObjectType() const;
 
       /**
         *   @brief Set owner object
@@ -81,7 +87,7 @@ namespace pe {
         *   @brief Get owner type
         *   @return owner type stored as an int value
         */
-      int getOwnerType();
+      int getOwnerType() const;
 
       /**
         *   @brief Get Shape
@@ -140,9 +146,23 @@ namespace pe {
         */
       float getElasticity();
 
+      /**
+        *   @brief Set force for PhysicObject
+        *   @details implemented in lower classes
+        *   @param force force to be set for the object
+        */
+      virtual void setForce(Vector2f force) = 0;
+
+      /**
+        *   @brief Set velocity for PhysicObject
+        *   @details implemented in lower classes
+        *   @param velocity velocity to be set for the object
+        */
+      virtual void setVelocity(Vector2f velocity) = 0;
 
 
     protected:
+      
       Shape *shape = nullptr; /**< Shape matching PhysicsObject, polygon */
       PhysicsProperties physics;  /**< PhysicsProperties of PhysicsObject */
       std::pair<void*, int> owner; /**< Pair made out of owner object and possible int type used for it */

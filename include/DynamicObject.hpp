@@ -35,7 +35,23 @@ namespace pe {
           */
         DynamicObject(Shape *shape, float density);
 
-      private:
+        /**
+          *   @brief Set force for DynamicOject
+          *   @see PhysicsObject setForce
+          *   @details force changes the acceloration value in PhysicsProperties of the object
+          *   @param force force to be set for the object
+          */
+        virtual void setForce(Vector2f force) override;
+
+        /**
+          *   @brief Set velocity for DynamicObject
+          *   @see PhysicsObject setVelocity
+          *   @details velocity replaces old velocity value in PhysicsProperties of the object
+          *   @param velocity velocity to be set for the object
+          */
+        virtual void setVelocity(Vector2f velocity) override;
+
+
     };
 
 }// end of namespace pe
