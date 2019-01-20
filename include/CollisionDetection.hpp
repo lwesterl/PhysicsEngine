@@ -30,7 +30,7 @@ namespace pe {
 
     /**
       *   @struct Projection
-      *   @brief Struct used to for store Shape projection results
+      *   @brief Struct used for storing Shape projection results
       */
     struct Projection {
       float min; /**< min projection result */
@@ -78,7 +78,7 @@ namespace pe {
       *   @brief Check whether Projections overlap
       *   @param proj1 1st Projection to check
       *   @param proj2 2nd Projection to check
-      *   @return true if Projections overlap, else false 
+      *   @return true if Projections overlap, else false
       */
     bool overlap(struct Projection& proj1, struct Projection& proj2);
 

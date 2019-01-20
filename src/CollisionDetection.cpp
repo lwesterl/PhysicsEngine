@@ -23,20 +23,18 @@ namespace pe {
       Shape* shape2 = obj2->getShape();
       // for obj1 axis
       std::vector<Vector2f>& axis = shape1->getAxis();
-      for (int i = 0; i < shape1->getEdges(); i++) {
+      for (unsigned i = 0; i < axis.size(); i++) {
         // project both Shapes
-        // TODO replace 0.f with correct angle
-        struct Projection proj1 = ProjectShape(axis[i], obj1->getPhysics().position, shape1, 0.f);
-        struct Projection proj2 = ProjectShape(axis[i], obj2->getPhysics().position, shape2, 0.f);
+        struct Projection proj1 = ProjectShape(axis[i], obj1->getPhysics().position, shape1, obj1->getPhysics().angle);
+        struct Projection proj2 = ProjectShape(axis[i], obj2->getPhysics().position, shape2, obj2->getPhysics().angle);
         if (! overlap(proj1, proj2)) return false; // one projection which won't overlap is enough
       }
       // for obj2 axis
       axis = shape2->getAxis();
-      for (int i = 0; i < shape2->getEdges(); i++) {
+      for (unsigned i = 0; i < axis.size(); i++) {
         // project both Shapes
-        // TODO replace 0.f with correct angle
-        struct Projection proj1 = ProjectShape(axis[i], obj1->getPhysics().position, shape1, 0.f);
-        struct Projection proj2 = ProjectShape(axis[i], obj2->getPhysics().position, shape2, 0.f);
+        struct Projection proj1 = ProjectShape(axis[i], obj1->getPhysics().position, shape1, obj1->getPhysics().angle);
+        struct Projection proj2 = ProjectShape(axis[i], obj2->getPhysics().position, shape2, obj2->getPhysics().angle);
         if (! overlap(proj1, proj2)) return false; // one projection which won't overlap is enough
       }
       // all projections overlap, collision detected
