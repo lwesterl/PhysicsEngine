@@ -152,10 +152,20 @@ namespace pe {
     int len = getEdges();
     axis = std::vector<Vector2f> (len);
     for (int i = 0; i < len; i++) {
-      // axis should be perpendicular to edges of the Shape (-y, x) and |axis| = 1
-      axis[i] = Vector2f(-(frame[i + 1].getY() - frame[i].getY()), frame[i + 1].getX() - frame[i].getX());
+      // axis should be perpendicular to edges of the Shape (-y, x) and |axis| = 1, direction doesn't really matter (use abs)
+      axis[i] = Vector2f(-std::abs((frame[i + 1].getY() - frame[i].getY())), std::abs(frame[i + 1].getX() - frame[i].getX()));
       axis[i].normalize();
     }
+    RemoveDuplicateAxis();
   }
 
+  // Remove duplicate axis
+  void Shape::RemoveDuplicateAxis() {
+    std::sort(axis.begin(), axis.end(), [] (const Vector2f& vect1, const Vector2f& vect2){
+      return vect1 < vect2;
+    });
+    auto last = std::unique(axis.begin(), axis.end());
+    // remove duplicates permanently
+    axis.erase(last, axis.end());
+  }
 }// end of namespace pe

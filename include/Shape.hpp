@@ -11,6 +11,7 @@
 #include <deque>
 #include <vector>
 #include <cmath>
+#include <algorithm>
 
 /**
   *   @namespace pe
@@ -89,7 +90,8 @@ namespace pe {
           *   @brief Get how many edges there are in the Shape
           *   @details Should be frame.size() - 1 for all polygon Shapes
           *   @return amount of edges
-          *   @remark returns 0 if frame is empty
+          *   @remark returns 0 if frame is empty. !!!! This may or may not be same as
+          *   axis.size() !!!!
           */
         int getEdges();
 
@@ -123,6 +125,13 @@ namespace pe {
           *   called from constructor or when frame is changed
           */
         void FindAxis();
+
+        /**
+          *   @brief Remove duplicate axis
+          *   @details This should be called from FindAxis after all axis have been created
+          *   to remove duplicates -> boosts CollisionDetection performance
+          */
+        void RemoveDuplicateAxis();
 
 
         Vector2f mass_center; /**< This should be object mass center point */
