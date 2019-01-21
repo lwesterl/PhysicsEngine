@@ -10,7 +10,7 @@ namespace pe {
 
   // Constructor
   PhysicsObject::PhysicsObject(Shape *shape, float density, bool static_object, ObjectType::ObjectType type):
-  shape(shape), physics(PhysicsProperties(density, shape->getArea(), static_object)), type(type) {}
+  shape(shape), physics(PhysicsProperties(density, shape->getArea(), static_object)), collision_mask(0x00), type(type) {}
 
   // Get ObjectType
   ObjectType::ObjectType PhysicsObject::getObjectType() const {
@@ -70,6 +70,16 @@ namespace pe {
   // Get elasticity of PhysicsObject
   float PhysicsObject::getElasticity() {
     return physics.elasticity;
+  }
+
+  // Set collision_mask
+  void PhysicsObject::setCollisionMask(uint8_t mask) {
+    collision_mask = mask;
+  }
+
+  // Get collision_mask
+  uint8_t PhysicsObject::getCollisionMask() {
+    return collision_mask;
   }
 
 

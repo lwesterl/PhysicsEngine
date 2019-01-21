@@ -60,9 +60,24 @@ namespace pe {
         *   @param density tells object 2D density, used in calculating mass
         *   @param static_object tells whether object is static or not
         *   @param type Object type (passed by lower class constructor, DynamicOject / StaticObject)
-        *   @details Constructs PhysicsProperties based on the density and Shape
+        *   @details Constructs PhysicsProperties based on the density and Shape. By default all objects collide with
+        *   each other, use setCollisionMask() to change this behaviour
         */
       PhysicsObject(Shape *shape, float density, bool static_object, ObjectType::ObjectType type);
+
+      /**
+        *   @brief Set force for PhysicObject
+        *   @details implemented in lower classes
+        *   @param force force to be set for the object
+        */
+      virtual void setForce(Vector2f force) = 0;
+
+      /**
+        *   @brief Set velocity for PhysicObject
+        *   @details implemented in lower classes
+        *   @param velocity velocity to be set for the object
+        */
+      virtual void setVelocity(Vector2f velocity) = 0;
 
       /**
         *   @brief Get ObjectType
@@ -147,26 +162,27 @@ namespace pe {
       float getElasticity();
 
       /**
-        *   @brief Set force for PhysicObject
-        *   @details implemented in lower classes
-        *   @param force force to be set for the object
+        *   @brief Set collision mask
+        *   @details 0xFF -> objects won't collide with anything. 0x00 -> objects collides
+        *   with everything (default). Objects can't collide with others which have smaller collision_masks
+        *   @param mask New collision_mask value
         */
-      virtual void setForce(Vector2f force) = 0;
+      void setCollisionMask(uint8_t mask);
 
       /**
-        *   @brief Set velocity for PhysicObject
-        *   @details implemented in lower classes
-        *   @param velocity velocity to be set for the object
+        *   @brief Get collision mask
+        *   @return collision_mask
         */
-      virtual void setVelocity(Vector2f velocity) = 0;
+      uint8_t getCollisionMask();
 
 
     protected:
-      
+
       Shape *shape = nullptr; /**< Shape matching PhysicsObject, polygon */
       PhysicsProperties physics;  /**< PhysicsProperties of PhysicsObject */
       std::pair<void*, int> owner; /**< Pair made out of owner object and possible int type used for it */
-      uint16_t collision_mask; /**< Bitmask used in collision detection */
+      uint8_t collision_mask; /**< Value used in collision detection, 0x00 - 0xFF.
+      No collisions with objects which have smaller collision_masks. 0xFF -> no collisions at all */
       ObjectType::ObjectType type;  /**< PhysicsObject type, either DynamicOject or StaticObject */
 
 
