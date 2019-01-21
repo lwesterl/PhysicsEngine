@@ -5,7 +5,6 @@
   */
 
 #include "../include/CollisionDetection.hpp"
-#include <iostream>
 
 
 namespace pe {
@@ -38,6 +37,8 @@ namespace pe {
         if (! overlap(proj1, proj2)) return false; // one projection which won't overlap is enough
       }
       // all projections overlap, collision detected
+      std::list<PhysicsObject*> collided = GetCollisionResult(obj1, obj2);
+      // move collided according to MTV
       return true;
     }
 
@@ -84,6 +85,25 @@ namespace pe {
     // Check if Projections overlap
     bool overlap(struct Projection& proj1, struct Projection& proj2) {
       return !(proj1.max < proj2.min || proj2.max < proj1.min);
+    }
+
+    // Check if objects can collide
+    bool canCollide(PhysicsObject* obj1, PhysicsObject* obj2) {
+      return ((obj1->getCollisionMask() ^ 0xFF) & (obj2->getCollisionMask() ^ 0xFF)) != 0;
+    }
+
+    // Get correct collision result
+     std::list<PhysicsObject*> GetCollisionResult(PhysicsObject* obj1, PhysicsObject* obj2) {
+      uint8_t mask1 = obj1->getCollisionMask();
+      uint8_t mask2 = obj2->getCollisionMask();
+      std::list<PhysicsObject*> objects;
+      if (obj1->getObjectType() != ObjectType::StaticObject && mask1 <= mask2) {
+        objects.push_back(obj1);
+      }
+      if (obj2->getObjectType() != ObjectType::StaticObject && mask2 <= mask1) {
+        objects.push_back(obj2);
+      }
+      return objects;
     }
 
   }// end of namespace CollisionDetection

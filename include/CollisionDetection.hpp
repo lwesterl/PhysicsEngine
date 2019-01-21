@@ -12,6 +12,7 @@
 #include "PhysicsProperties.hpp"
 #include <vector>
 #include <deque>
+#include <list>
 #include <limits>
 
 
@@ -25,6 +26,7 @@ namespace pe {
     *   @namespace CollisionDetection
     *   @brief Contains all collision detection related functions
     *   @details These functions should be called periodically from PhysicsWorld
+    *   @remark currently no real time collision detection support
     */
   namespace CollisionDetection {
 
@@ -35,6 +37,15 @@ namespace pe {
     struct Projection {
       float min; /**< min projection result */
       float max; /**< max projection result */
+    };
+
+    /**
+      *   @struct MTV
+      *   @brief Minimum translation vector
+      */
+    struct MTV {
+      Vector2f axis; /**< direction of the translation */
+      float amount; /**< size of the translation needed */
     };
 
     /**
@@ -81,6 +92,25 @@ namespace pe {
       *   @return true if Projections overlap, else false
       */
     bool overlap(struct Projection& proj1, struct Projection& proj2);
+
+    /**
+      *   @brief Check whether objects can collide
+      *   @details collision_masks define if they can collide
+      *   @param obj1 1st PhysicsObject to be checked
+      *   @param obj2 2nd PhysicsObject to be checked
+      *   @return true if objects can collide, otherwise false
+      */
+    bool canCollide(PhysicsObject* obj1, PhysicsObject* obj2);
+
+    /**
+      *   @brief Get result of the collision
+      *   @details The list is returned based on ObjectTypes and collision_masks
+      *   StaticObjects cannot have collision action. Also, objects can only have action
+      *   with objects which have smaller collision_masks
+      *   @remark not optimal in terms of performance (copies std::list)
+      *   @return list of objects which should be moved etc as the result
+      */
+    std::list<PhysicsObject*> GetCollisionResult(PhysicsObject* obj1, PhysicsObject* obj2);
 
 
   } // end of namespace CollisionDetection
