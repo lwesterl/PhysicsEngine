@@ -46,6 +46,52 @@ int main() {
   assert(pe::CollisionDetection::calculateCollision(&dyn3, &dyn1) == false);
   std::cout << "test successful" << std::endl;
 
+  std::cout << std::endl << "canCollide and GetCollisionResult test" << std::endl;
+  pe::DynamicObject dyn4(&shape, 1.f);
+  dyn4.setPosition(pe::Vector2f(100.f, 100.f));
+  pe::DynamicObject dyn5(&shape, 10.f);
+  pe::StaticObject static1(&shape);
+  static1.setPosition(pe::Vector2f(200.f, -500.f));
+  pe::StaticObject static2(&shape);
+  // by default all objects should collide
+  assert(pe::CollisionDetection::canCollide(&dyn4, &dyn5));
+  assert(pe::CollisionDetection::canCollide(&dyn4, &static1));
+  assert(pe::CollisionDetection::canCollide(&static2, &static1));
+  assert(pe::CollisionDetection::canCollide(&dyn5, &dyn5));
+  dyn4.setCollisionMask(0xFF);
+  assert(pe::CollisionDetection::canCollide(&dyn4, &dyn5) == false);
+  assert(pe::CollisionDetection::canCollide(&static1, &dyn4) == false);
+  dyn4.setCollisionMask(0x02);
+  assert(pe::CollisionDetection::canCollide(&dyn4, &dyn5));
+  assert(pe::CollisionDetection::canCollide(&static1, &dyn4));
+  dyn5.setCollisionMask(0x02);
+  assert(pe::CollisionDetection::canCollide(&dyn4, &dyn5));
+  dyn4.setCollisionMask(0x00);
+  dyn5.setCollisionMask(0x00);
+
+  std::list<pe::PhysicsObject*> objects;
+  // Notice: position must not affect GetCollisionResult
+  objects = pe::CollisionDetection::GetCollisionResult(&dyn5, &dyn4);
+  for (auto& item : objects) {
+    std::cout << item << std::endl;
+  }
+  assert(objects.size() == 2);
+  objects = pe::CollisionDetection::GetCollisionResult(&dyn4, &dyn4);
+  assert(objects.size() == 2);
+  objects = pe::CollisionDetection::GetCollisionResult(&static1, &dyn4);
+  assert(objects.size() == 1);
+  objects = pe::CollisionDetection::GetCollisionResult(&static1, &static2);
+  assert(objects.size() == 0);
+
+  static1.setCollisionMask(0x10);
+  objects = pe::CollisionDetection::GetCollisionResult(&static1, &dyn4);
+  assert(objects.size() == 1);
+  dyn5.setCollisionMask(0xF0);
+  objects = pe::CollisionDetection::GetCollisionResult(&dyn5, &dyn4);
+  assert(objects.size() == 1);
+
+  std::cout << "test successful" << std::endl;
+
   std::cout << std::endl << "All tests passed" << std::endl;
   return 0;
 }
