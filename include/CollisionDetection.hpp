@@ -15,6 +15,7 @@
 #include <list>
 #include <limits>
 
+#define MIN(a, b) ((a) < (b) ? (a) : (b)) /**< Macro for min value */
 
 /**
   *   @namespace pe
@@ -45,7 +46,7 @@ namespace pe {
       */
     struct MTV {
       Vector2f axis; /**< direction of the translation */
-      float amount; /**< size of the translation needed */
+      float amount = std::numeric_limits<float>::max(); /**< size of the translation needed, init to max value */
     };
 
     /**
@@ -112,6 +113,30 @@ namespace pe {
       */
     std::list<PhysicsObject*> GetCollisionResult(PhysicsObject* obj1, PhysicsObject* obj2);
 
+    /**
+      *   @brief Find overlap
+      *   @details This should be called after overlapping is confirmed with overlap()
+      *   @param proj1 1st Projection
+      *   @param proj2 2nd Projection
+      *   @return amount of overlap
+      */
+    inline float FindOverlap(struct Projection& proj1, struct Projection& proj2);
+
+    /**
+      *   @brief Store MTV based on the overlap
+      *   @param mtv minimum translation vector
+      *   @param axis direction of the translation axis
+      *   @param proj1 1st Projection
+      *   @param proj2 2nd Projection
+      */
+    struct MTV& StoreMTV(struct MTV& mtv, Vector2f axis, struct Projection& proj1, struct Projection& proj2);
+
+    /**
+      *   @brief Collide ojects after collision is detected
+      *   @param objects list of objects that should be collided
+      *   @param mtv minimum translation vector
+      */
+    void collideObjects(std::list<PhysicsObject*>& objects, struct MTV& mtv);
 
   } // end of namespace CollisionDetection
 } // end of namespace pe

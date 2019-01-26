@@ -20,6 +20,7 @@ namespace pe {
       // objects could collide, calculate possible collisions
       Shape* shape1 = obj1->getShape();
       Shape* shape2 = obj2->getShape();
+      struct MTV mtv;
       // for obj1 axis
       std::vector<Vector2f>& axis = shape1->getAxis();
       for (unsigned i = 0; i < axis.size(); i++) {
@@ -27,6 +28,7 @@ namespace pe {
         struct Projection proj1 = ProjectShape(axis[i], obj1->getPhysics().position, shape1, obj1->getPhysics().angle);
         struct Projection proj2 = ProjectShape(axis[i], obj2->getPhysics().position, shape2, obj2->getPhysics().angle);
         if (! overlap(proj1, proj2)) return false; // one projection which won't overlap is enough
+        mtv = StoreMTV(mtv, axis[i], proj1, proj2);
       }
       // for obj2 axis
       axis = shape2->getAxis();
@@ -35,10 +37,13 @@ namespace pe {
         struct Projection proj1 = ProjectShape(axis[i], obj1->getPhysics().position, shape1, obj1->getPhysics().angle);
         struct Projection proj2 = ProjectShape(axis[i], obj2->getPhysics().position, shape2, obj2->getPhysics().angle);
         if (! overlap(proj1, proj2)) return false; // one projection which won't overlap is enough
+        mtv = StoreMTV(mtv, axis[i], proj1, proj2);
       }
       // all projections overlap, collision detected
       std::list<PhysicsObject*> collided = GetCollisionResult(obj1, obj2);
       // move collided according to MTV
+      //collideObjects(collided, mtv);
+
       return true;
     }
 
@@ -104,6 +109,33 @@ namespace pe {
         objects.push_back(obj2);
       }
       return objects;
+    }
+
+    // Find amount of overlap
+    inline float FindOverlap(struct Projection& proj1, struct Projection& proj2) {
+      return MIN(std::abs(proj1.max - proj2.min), std::abs(proj2.max - proj1.min));
+    }
+
+    // Store MTV of overlap
+    struct MTV& StoreMTV(struct MTV& mtv, Vector2f axis, struct Projection& proj1, struct Projection& proj2) {
+
+      float overlap = FindOverlap(proj1, proj2);
+      if (overlap < mtv.amount) {
+        mtv.axis = axis;
+        mtv.amount = overlap;
+      }
+      return mtv;
+    }
+
+    // Collide objects based on MTV
+    void collideObjects(std::list<PhysicsObject*>& objects, struct MTV& mtv) {
+      unsigned size = objects.size();
+      if (!size) return;
+      Vector2f position_change = mtv.axis; // unit vector which tells direction
+      position_change *= mtv.amount / static_cast<float>(size);
+      for (auto &object : objects) {
+        object->collisionAction(position_change);
+      }
     }
 
   }// end of namespace CollisionDetection
