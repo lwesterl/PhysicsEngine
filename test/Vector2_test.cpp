@@ -123,6 +123,21 @@ int main() {
   //assert(test23.getX() == 20.f && test23.getY() == 23.f);
   std::cout << "Test successful" << std::endl;
 
+  // += and -= -operator tests
+  std::cout << std::endl << "+= and -= -operator tests" << std::endl;
+  pe::Vector2f test24(10.f, 20.f);
+  test24 += pe::Vector2f(10.f, -10.f);
+  assert(test24 == pe::Vector2f(20.f, 10.f));
+  test24 -= pe::Vector2f(20.f, 10.f);
+  assert(test24.getX() == 0.f && test24.getY() == 0.f);
+  pe::Vector2f test25(100.f, 100.f);
+  test24.update(10.f, 10.f);
+  assert(test24 == pe::Vector2f(10.f, 10.f));
+  test25 += test24;
+  assert(test24 == pe::Vector2f(10.f, 10.f));
+  assert(test25 == pe::Vector2f(110.f, 110.f));
+  std::cout << "Test successful" << std::endl;
+
   std::cout << std::endl << "All tests passed" << std::endl;
 
   return 0;
