@@ -20,12 +20,12 @@ namespace pe {
   Vector2<T>::Vector2(const Vector2<T>& vector2): x(vector2.x), y(vector2.y) {}
 
   template<typename T>
-  T Vector2<T>::getX() {
+  T Vector2<T>::getX() const {
     return x;
   }
 
   template<typename T>
-  T Vector2<T>::getY() {
+  T Vector2<T>::getY() const {
     return y;
   }
 
@@ -43,7 +43,7 @@ namespace pe {
   }
 
   template<typename T>
-  float Vector2<T>::dotProduct(const Vector2<T>& vector) {
+  float Vector2<T>::dotProduct(const Vector2<T>& vector) const {
     return x * vector.x + y * vector.y;
   }
 
@@ -61,7 +61,7 @@ namespace pe {
   }
 
   template<typename T>
-  T Vector2<T>::getAngle() {
+  T Vector2<T>::getAngle() const {
     return std::atan2(y, x);
   }
 

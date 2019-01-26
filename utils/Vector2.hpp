@@ -16,6 +16,8 @@
   */
 namespace pe {
 
+  template<typename T> class Rect; /**< Forward declaration of Rect template class */
+  
   /**
     *   @class Vector2
     *   @brief Template class for 2D-vectors
@@ -48,13 +50,13 @@ namespace pe {
         *   @brief Get x value
         *   @return x
         */
-      T getX();
+      T getX() const;
 
       /**
         *   @brief Get y value
         *   @return y
         */
-      T getY();
+      T getY() const;
 
       /**
         *   @brief Update x and y values
@@ -75,7 +77,7 @@ namespace pe {
         *   @return dot product of the vectors
         *   @remark dotProduct also available as external function
         */
-      float dotProduct(const Vector2<T>& vector);
+      float dotProduct(const Vector2<T>& vector) const;
 
       /**
         *   @brief Rotate Vector2
@@ -93,7 +95,7 @@ namespace pe {
         *   @remark This is practical for only floats and doubles. Don't use this
         *   for Vector2<unsigned>
         */
-      T getAngle();
+      T getAngle() const;
 
       /**
         *   @brief Assignment operator
@@ -118,6 +120,7 @@ namespace pe {
       /**
         *   @brief -= -operator overload
         *   @param vector2 Vector2 to be substracted
+        *   @return updated Vector2 reference
         */
       Vector2<T>& operator-=(const Vector2<T>& vector2);
 
@@ -208,12 +211,13 @@ namespace pe {
         *   @return dot product of the vectors
         *   @remark dotProduct also available as member method
         */
-      friend float dotProduct(const Vector2<T>& vect1, const Vector2<T>& vect2) {
+      friend T dotProduct(const Vector2<T>& vect1, const Vector2<T>& vect2) {
         return vect1.x * vect2.x + vect1.y * vect2.y;
       }
 
 
     private:
+      friend class Rect<T>; /**< Give Rect direct access to x and y */
       T x;
       T y;
   };
