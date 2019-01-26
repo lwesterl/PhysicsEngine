@@ -67,15 +67,29 @@ namespace pe {
 
   template<typename T>
   Vector2<T>& Vector2<T>::operator=(const Vector2<T>& vector2) {
-    this->x = vector2.x;
-    this->y = vector2.y;
+    x = vector2.x;
+    y = vector2.y;
     return *this;
   }
 
   template<typename T>
   Vector2<T>& Vector2<T>::operator*=(T mult) {
-    this->x *= mult;
-    this->y *= mult;
+    x *= mult;
+    y *= mult;
+    return *this;
+  }
+
+  template<typename T>
+  Vector2<T>& Vector2<T>::operator+=(const Vector2<T>& vector2) {
+    x += vector2.x;
+    y += vector2.y;
+    return *this;
+  }
+
+  template<typename T>
+  Vector2<T>& Vector2<T>::operator-=(const Vector2<T>& vector2) {
+    x -= vector2.x;
+    y -= vector2.y;
     return *this;
   }
 

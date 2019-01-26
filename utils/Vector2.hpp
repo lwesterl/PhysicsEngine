@@ -109,6 +109,19 @@ namespace pe {
       Vector2<T>& operator*=(T mult);
 
       /**
+        *   @brief Addition += -operator overload
+        *   @param vector2 Vector2 to be added
+        *   @return updated Vector2 reference
+        */
+      Vector2<T>& operator+=(const Vector2<T>& vector2);
+
+      /**
+        *   @brief -= -operator overload
+        *   @param vector2 Vector2 to be substracted
+        */
+      Vector2<T>& operator-=(const Vector2<T>& vector2);
+
+      /**
         *   @brief Equality implementation
         *   @param vect1 the first passed Vector2
         *   @param vect2 the second passed Vector2
