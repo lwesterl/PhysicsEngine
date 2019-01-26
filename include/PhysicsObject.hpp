@@ -80,6 +80,13 @@ namespace pe {
       virtual void setVelocity(Vector2f velocity) = 0;
 
       /**
+        *   @brief Calculate collision action for the object
+        *   @details implemented in lower classes
+        *   @param position_change change needed to avoid collision
+        */
+      virtual void collisionAction(Vector2f position_change) = 0;
+
+      /**
         *   @brief Get ObjectType
         *   @return type
         */

@@ -51,6 +51,13 @@ namespace pe {
           */
         virtual void setVelocity(Vector2f velocity) override;
 
+        /**
+          *   @brief Implementation of collisionAction from PhysicsObjects
+          *   @details pushes DynamicOject avoid from other object by position_change
+          *   @todo Add physics to the implementation
+          */
+        virtual void collisionAction(Vector2f position_change) override;
+
 
     };
 

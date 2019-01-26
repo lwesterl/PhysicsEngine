@@ -44,7 +44,13 @@ namespace pe {
         *   @brief setVelocity implementation, no velocity can be set for StaticObject
         *   @param velocity not used but this way same function call can be kept
         */
-      virtual void setVelocity(__attribute__((unused)) Vector2f velocity) override {}  
+      virtual void setVelocity(__attribute__((unused)) Vector2f velocity) override {}
+
+      /**
+        *   @brief collisionAction implementation, no collision action for StaticObject
+        *   @param position_change not used, needed to override PhysicsObject collisionAction
+        */
+      virtual void collisionAction(__attribute__((unused)) Vector2f position_change) override {}
 
   };
 }// enf of namespace pe
