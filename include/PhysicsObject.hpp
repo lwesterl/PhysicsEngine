@@ -55,6 +55,11 @@ namespace pe {
         PhysicsObject() {}
 
       /**
+        *   @brief Virtual deconstructor
+        */
+        virtual ~PhysicsObject() {}
+
+      /**
         *   @brief Constructor
         *   @param shape matching Shape (pass valid Shape, otherwise causes segmentation violation)
         *   @param density tells object 2D density, used in calculating mass
