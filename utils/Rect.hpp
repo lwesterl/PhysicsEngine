@@ -113,6 +113,35 @@ namespace pe {
         return os;
       }
 
+      /**
+        *   @brief Equality operator
+        *   @param rect1 1st Rect to be compared
+        *   @param rect2 2nd Rect to be compared
+        *   @return true if Rects identical, otherwise false
+        */
+      friend bool operator==(const Rect<T>& rect1, const Rect<T>& rect2) {
+        return ((rect1.pos == rect2.pos) && (rect1.width == rect2.width) && (rect1.height == rect2.height));
+      }
+
+      /**
+        *   @brief Smaller than operator
+        *   @param rect1 1st Rect to be compared
+        *   @param rect2 2nd Rect to be compared
+        *   @return pos based comparison result @see Vector2::operator<
+        */
+      friend bool operator<(const Rect<T>& rect1, const Rect<T>& rect2) {
+        return rect1.pos < rect2.pos;
+      }
+
+      /**
+        *   @brief Greater than operator
+        *   @param rect1 1st Rect to be compared
+        *   @param rect2 2nd Rect to be compared
+        *   @return pos based comparison result @see Vector2::operator>
+        */
+      friend bool operator>(const Rect<T>& rect1, const Rect<T>& rect2) {
+        return rect1.pos > rect2.pos;
+      }
 
 
     private:
