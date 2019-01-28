@@ -17,7 +17,7 @@
 namespace pe {
 
   template<typename T> class Rect; /**< Forward declaration of Rect template class */
-  
+
   /**
     *   @class Vector2
     *   @brief Template class for 2D-vectors
@@ -45,6 +45,15 @@ namespace pe {
         *   @param vector2 Vector2 instance to be copied
         */
       Vector2(const Vector2<T>& vector2);
+
+      /**
+        *   @brief Cast to another Vector2 type
+        *   @return Vector2 of the casted type
+        */
+      template<typename N>
+      operator Vector2<N>() {
+        return Vector2<N>(static_cast<N>(x), static_cast<N>(y));
+      }
 
       /**
         *   @brief Get x value
