@@ -61,6 +61,17 @@ namespace pe {
     }
   }
 
+  // Add Cell
+  bool PhysicsGrid::addCell(Recti position) {
+    auto it = cells.find(position);
+    if (it == cells.end()) {
+      // add new Cell
+      cells.emplace(position, new Cell<PhysicsObject*>);
+      return true;
+    }
+    return false;
+  }
+
   // Add object to Cell in PhysicsGrid
   bool PhysicsGrid::addObject(PhysicsObject* object) {
     auto it = cells.find((Vector2i) object->getPosition());
