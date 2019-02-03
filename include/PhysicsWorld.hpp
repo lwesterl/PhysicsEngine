@@ -6,12 +6,15 @@
 
 #pragma once
 
+#include "../utils/Rect.hpp"
+#include "../utils/Vector2.hpp"
 #include "PhysicsObject.hpp"
 #include "DynamicObject.hpp"
 #include "StaticObject.hpp"
 #include "PhysicsGrid.hpp"
 #include "CollisionDetection.hpp"
 #include <list>
+#include <limits>
 
 /**
   *   @namespace pe
@@ -126,6 +129,8 @@ namespace pe {
     private:
       // Class members
       static const int GridCellSize;
+      static int WorldWidth;
+      static int WorldHeight;
       static float IterarationsInterval;
 
       // Private functions
