@@ -231,10 +231,10 @@ namespace pe {
       T y;
   };
 
-  /*  Define shorter keywords */
-  #define Vector2f Vector2<float> /**< Macro for float Vector2 */
-  #define Vector2i Vector2<int> /**< Macro for int Vector2 */
-  #define Vector2d Vector2<double> /**< Macro for double Vector2 */
-  #define Vector2u Vector2<unsigned> /**< Macro for unsigned Vector2 */
+  /* shorter keywords */
+  typedef Vector2<float> Vector2f; /**< typedef for float Vector2 */
+  typedef Vector2<int> Vector2i; /**< typedef for int Vector2 */
+  typedef Vector2<double> Vector2d; /**< typedef for double Vector2 */
+  typedef Vector2<unsigned> Vector2u; /**< typedef for unsigned Vector2 */
 
 } // end of namespace pe

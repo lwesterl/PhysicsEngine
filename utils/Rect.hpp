@@ -150,10 +150,10 @@ namespace pe {
       T height;
   };
 
-  // Define shorter keywords
-  #define Rectf Rect<float> /**< Macro for float Rect */
-  #define Recti Rect<int> /**< Macro for int Rect */
-  #define Rectu Rect<unsigned> /**< Macro for unsigned Rect */
-  #define Rectd Rect<double> /**< Macro for double Rect */
+  // shorter keywords
+  typedef Rect<float> Rectf; /**< typedef for float Rect */
+  typedef Rect<int> Recti; /**< typedef for int Rect */
+  typedef Rect<unsigned> Rectu; /**< typedef for unsigned Rect */
+  typedef Rect<double> Rectd; /**< typedef for double Rect */
 
 } // end of namespace pe
