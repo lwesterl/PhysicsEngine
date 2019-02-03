@@ -1,0 +1,144 @@
+/**
+  *   @file PhysicsWorld.hpp
+  *   @author Lauri Westerholm
+  *   @brief Header for PhysicsWorld class
+  */
+
+#pragma once
+
+#include "PhysicsObject.hpp"
+#include "DynamicObject.hpp"
+#include "StaticObject.hpp"
+#include "PhysicsGrid.hpp"
+#include "CollisionDetection.hpp"
+#include <list>
+
+/**
+  *   @namespace pe
+  *   @remark Stands for PhysicsEngine
+  */
+namespace pe {
+
+  /**
+    *   @struct Collided
+    *   @brief struct containing two collided PhysicObject
+    */
+  struct Collided {
+    PhysicsObject* first; /**< 1st collided object */
+    PhysicsObject* second; /**< 2nd collided object */
+
+    /**
+      *   @brief Constructor
+      *   @param first collided PhysicObject pointer
+      *   @param second collided PhysicsObject pointer
+      */
+    Collided(PhysicsObject* first, PhysicsObject* second):
+              first(first), second(second) {}
+
+    /**
+      *   @brief Get index matching PhysicObject
+      *   @param index collided object's index (0 or 1)
+      *   @return PhysicsObject pointer matching the index. returns nullptr if index incorrect
+      */
+    PhysicsObject* operator[](int index) {
+      if (index == 0) return first;
+      if (index == 1) return second;
+      return nullptr;
+    }
+  };
+
+  /**
+    *   @class PhysicsWorld
+    *   @brief World for PhysicsObject
+    */
+  class PhysicsWorld
+  {
+    public:
+      /**
+        *   @brief Set how many iterations is calculated each second
+        *   @details Changes the class variable, PhysicsWorld::IterarationsInterval
+        *   @param iteration How many iterations should be calculated per second
+        */
+      static void setIterationAmount(float iterations);
+
+      /**
+        *   @brief Constructor
+        *   @details Creates PhysicsWorld with PhysicsGrid consisting of empty
+        *   Cells
+        */
+      PhysicsWorld();
+
+      /**
+        *   @brief Deconstructor
+        *   @details Removes every PhysicObject, PhysicsGrid and deletes memory
+        *   allocated for those
+        */
+      virtual ~PhysicsWorld();
+
+      /**
+        *   @brief Copy constructor
+        *   @param world to be copied
+        */
+      PhysicsWorld(const PhysicsWorld& world);
+
+      /**
+        *   @brief Assignment operator
+        *   @param world to be assigned
+        *   @return updated reference to the PhysicsWorld
+        */
+      PhysicsWorld& operator=(const PhysicsWorld& world);
+
+      /**
+        *   @brief Add PhysicObject to PhysicsWorld
+        *   @details Adds object to the correct PhysicsGrid Cell and starts to
+        *   update its position and collisions when update is called
+        *   @param object to be added
+        *   @remark PhysicsWorld (PhysicsGrid) takes ownership of the object.
+        *   Remove object by calling removeObject (Do NOT delete object by other ways)
+        *   @return true if object added, otherwise false
+        */
+      bool addObject(PhysicsObject* object);
+
+      /**
+        *   @brief Remove object from PhysicsWorld
+        *   @details This is the only correct way to permanently remove objects.
+        *   object is removed from PhysicsGrid and its memory is deleted
+        *   @param oject to be removed permanently
+        *   @return true if object found and removed, otherwise false
+        */
+      bool removeObject(PhysicsObject* object);
+
+      /**
+        *   @brief Update PhysicsWorld
+        *   @details This should be called periodically
+        *   @remark This is should be called before calling getCollided()
+        */
+      void update();
+
+      /**
+        *   @brief Get list of collied PhysicsObjects
+        *   @details Each entry in the list is struct Collided
+        *   @return collided
+        *   @remark collided is updated when update is called
+        */
+      std::list<struct Collided>& getCollided();
+
+    private:
+      // Class members
+      static const int GridCellSize;
+      static float IterarationsInterval;
+
+      // Private functions
+      /**
+        *   @brief Init grid to contain empty Cells
+        *   @details This should be called from constructor to init grid
+        */
+      void InitGrid();
+
+      // Instance variables
+      PhysicsGrid* grid;
+      std::list<struct Collided> collided;
+
+  };
+
+} // end of namespace pe
