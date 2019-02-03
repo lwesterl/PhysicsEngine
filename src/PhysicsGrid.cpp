@@ -85,4 +85,20 @@ namespace pe {
     return false;
   }
 
+  // Remove object from PhysicsGrid Cell
+  bool PhysicsGrid::removeObject(PhysicsObject* object) {
+    auto it = cells.find((Vector2i) object->getPosition());
+    if (it != cells.end()) {
+      // remove object
+      for (auto item = it->second->entities.begin(); item != it->second->entities.end(); it++) {
+        if (*item == object) {
+          it->second->entities.erase(item);
+          delete object;
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
 } // end of namespace pe

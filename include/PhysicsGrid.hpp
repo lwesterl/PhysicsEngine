@@ -125,6 +125,13 @@ namespace pe {
           */
         bool addObject(PhysicsObject* object);
 
+        /**
+          *   @brief Remove PhysicsObject from PhysicsGrid
+          *   @param object to be removed
+          *   @return true if object successfully removes, otherwise false
+          */
+        bool removeObject(PhysicsObject* object);
+
       private:
         /**
           *   @brief Clear Grid
