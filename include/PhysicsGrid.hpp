@@ -109,6 +109,8 @@ namespace pe {
           *   @details After Cell is added, Grid maintains removal of the entities
           *   and frees memory allocated for them
           *   @param position where cell is added on 2D plane
+          *   @remark if Cell already exists at given position,
+          *   does nothing and returns false
           */
         bool addCell(Recti position);
 
