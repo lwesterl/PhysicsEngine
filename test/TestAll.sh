@@ -3,8 +3,8 @@
 # a small bash script which makes and runs all tests
 # exits on failure
 
-# runs tests by ./TestAll
-# runs memory leak tests by ./TestAll valgrind
+# runs tests by ./TestAll.sh
+# runs memory leak tests by ./TestAll.sh valgrind
 
 
 make
