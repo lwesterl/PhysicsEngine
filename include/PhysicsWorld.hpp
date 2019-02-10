@@ -14,7 +14,6 @@
 #include "PhysicsGrid.hpp"
 #include "CollisionDetection.hpp"
 #include <list>
-#include <limits>
 
 /**
   *   @namespace pe
@@ -53,6 +52,14 @@ namespace pe {
   /**
     *   @class PhysicsWorld
     *   @brief World for PhysicsObject
+    *   @details How PhysicsWorld should be used?
+    *   1. Create Dynamic/StaticObjects, set their initial positions, forces etc.
+    *   2. Add Objects to PhysicsWorld
+    *   3. Call PhysicsWorld.update() to update Objects' position in the world and their physics
+    *   4. Possibly remove PhysicsObjects which have collided or have some other actions based on getCollided()
+    *   4. Draw PhysicsObjects
+    *   5. Possibly change forces, object positions etc.
+    *   6. Repeat process described above
     */
   class PhysicsWorld
   {
@@ -96,7 +103,7 @@ namespace pe {
         *   @details Adds object to the correct PhysicsGrid Cell and starts to
         *   update its position and collisions when update is called
         *   @param object to be added
-        *   @remark PhysicsWorld (PhysicsGrid) takes ownership of the object.
+        *   @remark PhysicsWorld (PhysicsGrid) takes ownership of the object (must be allocated from heap).
         *   Remove object by calling removeObject (Do NOT delete object by other ways)
         *   @return true if object added, otherwise false
         */

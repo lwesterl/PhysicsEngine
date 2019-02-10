@@ -133,6 +133,8 @@ namespace pe {
         *   @param position new physics.position
         *   @details position is normally calculated in relation to Shape center of mass.
         *   setOriginTransform to choose arbitrary base point for position
+        *   @remark If PhysicsObject is added to PhysicsWorld you need to call
+        *   PhysicsWorld.update() before you try to remove the PhysicsObject
         */
       void setPosition(Vector2f position);
 
