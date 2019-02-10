@@ -90,7 +90,7 @@ namespace pe {
     auto it = cells.find((Vector2i) object->getPosition());
     if (it != cells.end()) {
       // remove object
-      for (auto item = it->second->entities.begin(); item != it->second->entities.end(); it++) {
+      for (auto item = it->second->entities.begin(); item != it->second->entities.end(); item++) {
         if (*item == object) {
           it->second->entities.erase(item);
           delete object;
