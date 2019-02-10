@@ -13,7 +13,7 @@ make clean-objects  | remove all object
 
 ```
 
-### Run also memory leaks tests
+### Run also memory leak tests (valgrind must be installed)
 
 ```
   ./TestAll.sh valgrind
