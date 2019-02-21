@@ -23,7 +23,7 @@ namespace pe {
 
   /**
     *   @namespace ObjectType
-    *   @brief Used just to avoid namespace collisions between DynamicOject and StaticObject
+    *   @brief Used just to avoid namespace collisions between DynamicObject and StaticObject
     */
   namespace ObjectType {
 
@@ -64,7 +64,7 @@ namespace pe {
         *   @param shape matching Shape (pass valid Shape, otherwise causes segmentation violation)
         *   @param density tells object 2D density, used in calculating mass
         *   @param static_object tells whether object is static or not
-        *   @param type Object type (passed by lower class constructor, DynamicOject / StaticObject)
+        *   @param type Object type (passed by lower class constructor, DynamicObject / StaticObject)
         *   @details Constructs PhysicsProperties based on the density and Shape. By default all objects collide with
         *   each other, use setCollisionMask() to change this behaviour
         */
@@ -90,6 +90,13 @@ namespace pe {
         *   @param position_change change needed to avoid collision
         */
       virtual void collisionAction(Vector2f position_change) = 0;
+
+      /**
+        *   @brief Update objects physics
+        *   @details implemented in lower classes
+        *   @remark DO NOT call this outside PhysicsWorld
+        */
+      virtual void updatePhysics(float elapsed_time) = 0;
 
       /**
         *   @brief Get ObjectType
@@ -197,7 +204,8 @@ namespace pe {
       std::pair<void*, int> owner; /**< Pair made out of owner object and possible int type used for it */
       uint8_t collision_mask; /**< Value used in collision detection, 0x00 - 0xFF.
       No collisions with objects which have smaller collision_masks. 0xFF -> no collisions at all */
-      ObjectType::ObjectType type;  /**< PhysicsObject type, either DynamicOject or StaticObject */
+      ObjectType::ObjectType type;  /**< PhysicsObject type, either DynamicObject or StaticObject */
+      bool moved; /**< Whether PhysicsObject is moved */
 
 
   };

@@ -29,14 +29,14 @@ namespace pe {
         DynamicObject();
 
         /**
-          *   @brief Constructor for DynamicOject
-          *   @param shape Shape which matches to the DynamicOject
+          *   @brief Constructor for DynamicObject
+          *   @param shape Shape which matches to the DynamicObject
           *   @param density 2D density of the object
           */
         DynamicObject(Shape *shape, float density);
 
         /**
-          *   @brief Set force for DynamicOject
+          *   @brief Set force for DynamicObject
           *   @see PhysicsObject setForce
           *   @details force changes the acceloration value in PhysicsProperties of the object
           *   @param force force to be set for the object
@@ -53,10 +53,18 @@ namespace pe {
 
         /**
           *   @brief Implementation of collisionAction from PhysicsObjects
-          *   @details pushes DynamicOject avoid from other object by position_change
+          *   @details pushes DynamicObject avoid from other object by position_change
           *   @todo Add physics to the implementation
           */
         virtual void collisionAction(Vector2f position_change) override;
+
+        /**
+          *   @brief Implementation of updatePhysics from PhysicObject
+          *   @details Updates DynamicObject PhysicsProperties, physics, based
+          *   on elapsed_time
+          *   @param elapsed_time time elapsed from the last update (in seconds)
+          */
+        virtual void updatePhysics(float elapsed_time) override;
 
 
     };

@@ -10,7 +10,7 @@ namespace pe {
 
   // Constructor
   PhysicsObject::PhysicsObject(Shape *shape, float density, bool static_object, ObjectType::ObjectType type):
-  shape(shape), physics(PhysicsProperties(density, shape->getArea(), static_object)), collision_mask(0x00), type(type) {}
+  shape(shape), physics(PhysicsProperties(density, shape->getArea(), static_object)), collision_mask(0x00), type(type), moved(false) {}
 
   // Get ObjectType
   ObjectType::ObjectType PhysicsObject::getObjectType() const {
@@ -45,6 +45,7 @@ namespace pe {
   // Set PhysicsObject position in PhysicsWorld
   void PhysicsObject::setPosition(Vector2f position) {
     physics.setPosition(position);
+    moved = true;
   }
 
   // Get PhysicsObject position in PhysicsWorld

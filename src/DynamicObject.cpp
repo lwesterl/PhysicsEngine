@@ -40,4 +40,9 @@ namespace pe {
     physics.acceloration.update(PhysicsProperties::GravityX, PhysicsProperties::GravityY);
   }
 
+  // updatePhysics implementation
+  void DynamicObject::updatePhysics(float elapsed_time) {
+
+  }
+
 }// end of namespace pe

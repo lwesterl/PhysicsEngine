@@ -16,7 +16,7 @@ namespace pe {
 
   /**
     *   @class StaticObject
-    *   @brief DynamicOject inherit class describing static objects in PhysicsWorld
+    *   @brief PhysicsObject inherited class describing static objects in PhysicsWorld
     */
   class StaticObject: public PhysicsObject
   {
@@ -51,6 +51,12 @@ namespace pe {
         *   @param position_change not used, needed to override PhysicsObject collisionAction
         */
       virtual void collisionAction(__attribute__((unused)) Vector2f position_change) override {}
+
+      /**
+        *   @brief updatePhysics implementation, no active physics for StaticObject
+        *   @param elapsed_time not used, needed to override PhysicsObject updatePhysics
+        */
+      virtual void updatePhysics(__attribute__((unused)) float elapsed_time) override {}
 
   };
 }// enf of namespace pe
