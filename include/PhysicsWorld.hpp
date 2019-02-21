@@ -120,7 +120,9 @@ namespace pe {
 
       /**
         *   @brief Update PhysicsWorld
-        *   @details This should be called periodically
+        *   @details This should be called periodically. Currently no support for
+        *   real time collision detection (fast moving objects will go through each
+        *   other)
         *   @remark This is should be called before calling getCollided()
         */
       void update();

@@ -132,6 +132,16 @@ namespace pe {
           */
         bool removeObject(PhysicsObject* object);
 
+        /**
+          *   @brief Move all objects to correct grid cells
+          *   @details DynamicObject checked for move its moved bool is true.
+          *   After possibly moving sets the moved to false. DynamicObject
+          *   needs to be moved if its position isn't inside the grid cell
+          *   @remark This is necessarily quite heavy method and it should be
+          *   called only from PhysicsWorld update
+          */
+        void moveObjects();
+
       private:
         /**
           *   @brief Clear Grid

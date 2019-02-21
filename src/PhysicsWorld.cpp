@@ -65,6 +65,22 @@ namespace pe {
 
   // Update PhysicsWorld PhysicsObject positions and calculate collision
   void PhysicsWorld::update() {
+    /*
+      STEPS
+      0. init collided
+
+      1. Update object physics if DynamicObject (call updatePhysics with elapsed
+       time, IterarationsInterval, as argument). This could be done in multiple
+       threads at the same time, threads operate one grid cell. Activate object
+       moved bool.
+
+      2. Move objects to the correct grid cells (call grid moveObjects)
+
+      3. Check collisions and store collided objects to collided
+        - Collision may cause objects to change grid cells
+        - But it's enough to update objects' grid cells during next update cycle
+        step 2
+    */
 
   }
 
