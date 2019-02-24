@@ -44,9 +44,9 @@ namespace pe {
   void DynamicObject::updatePhysics(float elapsed_time) {
     // apply gravity to the object
     float delta_x = physics.velocity.getX() * elapsed_time +
-    (physics.acceloration.getX() + PhysicsProperties::GravityX) * elapsed_time * elapsed_time;
+    0.5f * (physics.acceloration.getX() + PhysicsProperties::GravityX) * elapsed_time * elapsed_time;
     float delta_y = physics.velocity.getY() * elapsed_time +
-    (physics.acceloration.getY() + PhysicsProperties::GravityY) * elapsed_time * elapsed_time;
+    0.5f * (physics.acceloration.getY() + PhysicsProperties::GravityY) * elapsed_time * elapsed_time;
     physics.movePosition(Vector2f(delta_x, delta_y));
     // decrease acceloration and velocity based on physics.resistance_factor
     physics.applyResistance(elapsed_time);
