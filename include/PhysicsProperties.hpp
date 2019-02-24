@@ -10,6 +10,10 @@
 #include <cmath>
 
 
+/**
+  *   @namespace pe
+  *   @remark Stands for PhysicsEngine
+  */
 namespace pe {
 
   /**
@@ -50,14 +54,31 @@ namespace pe {
           */
         void setPosition(Vector2f pos);
 
+        /**
+          *   @brief Move object position
+          *   @details This method moves position in relation to objects current
+          *   position
+          *   @param move Movement amount in relation to the current position
+          */
+        void movePosition(Vector2f move);
+
+        /**
+          *   @brief Apply resistance to velocity and acceloration
+          *   @details Currently not physically correct
+          *   @param elapsed_time time elapsed since previous update (in seconds)
+          *   @remark resistance_factor should tell applied resistance per second
+          */
+        void applyResistance(float elapsed_time);
+
         Vector2f velocity; /**< Velocity (x, y) */
-        Vector2f acceloration; /**< Acceloration (x, y) */
+        Vector2f acceloration; /**< Acceloration (x, y), this should not include gravity */
         Vector2f position; /**< Actual position of the object in PhysicsWorld, normally relating to the center of mass of the Shape */
         Vector2f origin_transform; /**< Transform from the object center of mass to user defined point */
         float angle; /**< Rotation angle in radians */
         float density; /**< 2D density of the object */
         float elasticity; /**< Bounciness of the object, should be >= 0 */
         float inverse_mass; /**< Inverse of the object mass */
+        float resistance_factor; /**< speed decreases to ~ resistance_factor and acc ~ sqrt(resistance_factor) */
 
       private:
 

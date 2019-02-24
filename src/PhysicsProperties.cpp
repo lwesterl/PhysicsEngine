@@ -15,7 +15,8 @@ namespace pe {
   float PhysicsProperties::SizeScale = 0.1f;
 
   // Empty constructor
-  PhysicsProperties::PhysicsProperties(): angle(0.f), density(0.f), elasticity(0.f), inverse_mass(0.f) {}
+  PhysicsProperties::PhysicsProperties(): angle(0.f), density(0.f), elasticity(0.f),
+  inverse_mass(0.f), resistance_factor(2.f) {}
 
   // Constructor
   PhysicsProperties::PhysicsProperties(float density, float area, bool static_object):
@@ -26,6 +27,19 @@ namespace pe {
   // Set position
   void PhysicsProperties::setPosition(Vector2f pos) {
     position = pos + origin_transform;
+  }
+
+  // Move position
+  void PhysicsProperties::movePosition(Vector2f move) {
+    position = position + origin_transform + move;
+  }
+
+  // Apply resisting forces
+  void PhysicsProperties::applyResistance(float elapsed_time) {
+    velocity.update(velocity.getX() * (1.f - elapsed_time / resistance_factor),
+                    velocity.getY() * (1.f - elapsed_time / resistance_factor));
+    acceloration.update(acceloration.getX() * (1.f - elapsed_time / sqrt(resistance_factor)),
+                    acceloration.getY() * (1.f - elapsed_time / sqrt(resistance_factor)));
   }
 
   // Calculate inverse of the object mass
