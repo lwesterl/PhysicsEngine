@@ -82,7 +82,7 @@ namespace pe {
     }
   }
 
-  // Activate / deactivate Cell
+  // Activate / deactivate Cell, private method
   bool PhysicsGrid::ActivateCell(Cell<PhysicsObject*>* cell) {
     for (auto &it : cell->entities) {
       if (it->getObjectType() == ObjectType::DynamicObject) {
@@ -92,6 +92,34 @@ namespace pe {
     }
     cell->active_cell = false;
     return false;
+  }
+
+  // Try to insert object to cell, private method
+  bool PhysicsGrid::insertObject(PhysicsObject* object) {
+    auto it = cells.find((Vector2i) object->getMinPosition());
+    auto it2 = cells.find((Vector2i) object->getMaxPosition());
+    if ((it != cells.end()) && (it == it2)) {
+      // PhysicsObject is completely inside one Cell
+      it->second->entities.push_back(object);
+      if (object->getObjectType() == ObjectType::DynamicObject) {
+        it->second->active_cell = true;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  // Move loose_cell PhysicsObjects, private method
+  void PhysicsGrid::moveLooseCellObjects() {
+    for (auto it = loose_cell->entities.begin(); it != loose_cell->entities.end();) {
+      if ((*it)->getMoved()) {
+        if (insertObject(*it)) {
+          // object added to cell
+          it = loose_cell->entities.erase(it);
+        }
+      }
+      else it++;
+    }
   }
 
   // Add Cell
@@ -107,20 +135,11 @@ namespace pe {
 
   // Add object to Cell in PhysicsGrid
   bool PhysicsGrid::addObject(PhysicsObject* object) {
-    auto it = cells.find((Vector2i) object->getMinPosition());
-    auto it2 = cells.find((Vector2i) object->getMaxPosition());
-    if ((it != cells.end()) && (it == it2)) {
-      // PhysicsObject is completely inside one Cell
-      it->second->entities.push_back(object);
-      if (object->getObjectType() == ObjectType::DynamicObject) {
-        it->second->active_cell = true;
-      }
-      return true;
+    if (! insertObject(object)) {
+      // PhysicsObject inside multiple Cells, add it to loose_cell
+      loose_cell->entities.push_back(object);
+      loose_cell->active_cell = true;
     }
-
-    // PhysicsObject inside multiple Cells, add it to loose_cell
-    loose_cell->entities.push_back(object);
-    loose_cell->active_cell = true;
     return true;
   }
 
@@ -160,10 +179,19 @@ namespace pe {
       for (std::list<PhysicsObject*>::iterator i = physobjs.begin(); i != physobjs.end();) {
         // active_cell isn't enough here because also StaticObjects could have been moved
         if ((*i)->getMoved()) {
-
+          // check whether it needs to be moved
+          if ((!it->first.contains((*i)->getMinPosition())) || (!it->first.contains((*i)->getMaxPosition()))) {
+            // remove object from the current Cell
+            (*i)->setMoved(false);
+            addObject(*i);
+            i = physobjs.erase(i);
+          }
         }
+        else i++;
       }
     }
+    // Handle loose_cell
+    moveLooseCellObjects();
   }
 
 } // end of namespace pe

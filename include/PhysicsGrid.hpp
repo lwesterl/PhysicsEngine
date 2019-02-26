@@ -166,6 +166,20 @@ namespace pe {
           */
         bool ActivateCell(Cell<PhysicsObject*>* cell);
 
+        /**
+          *   @brief Try to insert object to cell
+          *   @param object PhysicsObject to be inserted
+          *   @return true if successful, otherwise false -> object should be
+          *   inserted to loose_cell
+          */
+        bool insertObject(PhysicsObject* object);
+
+        /**
+          *   @brief Move loose_cell PhysicsObjects
+          *   @remark This should be called only from moveObjects
+          */
+        void moveLooseCellObjects();
+
 
         std::map<Recti, Cell<PhysicsObject*>*, CompareRectMap<int>> cells;
         Cell<PhysicsObject*>* loose_cell = nullptr; /**< Cell for all PhysicsObjects which are not in a single Cell, cells */
