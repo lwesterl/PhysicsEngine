@@ -152,6 +152,18 @@ namespace pe {
       Vector2f& getPosition();
 
       /**
+        *   @brief Get PhysicsObject smallest edge position
+        *   @return Shape min + getPosition
+        */
+      Vector2f getMinPosition();
+
+      /**
+        *   @brief Get PhysicsObject biggest edge position
+        *   @return Shape max + getPosition
+        */
+      Vector2f getMaxPosition();
+
+      /**
         *   @brief Set origin transform
         *   @details PhysicsObject position is normally calculated in relation to shape
         *   center of mass. Use setOriginTransform to move the base point for position related
@@ -195,6 +207,15 @@ namespace pe {
         *   @return collision_mask
         */
       uint8_t getCollisionMask();
+
+      /**
+        *   @brief Check if moved
+        *   @return moved
+        */
+        // Get moved
+      inline bool getMoved() {
+        return moved;
+      }
 
 
     protected:

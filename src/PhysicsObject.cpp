@@ -53,6 +53,16 @@ namespace pe {
     return physics.position;
   }
 
+  // Get min position in PhysicsWorld
+  Vector2f PhysicsObject::getMinPosition() {
+    return getPosition() + shape->getMin();
+  }
+
+  // Get max position in PhysicsWorld
+  Vector2f PhysicsObject::getMaxPosition() {
+    return getPosition() + shape->getMax();
+  }
+
   // Set origin transform for PhysicsObject
   void PhysicsObject::setOriginTransform(Vector2f transform) {
     physics.origin_transform = transform;
