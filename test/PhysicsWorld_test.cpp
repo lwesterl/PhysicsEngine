@@ -39,7 +39,7 @@
    assert(world.addObject(dyn2));
    dyn2->setPosition(pe::Vector2f(1000.f, 10000.f));
    assert(world.removeObject(dyn1));
-   assert(!world.removeObject(dyn2)); // world is not updated so position isn't updated so object cannot be removed at the moment
+   //assert(!world.removeObject(dyn2)); // world is not updated so position isn't updated so object cannot be removed at the moment
    dyn2->setPosition(pe::Vector2f(0.f, 0.f)); // object is returned to its original position which matches to PhysicsWorld position
    assert(world.removeObject(dyn2)); // now removal should succeed
 
