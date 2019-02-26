@@ -11,7 +11,7 @@ namespace pe {
   /* Class PhysicsWorld */
 
   // Init class variables
-  const int PhysicsWorld::GridCellSize = 2000;
+  const int PhysicsWorld::GridCellSize = 5000;
   int PhysicsWorld::WorldWidth = 100000;
   int PhysicsWorld::WorldHeight = PhysicsWorld::WorldWidth;
   float PhysicsWorld::IterarationsInterval = 1.f / 60.f;
@@ -23,8 +23,8 @@ namespace pe {
 
   // Init Grid, private method
   void PhysicsWorld::InitGrid() {
-    for (int j = - WorldHeight / 2; j < WorldHeight / 2 - GridCellSize; j += GridCellSize) {
-      for (int i = - WorldWidth / 2; i < WorldWidth / 2 - GridCellSize; i += GridCellSize) {
+    for (int j = - WorldHeight / 2; j <= WorldHeight / 2 - GridCellSize; j += GridCellSize) {
+      for (int i = - WorldWidth / 2; i <= WorldWidth / 2 - GridCellSize; i += GridCellSize) {
         // create empty Cells to grid
         grid->addCell(Recti(Vector2i(i, j), GridCellSize, GridCellSize));
       }
@@ -68,14 +68,21 @@ namespace pe {
     /*
       STEPS
       0. init collided
-
+    */
+    collided.clear();
+    /*
       1. Update object physics if DynamicObject (call updatePhysics with elapsed
        time, IterarationsInterval, as argument). This could be done in multiple
        threads at the same time, threads operate one grid cell. Activate object
        moved bool.
+    */
 
+
+    /*
       2. Move objects to the correct grid cells (call grid moveObjects)
+    */
 
+    /*
       3. Check collisions and store collided objects to collided
         - Collision may cause objects to change grid cells
         - But it's enough to update objects' grid cells during next update cycle

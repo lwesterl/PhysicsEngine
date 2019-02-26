@@ -57,7 +57,7 @@ namespace pe {
       *   @return true if pos is smaller than rect left upper corner (min point)
       */
     bool operator() (const Vector2<T>& pos, const Rect<T>& rect) const {
-      return (pos.getX() < rect.getPosition().getX()) && (pos.getY() < rect.getPosition().getY());
+      return (pos.getX() < rect.getPosition().getX()) || (pos.getY() < rect.getPosition().getY());
     }
 
     /**
@@ -67,7 +67,7 @@ namespace pe {
       *   @return true if pos is greater than rect right lower corner (max point)
       */
     bool operator() (const Rect<T>& rect, const Vector2<T>& pos) const {
-      return (rect.getPosition().getX() + rect.getWidth() < pos.getX()) && (rect.getPosition().getY() + rect.getHeight() < pos.getY());
+      return (rect.getPosition().getX() + rect.getWidth() < pos.getX()) || (rect.getPosition().getY() + rect.getHeight() < pos.getY());
     }
   };
 
@@ -134,7 +134,7 @@ namespace pe {
 
         /**
           *   @brief Move all objects to correct grid cells
-          *   @details DynamicObject checked for move its moved bool is true.
+          *   @details PhysicsObject checked for move its moved bool is true.
           *   After possibly moving sets the moved to false. DynamicObject
           *   needs to be moved if its position isn't inside the grid cell
           *   @remark This is necessarily quite heavy method and it should be
@@ -158,8 +158,17 @@ namespace pe {
           */
         void Copy(const PhysicsGrid& grid);
 
+        /**
+          *   @brief Activate / deactivate Cell
+          *   @details Cell is active if it contains at least one DynamicObject
+          *   @param cell Cell to be checked
+          *   @return true if cell active, otherwise false
+          */
+        bool ActivateCell(Cell<PhysicsObject*>* cell);
+
 
         std::map<Recti, Cell<PhysicsObject*>*, CompareRectMap<int>> cells;
+        Cell<PhysicsObject*>* loose_cell = nullptr; /**< Cell for all PhysicsObjects which are not in a single Cell, cells */
     };
 
 
