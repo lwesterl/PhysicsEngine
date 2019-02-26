@@ -212,9 +212,15 @@ namespace pe {
         *   @brief Check if moved
         *   @return moved
         */
-        // Get moved
       inline bool getMoved() {
         return moved;
+      }
+
+      /**
+        *   @brief Set moved
+        */
+      inline void setMoved(bool moved) {
+        this->moved = moved;
       }
 
 
