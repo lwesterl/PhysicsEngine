@@ -37,6 +37,10 @@
    assert(world.addObject(dyn1));
    pe::DynamicObject* dyn2 = new pe::DynamicObject(&shape2, 1.f);
    assert(world.addObject(dyn2));
+
+   //update
+   world.update();
+
    dyn2->setPosition(pe::Vector2f(1000.f, 10000.f));
    assert(world.removeObject(dyn1));
    //assert(!world.removeObject(dyn2)); // world is not updated so position isn't updated so object cannot be removed at the moment

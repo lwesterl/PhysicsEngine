@@ -2,6 +2,7 @@
 
 CC=g++ -std=c++17
 CFLAGS=-Wall -pedantic -Wextra -g
+LINKER=-lpthread
 UTILS=../utils/
 SOURCE=../src/
 TESTS=$(wildcard *_test.cpp)
@@ -19,7 +20,7 @@ all:	$(EXE)
 
 #compile all tests
 %.exe:	%.cpp $(OBJECTS)
-	$(CC) $(CFLAGS) ${OBJ} $< -o $@
+	$(CC) $(CFLAGS) ${OBJ} $(LINKER) $< -o $@
 
 clean:
 	$(RM) *.o *.exe
