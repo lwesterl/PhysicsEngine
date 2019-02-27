@@ -101,6 +101,7 @@ namespace pe {
     if ((it != cells.end()) && (it == it2)) {
       // PhysicsObject is completely inside one Cell
       it->second->entities.push_back(object);
+      object->setMoved(false);
       if (object->getObjectType() == ObjectType::DynamicObject) {
         it->second->active_cell = true;
       }
@@ -173,6 +174,7 @@ namespace pe {
   }
 
   // Move PhysicsObjects to correct grid cells
+  // CURRENTLY FREEZES
   void PhysicsGrid::moveObjects() {
     for (std::map<Recti, Cell<PhysicsObject*>*>::iterator it = cells.begin(); it != cells.end(); it++) {
       std::list<PhysicsObject*>& physobjs = it->second->entities;
@@ -186,6 +188,7 @@ namespace pe {
             addObject(*i);
             i = physobjs.erase(i);
           }
+          else i++;
         }
         else i++;
       }

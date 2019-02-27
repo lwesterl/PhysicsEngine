@@ -142,6 +142,53 @@ namespace pe {
           */
         void moveObjects();
 
+        /**
+          *   @brief Get const iterator to the beginning of cell
+          *   @return cells.cbegin()
+          */
+        inline std::map<Recti, Cell<PhysicsObject*>*>::const_iterator cbegin() {
+          return cells.cbegin();
+        }
+
+        /**
+          *   @brief Get const iterator to the end of cell
+          *   @return cells.cend()
+          */
+        inline std::map<Recti, Cell<PhysicsObject*>*>::const_iterator cend() {
+          return cells.cend();
+        }
+        /**
+          *   @brief Get iterator to the beginning of cell
+          *   @return cells.begin()
+          */
+        inline std::map<Recti, Cell<PhysicsObject*>*>::iterator begin() {
+          return cells.begin();
+        }
+
+        /**
+          *   @brief Get iterator to the end of cell
+          *   @return cell.cend()
+          */
+        inline std::map<Recti, Cell<PhysicsObject*>*>::iterator end() {
+          return cells.end();
+        }
+
+        /**
+          *   @brief Get loose_cell
+          *   @return pointer to loose_cell
+          */
+        inline Cell<PhysicsObject*>* getLooseCell() {
+          return loose_cell;
+        }
+
+        /**
+          *   @brief Get cells size
+          *   @return cells.size
+          */
+        inline unsigned getCellsSize() {
+          return cells.size();
+        }
+
       private:
         /**
           *   @brief Clear Grid
