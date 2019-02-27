@@ -12,6 +12,7 @@ namespace pe {
 
   // Init class variables
   const int PhysicsWorld::GridCellSize = 5000;
+  const unsigned PhysicsWorld::THREADS = std::thread::hardware_concurrency();
   int PhysicsWorld::WorldWidth = 100000;
   int PhysicsWorld::WorldHeight = PhysicsWorld::WorldWidth;
   float PhysicsWorld::IterarationsInterval = 1.f / 60.f;
@@ -76,11 +77,35 @@ namespace pe {
        threads at the same time, threads operate one grid cell. Activate object
        moved bool.
     */
+    unsigned interval;
+    if ((PhysicsWorld::THREADS > 0) && ((interval = grid->getCellsSize() / PhysicsWorld::THREADS) > 0)) {
+      std::thread *workers = new std::thread[THREADS];
+      auto it = grid->begin();
+      auto it_inc = [](auto it, unsigned inc) { for (unsigned i = 0; i < inc; i++) it++; return it;};
+      unsigned i = 0;
+      for (; i < PhysicsWorld::THREADS - 1; i++) {
+        auto it2 = it_inc(it, interval);
+        workers[i] = std::thread(&PhysicsWorld::UpdateObjects, this, it, it2);
+        it = it2;
 
+      }
+      workers[i] = std::thread(&PhysicsWorld::UpdateObjects, this, it, grid->cend());
+      UpdateLooseObjects();
+      // collect threads
+      for (unsigned j = 0; j < PhysicsWorld::THREADS; j++) {
+        workers[j].join();
+      }
+      delete[] workers;
+    }
+    else {
+      UpdateObjects(grid->cbegin(), grid->cend());
+      UpdateLooseObjects();
+    }
 
     /*
       2. Move objects to the correct grid cells (call grid moveObjects)
     */
+    //grid->moveObjects();
 
     /*
       3. Check collisions and store collided objects to collided
@@ -90,6 +115,31 @@ namespace pe {
     */
 
   }
+
+  // Update PhysicsObjects in specific grid partion, private method
+  void PhysicsWorld::UpdateObjects(std::map<Recti, Cell<PhysicsObject*>*>::const_iterator begin, std::map<Recti, Cell<PhysicsObject*>*>::const_iterator end) {
+    for (auto it = begin; it != end; it++) {
+      std::list<PhysicsObject*>& objects = it->second->entities;
+      for (auto& object : objects) {
+        if (object->getObjectType() == ObjectType::DynamicObject) {
+          object->updatePhysics(PhysicsWorld::IterarationsInterval);
+          object->setMoved(true);
+        }
+      }
+    }
+  }
+
+  // Update loose_cell objects, private method
+  void PhysicsWorld::UpdateLooseObjects() {
+    std::list<PhysicsObject*> objects = grid->getLooseCell()->entities;
+    for (auto& object : objects) {
+      if (object->getObjectType() == ObjectType::DynamicObject) {
+        object->updatePhysics(PhysicsWorld::IterarationsInterval);
+        object->setMoved(true);
+      }
+    }
+  }
+
 
   // Get collided PhysicsObjects as a list reference
   std::list<struct Collided>& PhysicsWorld::getCollided() {

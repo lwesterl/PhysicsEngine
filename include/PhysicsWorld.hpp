@@ -14,6 +14,7 @@
 #include "PhysicsGrid.hpp"
 #include "CollisionDetection.hpp"
 #include <list>
+#include <thread>
 
 /**
   *   @namespace pe
@@ -23,7 +24,7 @@ namespace pe {
 
   /**
     *   @struct Collided
-    *   @brief struct containing two collided PhysicObject
+    *   @brief struct containing two collided PhysicsObject
     */
   struct Collided {
     PhysicsObject* first; /**< 1st collided object */
@@ -31,14 +32,14 @@ namespace pe {
 
     /**
       *   @brief Constructor
-      *   @param first collided PhysicObject pointer
+      *   @param first collided PhysicsObject pointer
       *   @param second collided PhysicsObject pointer
       */
     Collided(PhysicsObject* first, PhysicsObject* second):
               first(first), second(second) {}
 
     /**
-      *   @brief Get index matching PhysicObject
+      *   @brief Get index matching PhysicsObject
       *   @param index collided object's index (0 or 1)
       *   @return PhysicsObject pointer matching the index. returns nullptr if index incorrect
       */
@@ -80,7 +81,7 @@ namespace pe {
 
       /**
         *   @brief Deconstructor
-        *   @details Removes every PhysicObject, PhysicsGrid and deletes memory
+        *   @details Removes every PhysicsObject, PhysicsGrid and deletes memory
         *   allocated for those
         */
       virtual ~PhysicsWorld();
@@ -99,7 +100,7 @@ namespace pe {
       PhysicsWorld& operator=(const PhysicsWorld& world);
 
       /**
-        *   @brief Add PhysicObject to PhysicsWorld
+        *   @brief Add PhysicsObject to PhysicsWorld
         *   @details Adds object to the correct PhysicsGrid Cell and starts to
         *   update its position and collisions when update is called
         *   @param object to be added
@@ -138,6 +139,7 @@ namespace pe {
     private:
       // Class members
       static const int GridCellSize;
+      static const unsigned THREADS;
       static int WorldWidth;
       static int WorldHeight;
       static float IterarationsInterval;
@@ -148,6 +150,22 @@ namespace pe {
         *   @details This should be called from constructor to init grid
         */
       void InitGrid();
+
+      /**
+        *   @brief Update PhysicsObjects
+        *   @details Updates objects which are in the specific Cells given with
+        *   iterators. Calls updatePhysics for DynamicObjects
+        *   @param begin iterator to the first Cell & Recti which should be updated
+        *   @param end iterator which must not be updated anymore
+        */
+      void UpdateObjects(std::map<Recti, Cell<PhysicsObject*>*>::const_iterator begin, std::map<Recti, Cell<PhysicsObject*>*>::const_iterator end);
+
+      /**
+        *   @brief Update loose_cell PhysicsObjects
+        *   @details Calls updatePhysics for DynamicObjects
+        */
+      void UpdateLooseObjects();
+      
 
       // Instance variables
       PhysicsGrid* grid;
