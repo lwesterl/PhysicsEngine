@@ -105,7 +105,7 @@ namespace pe {
     /*
       2. Move objects to the correct grid cells (call grid moveObjects)
     */
-    //grid->moveObjects();
+    grid->moveObjects();
 
     /*
       3. Check collisions and store collided objects to collided

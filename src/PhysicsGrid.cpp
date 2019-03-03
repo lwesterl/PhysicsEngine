@@ -117,6 +117,9 @@ namespace pe {
         if (insertObject(*it)) {
           // object added to cell
           it = loose_cell->entities.erase(it);
+        } else {
+          (*it)->setMoved(false);
+          it++;
         }
       }
       else it++;
@@ -140,6 +143,7 @@ namespace pe {
       // PhysicsObject inside multiple Cells, add it to loose_cell
       loose_cell->entities.push_back(object);
       loose_cell->active_cell = true;
+      object->setMoved(false);
     }
     return true;
   }
@@ -174,7 +178,6 @@ namespace pe {
   }
 
   // Move PhysicsObjects to correct grid cells
-  // CURRENTLY FREEZES
   void PhysicsGrid::moveObjects() {
     for (std::map<Recti, Cell<PhysicsObject*>*>::iterator it = cells.begin(); it != cells.end(); it++) {
       std::list<PhysicsObject*>& physobjs = it->second->entities;
@@ -184,13 +187,13 @@ namespace pe {
           // check whether it needs to be moved
           if ((!it->first.contains((*i)->getMinPosition())) || (!it->first.contains((*i)->getMaxPosition()))) {
             // remove object from the current Cell
-            (*i)->setMoved(false);
             addObject(*i);
             i = physobjs.erase(i);
+          } else {
+            (*i)->setMoved(false);
+            i++;
           }
-          else i++;
-        }
-        else i++;
+        } else i++;
       }
     }
     // Handle loose_cell
