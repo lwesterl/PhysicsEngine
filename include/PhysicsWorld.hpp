@@ -15,6 +15,7 @@
 #include "CollisionDetection.hpp"
 #include <list>
 #include <thread>
+#include <mutex>
 
 /**
   *   @namespace pe
@@ -49,6 +50,22 @@ namespace pe {
       return nullptr;
     }
   };
+
+  /**
+    *   @namespace WorkType
+    *   @brief Used to avoid namespace collisions with PhysicsWorld method names
+    */
+  namespace WorkType {
+    /**
+      *   @enum WorkType
+      *   @brief Describes work for PhysicsWorld::DoWork
+      */
+    enum WorkType {
+      UpdateObjects,
+      CheckCollisions
+    };
+  } // end of namespace WorkType
+
 
   /**
     *   @class PhysicsWorld
@@ -152,6 +169,13 @@ namespace pe {
       void InitGrid();
 
       /**
+        *   @brief Start threads to do specified work
+        *   @param worktype WorkType describing whether PhysicsObjects should be
+        *   updated or collisions checked
+        */
+      void DoWork(enum WorkType::WorkType worktype);
+
+      /**
         *   @brief Update PhysicsObjects
         *   @details Updates objects which are in the specific Cells given with
         *   iterators. Calls updatePhysics for DynamicObjects
@@ -165,11 +189,23 @@ namespace pe {
         *   @details Calls updatePhysics for DynamicObjects
         */
       void UpdateLooseObjects();
-      
+
+      /**
+        *   @brief Check collisions between PhysicsObjects
+        *   @details Goes through all objects that are located in same grid cell
+        *   or are lose (these can also collide). Calls CollisionDetection::canCollide
+        *   Updates also collided based on return value of canCollide
+        *   @param begin iterator to grid->cells where checking should be started
+        *   @param end iterator to grid->cells which must not be checked
+        *   @remark O*N^2 complexity
+        */
+      void CheckCollisions(std::map<Recti, Cell<PhysicsObject*>*>::const_iterator begin, std::map<Recti, Cell<PhysicsObject*>*>::const_iterator end);
+
 
       // Instance variables
       PhysicsGrid* grid;
       std::list<struct Collided> collided;
+      std::mutex collided_mutex;
 
   };
 

@@ -71,36 +71,14 @@ namespace pe {
       0. init collided
     */
     collided.clear();
+
     /*
       1. Update object physics if DynamicObject (call updatePhysics with elapsed
        time, IterarationsInterval, as argument). This could be done in multiple
        threads at the same time, threads operate one grid cell. Activate object
        moved bool.
     */
-    unsigned interval;
-    if ((PhysicsWorld::THREADS > 0) && ((interval = grid->getCellsSize() / PhysicsWorld::THREADS) > 0)) {
-      std::thread *workers = new std::thread[THREADS];
-      auto it = grid->begin();
-      auto it_inc = [](auto it, unsigned inc) { for (unsigned i = 0; i < inc; i++) it++; return it;};
-      unsigned i = 0;
-      for (; i < PhysicsWorld::THREADS - 1; i++) {
-        auto it2 = it_inc(it, interval);
-        workers[i] = std::thread(&PhysicsWorld::UpdateObjects, this, it, it2);
-        it = it2;
-
-      }
-      workers[i] = std::thread(&PhysicsWorld::UpdateObjects, this, it, grid->cend());
-      UpdateLooseObjects();
-      // collect threads
-      for (unsigned j = 0; j < PhysicsWorld::THREADS; j++) {
-        workers[j].join();
-      }
-      delete[] workers;
-    }
-    else {
-      UpdateObjects(grid->cbegin(), grid->cend());
-      UpdateLooseObjects();
-    }
+    DoWork(WorkType::UpdateObjects);
 
     /*
       2. Move objects to the correct grid cells (call grid moveObjects)
@@ -113,7 +91,50 @@ namespace pe {
         - But it's enough to update objects' grid cells during next update cycle
         step 2
     */
+    DoWork(WorkType::CheckCollisions);
+    // check also if objects in loose cell collided with each other or with any other
+    // PhysicsObjects
 
+  }
+
+  // Start threads to do specified work, private method
+  void PhysicsWorld::DoWork(enum WorkType::WorkType worktype) {
+    unsigned interval;
+    if ((PhysicsWorld::THREADS > 0) && ((interval = grid->getCellsSize() / PhysicsWorld::THREADS) > 0)) {
+      std::thread *workers = new std::thread[THREADS];
+      auto it = grid->begin();
+      auto it_inc = [](auto it, unsigned inc) { for (unsigned i = 0; i < inc; i++) it++; return it;};
+      unsigned i = 0;
+      for (; i < PhysicsWorld::THREADS - 1; i++) {
+        auto it2 = it_inc(it, interval);
+        if (worktype == WorkType::UpdateObjects) {
+          workers[i] = std::thread(&PhysicsWorld::UpdateObjects, this, it, it2);
+        } else {
+          workers[i] = std::thread(&PhysicsWorld::CheckCollisions, this, it, it2);
+        }
+        it = it2;
+      }
+
+      if (worktype == WorkType::UpdateObjects) {
+        workers[i] = std::thread(&PhysicsWorld::UpdateObjects, this, it, grid->cend());
+        UpdateLooseObjects();
+      } else {
+        workers[i] = std::thread(&PhysicsWorld::CheckCollisions, this, it, grid->cend());
+      }
+      // collect threads
+      for (unsigned j = 0; j < PhysicsWorld::THREADS; j++) {
+        workers[j].join();
+      }
+      delete[] workers;
+    }
+    else {
+      if (worktype == WorkType::UpdateObjects) {
+        UpdateObjects(grid->cbegin(), grid->cend());
+        UpdateLooseObjects();
+      } else {
+        CheckCollisions(grid->cbegin(), grid->cend());
+      }
+    }
   }
 
   // Update PhysicsObjects in specific grid partion, private method
@@ -138,6 +159,24 @@ namespace pe {
         object->setMoved(true);
       }
     }
+  }
+
+  // Check collisions and update collided, private method
+  void PhysicsWorld::CheckCollisions(std::map<Recti, Cell<PhysicsObject*>*>::const_iterator begin, std::map<Recti, Cell<PhysicsObject*>*>::const_iterator end) {
+    for (auto it = begin; it != end; it++) {
+      for (auto object1 = it->second->entities.begin(); object1 != it->second->entities.end(); object1++) {
+        auto object2 = object1;
+        for (++object2; object2 != it->second->entities.end(); object2++) {
+          if (CollisionDetection::canCollide(*object1, *object2)) {
+            // objects collided, add to those to collided
+            collided_mutex.lock();
+            collided.push_back(Collided(*object1, *object2));
+            collided_mutex.unlock();
+          }
+        }
+      }
+    }
+
   }
 
 
