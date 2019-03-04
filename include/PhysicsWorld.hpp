@@ -197,10 +197,17 @@ namespace pe {
         *   Updates also collided based on return value of canCollide
         *   @param begin iterator to grid->cells where checking should be started
         *   @param end iterator to grid->cells which must not be checked
-        *   @remark O*N^2 complexity
+        *   @remark O*N^2 complexity, multithread support
         */
       void CheckCollisions(std::map<Recti, Cell<PhysicsObject*>*>::const_iterator begin, std::map<Recti, Cell<PhysicsObject*>*>::const_iterator end);
 
+      /**
+        *   @brief Check collisions for the loose PhysicsObjects
+        *   @details Loose objects can collided with any objects (loose or not loose).
+        *   Updates collided based on return values of CollisionDetection::canCollide
+        *   @remark O*N^2 complexity, this cannot be multithreaded
+        */
+      void CheckLooseCollisions();
 
       // Instance variables
       PhysicsGrid* grid;

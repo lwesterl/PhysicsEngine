@@ -94,7 +94,7 @@ namespace pe {
     DoWork(WorkType::CheckCollisions);
     // check also if objects in loose cell collided with each other or with any other
     // PhysicsObjects
-
+    CheckLooseCollisions();
   }
 
   // Start threads to do specified work, private method
@@ -177,6 +177,29 @@ namespace pe {
       }
     }
 
+  }
+
+  // Check collisions for the loose objects, private method
+  // This is not designed to be multithreaded
+  void PhysicsWorld::CheckLooseCollisions() {
+    Cell<PhysicsObject*>* loose_cell = grid->getLooseCell();
+    for (auto it1 = loose_cell->entities.begin(); it1 != loose_cell->entities.end(); it1++) {
+      auto it2 = it1;
+      for(++it2; it2 != loose_cell->entities.end(); it2++) {
+        // check collisions between other loose objects
+        if (CollisionDetection::canCollide(*it1, *it2)) {
+          collided.push_back(Collided(*it1, *it2));
+        }
+      }
+      for (auto it = grid->cbegin(); it != grid->cend(); it++) {
+        for (auto &object : it->second->entities) {
+          // check collisions with other PhysicsObjects
+          if (CollisionDetection::canCollide(*it1, object)) {
+            collided.push_back(Collided(*it1, object));
+          }
+        }
+      }
+    }
   }
 
 
