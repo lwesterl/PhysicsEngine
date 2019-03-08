@@ -85,7 +85,7 @@ namespace pe {
       /**
         *   @brief Set how many iterations is calculated each second
         *   @details Changes the class variable, PhysicsWorld::IterarationsInterval
-        *   @param iteration How many iterations should be calculated per second
+        *   @param iterations How many iterations should be calculated per second
         */
       static void setIterationAmount(float iterations);
 
@@ -131,7 +131,7 @@ namespace pe {
         *   @brief Remove object from PhysicsWorld
         *   @details This is the only correct way to permanently remove objects.
         *   object is removed from PhysicsGrid and its memory is deleted
-        *   @param oject to be removed permanently
+        *   @param object to be removed permanently
         *   @return true if object found and removed, otherwise false
         */
       bool removeObject(PhysicsObject* object);
