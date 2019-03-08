@@ -64,27 +64,27 @@ namespace pe {
           *   @brief Get the Shape frame
           *   @return frame as constant reference
           */
-        const std::deque<Vector2f>& getFrame();
+        const std::deque<Vector2f>& getFrame() const;
 
         /**
           *   @brief Get min
           *   @return Vector2f matching min
           *   @details Returns an empty pe::Vector2f if min is nullptr
           */
-        Vector2f getMin();
+        Vector2f getMin() const;
 
         /**
           *   @brief Get max
           *   @return Vector2f matching max
           *   @details Returns an empty pe::Vector2f if max is nullptr
           */
-        Vector2f getMax();
+        Vector2f getMax() const;
 
         /**
           *   @brief Get area of the Shape
           *   @return area
           */
-        float getArea();
+        float getArea() const;
 
         /**
           *   @brief Get how many edges there are in the Shape
@@ -93,7 +93,7 @@ namespace pe {
           *   @remark returns 0 if frame is empty. !!!! This may or may not be same as
           *   axis.size() !!!!
           */
-        int getEdges();
+        int getEdges() const;
 
         /**
           *   @brief Get axis of the Shape
@@ -102,6 +102,20 @@ namespace pe {
           *   after Shape is created to save compute time in CollisionDetection
           */
         std::vector<Vector2f>& getAxis();
+
+        /**
+          *   @brief Get Shape width
+          *   @return max x coordinate - min x coordinate
+          *   @remark returns 0 if min or max nullptr
+          */
+        float getWidth() const;
+
+        /**
+          *   @brief Get Shape height
+          *   @return max y coordinate - min y coordinate
+          *   @remark returns 0 if min or max nullptr
+          */
+        float getHeight() const;
 
 
       private:

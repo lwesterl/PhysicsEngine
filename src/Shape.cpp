@@ -56,12 +56,12 @@ namespace pe {
   }
 
   // Get frame
-  const std::deque<Vector2f>& Shape::getFrame() {
+  const std::deque<Vector2f>& Shape::getFrame() const {
     return frame;
   }
 
   // Get min
-  Vector2f Shape::getMin() {
+  Vector2f Shape::getMin() const {
     Vector2f vect;
     if (min != nullptr) {
       vect = *min;
@@ -70,7 +70,7 @@ namespace pe {
   }
 
   // Get max
-  Vector2f Shape::getMax() {
+  Vector2f Shape::getMax() const {
     Vector2f vect;
     if (max != nullptr) {
       vect = *max;
@@ -79,12 +79,12 @@ namespace pe {
   }
 
   // Get area
-  float Shape::getArea() {
+  float Shape::getArea() const {
     return area;
   }
 
   // Get amount of edges
-  int Shape::getEdges() {
+  int Shape::getEdges() const {
     int edges = frame.size();
     return edges > 0 ? edges -1 : 0;
   }
@@ -94,6 +94,23 @@ namespace pe {
     return axis;
   }
 
+  // Get width
+  float Shape::getWidth() const {
+    if ((max != nullptr) && (min != nullptr)) {
+      return max->getX() - min->getX();
+    }
+    return 0.f;
+  }
+
+  // Get height
+  float Shape::getHeight() const {
+    if ((max != nullptr) && (min != nullptr)) {
+      return max->getY() - min->getY();
+    }
+    return 0.f;
+  }
+
+  // Find min and max from frame, private method
   void Shape::FindMinMax() {
     min = nullptr;
     max = nullptr;
@@ -108,7 +125,7 @@ namespace pe {
     }
   }
 
-  // Center of polygon mass
+  // Center of polygon mass, private method
   void Shape::CenterMass() {
     float central_x = 0.f;
     float central_y = 0.f;
@@ -147,7 +164,7 @@ namespace pe {
     mass_center = Vector2f(central_x, central_y);
   }
 
-  // Calculate axis of the Shape
+  // Calculate axis of the Shape, private method
   void Shape::FindAxis() {
     int len = getEdges();
     axis = std::vector<Vector2f> (len);
@@ -159,7 +176,7 @@ namespace pe {
     RemoveDuplicateAxis();
   }
 
-  // Remove duplicate axis
+  // Remove duplicate axis, private method
   void Shape::RemoveDuplicateAxis() {
     std::sort(axis.begin(), axis.end(), [] (const Vector2f& vect1, const Vector2f& vect2){
       return vect1 < vect2;
