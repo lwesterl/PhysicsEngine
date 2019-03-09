@@ -1,7 +1,7 @@
 # ignore all objects, compiled files
 *.o
 *.exe
-demo
+/demo/demo
 
 # ignore all libraries
 *.so
