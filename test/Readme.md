@@ -4,8 +4,10 @@ Command | Description
 --------|-------------
 make                | compile all objects and tests
 make clean          | remove all objects and tests
-make clean-objects  | remove all object
+make clean-objects  | remove all objects
+libphysengine.so    | create dynamic library
 
+Note: objects are created to src and utils folders
 ## Test
 ### Run all tests
 ```
