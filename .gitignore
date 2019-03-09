@@ -1,6 +1,7 @@
 # ignore all objects, compiled files
 *.o
 *.exe
+demo
 
 # ignore all libraries
 *.so
