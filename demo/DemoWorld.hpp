@@ -9,6 +9,8 @@
 #include "../include/PhysicsWorld.hpp"
 #include "DemoObject.hpp"
 #include <SFML/Graphics.hpp>
+#include <list>
+#include <iostream>
 
 
 /**
@@ -52,7 +54,22 @@ class DemoWorld
     void draw();
 
   private:
+    /**
+      *   @brief Try to move DemoObject
+      *   @param event SFML MouseMove event
+      *   @return 0 on success else -1
+      */
+    int MouseMove(sf::Event& event);
+
+    /**
+      *   @brief Try to activate DemoObject
+      *   @param event SFML MouseButtonPressed event
+      *   @return 0 on success else -1
+      */
+    int MousePress(sf::Event& event);
+
     sf::RenderWindow &window;
     pe::PhysicsWorld physWorld;
     pe::Shape *shape; /**< this will be replaced by a proper Shape allocator */
+    std::list<DemoObject*> demoObjects;
 };

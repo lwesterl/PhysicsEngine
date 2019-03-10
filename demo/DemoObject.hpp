@@ -18,7 +18,7 @@
   *   @brief Class for object which are used to demo PhysicsEngine
   *   @details DemoObject uses SFML to provide framework for rendering
   */
-class DemoObject: sf::Drawable
+class DemoObject: public sf::Drawable
 {
   public:
     /**
@@ -73,8 +73,14 @@ class DemoObject: sf::Drawable
       *   @brief Set DemoObject position
       *   @param x new x coordinate
       *   @param y new y coordinate
+      *   @remark position of left upper corner of the DemoObject
       */
     void setPosition(float x, float y);
+
+    /**
+      *   @brief Update rectShape position to match physicsObject position
+      */
+    void updatePosition();
 
     /**
       *   @brief Set DemoObject color

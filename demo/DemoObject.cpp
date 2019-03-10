@@ -19,8 +19,10 @@ DemoObject::DemoObject(pe::ObjectType::ObjectType type, pe::Shape* shape, sf::Co
     // use some density value
     physicsObject = new pe::DynamicObject(shape, 1.f);
   }
+  // move physicsObject from left upper corner (like SFML rectShape)
+  physicsObject->setOriginTransform(pe::Vector2f(-shape->getWidth()/2.f, -shape->getHeight()/2.f));
   // create rectShape
-  rectShape = sf::RectangleShape(sf::Vector2f(shape->getHeight(), shape->getWidth()));
+  rectShape = sf::RectangleShape(sf::Vector2f(shape->getWidth(), shape->getHeight()));
   rectShape.setFillColor(color);
 }
 
@@ -51,6 +53,19 @@ DemoObject& DemoObject::operator=(const DemoObject& demoObject) {
 void DemoObject::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   // draw rectShape
   target.draw(rectShape, states);
+}
+
+// Set DemoObject position
+void DemoObject::setPosition(float x, float y) {
+  // both physicsObject and rectShape moved from left upper corner
+  physicsObject->setPosition(pe::Vector2f(x, y));
+  rectShape.setPosition(x, y);
+}
+
+// Update SFML position
+void DemoObject::updatePosition() {
+  pe::Vector2f new_pos = physicsObject->getPosition() + physicsObject->getOriginTransform();
+  rectShape.setPosition(new_pos.getX(), new_pos.getY());
 }
 
 // Set color for rectShape
