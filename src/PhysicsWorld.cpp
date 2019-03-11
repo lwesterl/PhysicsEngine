@@ -167,7 +167,7 @@ namespace pe {
       for (auto object1 = it->second->entities.begin(); object1 != it->second->entities.end(); object1++) {
         auto object2 = object1;
         for (++object2; object2 != it->second->entities.end(); object2++) {
-          if (CollisionDetection::canCollide(*object1, *object2)) {
+          if (CollisionDetection::calculateCollision(*object1, *object2)) {
             // objects collided, add to those to collided
             collided_mutex.lock();
             collided.push_back(Collided(*object1, *object2));
@@ -187,14 +187,14 @@ namespace pe {
       auto it2 = it1;
       for(++it2; it2 != loose_cell->entities.end(); it2++) {
         // check collisions between other loose objects
-        if (CollisionDetection::canCollide(*it1, *it2)) {
+        if (CollisionDetection::calculateCollision(*it1, *it2)) {
           collided.push_back(Collided(*it1, *it2));
         }
       }
       for (auto it = grid->cbegin(); it != grid->cend(); it++) {
         for (auto &object : it->second->entities) {
           // check collisions with other PhysicsObjects
-          if (CollisionDetection::canCollide(*it1, object)) {
+          if (CollisionDetection::calculateCollision(*it1, object)) {
             collided.push_back(Collided(*it1, object));
           }
         }
