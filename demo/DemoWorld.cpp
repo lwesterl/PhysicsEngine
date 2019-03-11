@@ -8,8 +8,8 @@
 
 /*  Class DemoWorld */
 
-// set a small gravity value
-float pe::PhysicsProperties::GravityY = 0.f;
+// set the gravity value
+float pe::PhysicsProperties::GravityY = 100.f;
 
 // Constructor
 DemoWorld::DemoWorld(sf::RenderWindow& window): window(window), shape(nullptr) {}
@@ -62,14 +62,17 @@ int DemoWorld::handleEvent(sf::Event& event) {
 
 // Update DemoWorld periodically
 void DemoWorld::update() {
-
+  // update PhysicsWorld
   physWorld.update();
   for (auto& object : demoObjects) {
     object->updatePosition();
-    if (object->getPhysicsObject()->getObjectType() == pe::ObjectType::DynamicObject) {
-      std::cout << "DynamicObject pos: " << object->getPhysicsObject()->getPosition() << std::endl;
-    }
   }
+  int num = 0;
+  std::list<struct pe::Collided>& collided = physWorld.getCollided();
+  for (auto it = collided.begin(); it != collided.end(); it++) {
+    num++;
+  }
+  std::cout << "Collisions: " << num << std::endl;
 }
 
 // Draw DemoWorld

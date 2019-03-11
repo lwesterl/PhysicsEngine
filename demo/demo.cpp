@@ -21,6 +21,7 @@ int main() {
     while(window.pollEvent(event)) {
       if (demoWorld.handleEvent(event) < 0) {
         // quit
+        window.close();
         return 0;
       }
     }

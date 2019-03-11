@@ -64,7 +64,8 @@ void DemoObject::setPosition(float x, float y) {
 
 // Update SFML position
 void DemoObject::updatePosition() {
-  pe::Vector2f new_pos = physicsObject->getPosition() + physicsObject->getOriginTransform();
+  // DynamicObject position already contains current origin_transform
+  pe::Vector2f new_pos = physicsObject->getPosition();
   rectShape.setPosition(new_pos.getX(), new_pos.getY());
 }
 
