@@ -47,10 +47,9 @@ namespace pe {
     0.5f * (physics.acceloration.getX() + PhysicsProperties::GravityX) * elapsed_time * elapsed_time;
     float delta_y = physics.velocity.getY() * elapsed_time +
     0.5f * (physics.acceloration.getY() + PhysicsProperties::GravityY) * elapsed_time * elapsed_time;
-    /**< TODO fix bug */
-    //physics.movePosition(Vector2f(delta_x, delta_y));
+    physics.movePosition(Vector2f(delta_x, delta_y));
     // decrease acceloration and velocity based on physics.resistance_factor
-    //physics.applyResistance(elapsed_time);
+    physics.applyResistance(elapsed_time);
   }
 
 }// end of namespace pe

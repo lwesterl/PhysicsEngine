@@ -31,7 +31,7 @@ namespace pe {
 
   // Move position
   void PhysicsProperties::movePosition(Vector2f move) {
-    position = position + origin_transform + move;
+    position = position + move;
   }
 
   // Apply resisting forces

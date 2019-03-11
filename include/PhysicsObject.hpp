@@ -148,6 +148,7 @@ namespace pe {
       /**
         *   @brief Get PhysicsObject position
         *   @return physics.position
+        *   @remark This position contains origin_transform
         */
       Vector2f& getPosition();
 
