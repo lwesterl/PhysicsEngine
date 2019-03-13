@@ -29,14 +29,10 @@ namespace pe {
 
   // collisionAction implementation
   void DynamicObject::collisionAction(Vector2f position_change) {
-    if (dotProduct(physics.velocity, position_change) > 0.f) {
-      // position change should be in the inverse direction
-      physics.position -= position_change;
-    }
-    else {
-      physics.position += position_change;
-    }
-    physics.velocity.update(0.f, 0.f);
+    // move DynamicObject to inverse direction to counter collision
+    physics.position += inverse_direction_unit_vector * position_change;
+    // update velocity show that DynamicObject bouncess of the object it collided based on elasticity
+    physics.velocity *= -physics.elasticity;
     physics.acceloration.update(PhysicsProperties::GravityX, PhysicsProperties::GravityY);
   }
 
@@ -50,6 +46,9 @@ namespace pe {
     physics.movePosition(Vector2f(delta_x, delta_y));
     // decrease acceloration and velocity based on physics.resistance_factor
     physics.applyResistance(elapsed_time);
+    // update also inverse_direction_unit_vector to store inverse for current movement
+    inverse_direction_unit_vector = Vector2f(-delta_x, -delta_y);
+    inverse_direction_unit_vector.normalize();
   }
 
 }// end of namespace pe

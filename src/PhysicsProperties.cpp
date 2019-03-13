@@ -16,11 +16,11 @@ namespace pe {
 
   // Empty constructor
   PhysicsProperties::PhysicsProperties(): angle(0.f), density(0.f), elasticity(0.f),
-  inverse_mass(0.f), resistance_factor(2.f) {}
+  inverse_mass(0.f), resistance_factor(1.2f) {}
 
   // Constructor
   PhysicsProperties::PhysicsProperties(float density, float area, bool static_object):
-  angle(0.f), density(std::abs(density)), elasticity(0.9f), resistance_factor(2.f) {
+  angle(0.f), density(std::abs(density)), elasticity(0.9f), resistance_factor(1.2f) {
     CalculateInverseMass(area, static_object);
   }
 

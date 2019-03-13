@@ -42,7 +42,7 @@ namespace pe {
       // all projections overlap, collision detected
       std::list<PhysicsObject*> collided = GetCollisionResult(obj1, obj2);
       // move collided according to MTV
-      //collideObjects(collided, mtv);
+      collideObjects(collided, mtv);
 
       return true;
     }

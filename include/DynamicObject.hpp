@@ -54,7 +54,7 @@ namespace pe {
         /**
           *   @brief Implementation of collisionAction from PhysicsObjects
           *   @details pushes DynamicObject avoid from other object by position_change
-          *   @todo Add physics to the implementation
+          *   @todo Physics could be tuned
           */
         virtual void collisionAction(Vector2f position_change) override;
 
@@ -68,6 +68,10 @@ namespace pe {
           *   suitable
           */
         virtual void updatePhysics(float elapsed_time) override;
+
+
+      private:
+        Vector2f inverse_direction_unit_vector; /**< Unit vector ponting to the opposite direction than current movement */
 
 
     };
