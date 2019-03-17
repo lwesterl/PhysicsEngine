@@ -41,7 +41,7 @@ class DemoWorld
       *   @brief Handle incoming events
       *   @param event SFML event
       */
-    int handleEvent(sf::Event &event);
+    void handleEvent(sf::Event &event);
 
     /**
       *   @brief Update DemoObjects positions etc.
@@ -57,16 +57,14 @@ class DemoWorld
     /**
       *   @brief Try to move DemoObject
       *   @param event SFML MouseMove event
-      *   @return 0 on success else -1
       */
-    int MouseMove(sf::Event& event);
+    void MouseMove(sf::Event& event);
 
     /**
       *   @brief Try to activate DemoObject
       *   @param event SFML MouseButtonPressed event
-      *   @return 0 on success else -1
       */
-    int MousePress(sf::Event& event);
+    void MousePress(sf::Event& event);
 
     sf::RenderWindow &window;
     pe::PhysicsWorld physWorld;

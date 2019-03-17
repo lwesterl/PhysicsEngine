@@ -10,6 +10,7 @@
 
 // set the gravity value
 float pe::PhysicsProperties::GravityY = 100.f;
+float pe::PhysicsProperties::GravityX = 10.f;
 
 // Constructor
 DemoWorld::DemoWorld(sf::RenderWindow& window): window(window), shape(nullptr) {}
@@ -42,20 +43,19 @@ void DemoWorld::initWorld() {
     // add object to physWorld
     physWorld.addObject(obj->getPhysicsObject());
     demoObjects.push_back(obj);
+    obj->getPhysicsObject()->setForce(pe::Vector2f(4.f, 500000.f));
   }
 }
 
 // Handle SFML window events
-int DemoWorld::handleEvent(sf::Event& event) {
+void DemoWorld::handleEvent(sf::Event& event) {
   switch (event.type) {
-    case sf::Event::Closed:
-      return -1;
     case sf::Event::MouseMoved:
-      return MouseMove(event);
+      MouseMove(event);
     case sf::Event::MouseButtonPressed:
-      return MousePress(event);
+      MousePress(event);
     default:
-      return 0;
+      return;
   }
 
 }
@@ -84,11 +84,11 @@ void DemoWorld::draw() {
 }
 
 // Try to move DemoObject, private method
-int DemoWorld::MouseMove(sf::Event& event) {
-  return 0;
+void DemoWorld::MouseMove(sf::Event& event) {
+  return;
 }
 
 // Try to activate DemoObject, private method
-int DemoWorld::MousePress(sf::Event& event) {
-  return 0;
+void DemoWorld::MousePress(sf::Event& event) {
+  return;
 }
