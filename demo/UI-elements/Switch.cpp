@@ -26,7 +26,7 @@ namespace UI {
     this->title.setFont(font);
     statusText.setFont(font);
     this->title.setFillColor(sf::Color::Blue);
-    statusText.setFillColor(sf::Color::Black);
+    statusText.setFillColor(sf::Color::White);
     this->title.setCharacterSize(Switch::CharSize);
     statusText.setCharacterSize(Switch::CharSize);
     this->title.setString(title);
@@ -36,7 +36,7 @@ namespace UI {
     setPosition(x, y);
     // max three Courier chars
     outerFrame.setSize(sf::Vector2f(3 * Switch::CharSize/2.f + 2 * Switch::SpacingHorizontal, Switch::CharSize));
-    outerFrame.setFillColor(sf::Color::Green);
+    outerFrame.setFillColor(sf::Color::Blue);
     // frameRect must exactly match outerFrame
     frameRect.setWidth(static_cast<float>(3 * Switch::CharSize/2.f + 2 * Switch::SpacingHorizontal));
     frameRect.setHeight(static_cast<float>(Switch::CharSize));

@@ -1,4 +1,5 @@
-/**   @file Switch.hpp
+/**
+  *   @file Switch.hpp
   *   @author Lauri Westerholm
   *   @brief Header for UI switch used in PhysicsEngine demo
   */
@@ -12,13 +13,15 @@
 
 #define FontPath "/fonts/Courier.ttf" /**< font file path, monospace font */
 
-/**   @namespace UI
+/**
+  *   @namespace UI
   *   @brief namespace for UI elements used in PhysicsEngine demo
   */
 namespace UI {
 
 
-  /**   @class Switch
+  /**
+    *   @class Switch
     *   @brief ON-OFF -style switch for demo
     */
 
@@ -29,62 +32,71 @@ namespace UI {
       static float SpacingVertical; /**< amount of vertical space between title and outerFrame */
       static float SpacingHorizontal; /**< amount of horizontal space between innerText and outerFrame */
 
-      /**   @brief Constructor
-
+      /**
+        *   @brief Constructor
         */
       Switch();
 
-      /**   @brief Deconstructor
+      /**
+        *   @brief Deconstructor
         */
       virtual ~Switch() {}
 
 
-      /**   @brief Constuctor which takes positional arguments
+      /**
+        *   @brief Constuctor which takes positional arguments
         *   @param x x coordinate position
         *   @param y y coordinate position
         *   @remark x and y is the position for left corner of the title
         */
       Switch(float x, float y, sf::String title);
 
-      /**   @brief Get value
+      /**
+        *   @brief Get value
         *   @return value
         */
       inline bool getValue() const {
         return value;
       }
 
-      /**   @brief Set position for the switch
+      /**
+        *   @brief Set position for the switch
         *   @param x x coordinate position
         *   @param y y coordinate position
         *   @remark position is the position for left corner of the title
         */
       void setPosition(float x, float y);
 
-      /**   @brief change value manually
+      /**
+        *   @brief change value manually
         *   @param value new value, true or false
         */
       void setValue(bool value);
 
-      /**   @brief Set title
+      /**
+        *   @brief Set title
         *   @param title new title text
         */
       void setTitle(sf::String title);
 
-      /**   @brief Draw Switch
+      /**
+        *   @brief Draw Switch
         *   @details Switch inherits from sf::Drawable
         *   @param target Rendertarger where Switch is drawn to
         *   @param states sf::Renderstates
         */
       virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-      /**   @brief Set enabled
+      /**
+        *   @brief Set enabled
         *   @param enable true -> Switch drawn and can be activated
         */
       inline void enable(bool enable) {
         enabled = enable;
       }
 
-      /**   @brief Try to toggle the switch
+      /**
+        *   @brief Try to toggle the switch
         *   @details switch is toggled if x and y are inside outerFrame
         *   @param x x coordinate position
         *   @param y y coordinate position
