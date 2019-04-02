@@ -32,6 +32,7 @@ namespace UI {
     image = sf::Sprite(*texture);
     frame = button.frame;
     action = button.action;
+    setPosition(button.image.getPosition().x, button.image.getPosition().y);
   }
 
   // copy construtor
@@ -48,6 +49,7 @@ namespace UI {
   // set new position
   void Button::setPosition(float x, float y) {
     frame.setPosition(pe::Vector2f(x, y));
+    image.setPosition(sf::Vector2f(x, y));
   }
 
   // draw Button: image (sf::Sprite)

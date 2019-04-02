@@ -56,7 +56,7 @@ namespace UI {
       /**
         *   @brief Deconstructor
         *   @details Deletes all memory allocated for Texture -> all those pointer
-        *   will invalidate, show this TextureLoader must not go out of scope
+        *   will invalidate, so this TextureLoader must not go out of scope
         *   before Buttons using the textures
         */
       virtual ~TextureLoader();

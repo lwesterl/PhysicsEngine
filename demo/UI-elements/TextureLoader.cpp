@@ -13,16 +13,16 @@ namespace UI {
   // Init TexturePaths
   std::map<TextureName::TextureName, const std::string> TextureLoader::TexturePaths =
   {
-    { TextureName::UpArrow, "img/up_arrow.png" },
-    { TextureName::DownArrow, "img/down_arrow.png" },
-    { TextureName::StartStop, "img/pause_play.png" },
-    { TextureName::Restart, "img/restart.png" }
+    { TextureName::UpArrow, "UI-elements/img/up_arrow.png" },
+    { TextureName::DownArrow, "UI-elements/img/down_arrow.png" },
+    { TextureName::StartStop, "UI-elements/img/pause_play.png" },
+    { TextureName::Restart, "UI-elements/img/restart.png" }
   };
 
   // Constructor
   TextureLoader::TextureLoader() {
     // a little sketchy
-    for (int i = TextureName::UpArrow; i != TextureName::Restart; i++) {
+    for (int i = TextureName::UpArrow; i != TextureName::Restart + 1; i++) {
       sf::Texture* texture = new sf::Texture();
       texture->loadFromFile(TextureLoader::TexturePaths[static_cast<TextureName::TextureName> (i)]);
       textures.emplace(std::make_pair(static_cast<TextureName::TextureName> (i), texture));
