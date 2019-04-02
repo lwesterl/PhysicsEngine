@@ -6,6 +6,10 @@
 
 #pragma once
 #include "DemoWorld.hpp"
+#include "UI-elements/TextureLoader.hpp"
+#include "UI-elements/Button.hpp"
+#include "UI-elements/Multichoice.hpp"
+#include "UI-elements/Switch.hpp"
 #include <SFML/Graphics.hpp>
 
 /**
@@ -15,6 +19,10 @@
 class DemoUI
 {
   public:
+    const static unsigned WindowWidth = 800; /**< window width */
+    const static unsigned WindowHeight = 600; /**< window height */
+    constexpr static float BottomToolStartHeight = 0.875; /**< tells where bottom toolbar starts, must in range of 0 - 1 */
+
     /**
       *   @brief Constructor for DemoUI
       *   @param window RenderWindow
@@ -40,7 +48,7 @@ class DemoUI
     /**
       *   @brief Pause switch
       */
-    void inline PauseSwitch() {
+    void inline pauseSwitch() {
       paused ? paused = false: paused = true;
     }
 
@@ -58,8 +66,28 @@ class DemoUI
       */
     bool HandleKeyPress(sf::Event& event);
 
+    /**
+      *   @brief Handle mouse presses
+      *   @param event sfml MousePressEvent
+      */
+    bool HandleMousePress(sf::Event& event);
+
+    /**
+      *   @brief Create all UI elements
+      *   @details This should be called only from the constructor
+      */
+    void CreateUI();
+
     bool paused;
     sf::RenderWindow &window;
     DemoWorld demoWorld;
+    UI::TextureLoader textureLoader;
+    UI::Multichoice multiChoices[4];
+    UI::Button buttons[2];
+    UI::Switch collisionSwitch;
+    sf::RectangleShape toolbarBackground;
+    sf::RectangleShape pauseBackground;
+    sf::View bottomToolbarView;
+
 
 };

@@ -10,7 +10,8 @@
 int main() {
 
   // create the main window
-  sf::RenderWindow window(sf::VideoMode(800, 600), "PhysicsEngine Demo");
+  sf::RenderWindow window(sf::VideoMode(DemoUI::WindowWidth, DemoUI::WindowHeight), "PhysicsEngine Demo",
+                          sf::Style::Titlebar | sf::Style::Close);
 
   // create DemoUI
   DemoUI demoUI(window);
