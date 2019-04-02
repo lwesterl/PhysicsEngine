@@ -6,6 +6,7 @@
 
 #pragma once
 #include "Switch.hpp" // contains font path macro
+#include "Button.hpp"
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
 #include <cstdint>
@@ -63,7 +64,7 @@ namespace UI {
         *   @param height Multichoice frame height
         *   @remark Positions are set based on title left corner
         */
-        Multichoice(sf::String title, float x, float y, float width, float height);
+        Multichoice(sf::String title, float x, float y, float width, float height, sf::Texture* upArrow, sf::Texture* downArrow);
 
       /**
         *   @brief Set scale for Multichoice
@@ -89,23 +90,43 @@ namespace UI {
         */
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+      /**
+        *   @brief Check if Multichoice has been toggled, ie. Buttons pressed
+        *   @param x coordinate position
+        *   @param y coordinate position
+        *   @return true -> toggled
+        */
         bool tryToggle(float x, float y);
 
-        /**
-          *   @brief Get value
-          *   @return value
-          */
+      /**
+        *   @brief Get value
+        *   @return value
+        */
         inline int32_t getValue() const {
           return value;
         }
 
-        /**
-          *   @brief Set enabled
-          *   @param enable true -> drawn and buttons can be clicked
+      /**
+        *   @brief Set enabled
+        *   @param enable true -> drawn and buttons can be clicked
           */
         inline void setEnabled(bool enable) {
           enabled = enable;
         }
+
+      /**
+        *   @brief Increase value
+        *   @details This should be passed as a function pointer to increaseButton
+        *   and called by that Button
+        */
+        void increaseValue();
+
+      /**
+        *   @brief Decrease value
+        *   @details This should be passed as a function pointer to decreaseButton
+        *   and called by that Button
+        */
+        void decreaseValue();
 
     private:
 
@@ -128,6 +149,8 @@ namespace UI {
       sf::Text title;
       sf::Text valueText;
       sf::Font font;
+      Button increaseButton;
+      Button decreaseButton;
 
   };
 

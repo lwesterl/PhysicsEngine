@@ -21,7 +21,7 @@ namespace UI {
   Multichoice::Multichoice(): value(0), interval(0) {}
 
   // constructor
-  Multichoice::Multichoice(sf::String title, float x, float y, float width, float height):
+  Multichoice::Multichoice(sf::String title, float x, float y, float width, float height, sf::Texture* upArrow, sf::Texture* downArrow):
   value(0), interval(0) {
     // if font loading fails, none of the text are visible
     font.loadFromFile(FontPath);
@@ -46,6 +46,12 @@ namespace UI {
 
     // set correct positions
     setPosition(x, y);
+
+    // create Buttons
+    increaseButton = Button(x + Multichoice::HorizontalDistance, y + Multichoice::VerticalDistance,
+                            upArrow, std::bind(&Multichoice::increaseValue, this));
+    decreaseButton = Button(x + Multichoice::HorizontalDistance, y + Multichoice::VerticalDistance,
+                            downArrow, std::bind(&Multichoice::decreaseValue, this));
   }
 
   // set all scale related values
@@ -104,6 +110,25 @@ namespace UI {
       target.draw(limits.maxText);
       target.draw(valueText);
     }
+  }
+
+  // try toggle, check if Buttons pressed
+  bool Multichoice::tryToggle(float x, float y) {
+    if (increaseButton.checkClicked(x, y)) return true;
+    if (decreaseButton.checkClicked(x, y)) return true;
+    return false;
+  }
+
+  // increase value if possible
+  void Multichoice::increaseValue() {
+    if (value + interval < limits.max) value += interval;
+    else value = limits.max;
+  }
+
+  // decrease value if possible
+  void Multichoice::decreaseValue() {
+    if (value - interval > limits.min) value -= interval;
+    else value = limits.min;
   }
 
 
