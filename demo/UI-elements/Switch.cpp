@@ -20,7 +20,7 @@ namespace UI {
   Switch::Switch(): value(true), enabled(true) {}
 
   // full constructor
-  Switch::Switch(float x, float y, sf::String title): value(true), enabled(true) {
+  Switch::Switch(float x, float y, sf::String title, bool state): value(true), enabled(true) {
     font.loadFromFile(FontPath);
     // if loading fails, no texts are visible
     this->title.setFont(font);
@@ -30,24 +30,64 @@ namespace UI {
     this->title.setCharacterSize(Switch::CharSize);
     statusText.setCharacterSize(Switch::CharSize);
     this->title.setString(title);
-    statusText.setString("ON");
+    if (state) {
+      statusText.setString("ON");
+      outerFrame.setFillColor(sf::Color::Green);
+    }
+    else {
+      value = false;
+      statusText.setString("OFF");
+      outerFrame.setFillColor(sf::Color::Red);
+    }
 
-    // set correct positions, try to center the title
-    setPosition(x, y);
     // max three Courier chars
     outerFrame.setSize(sf::Vector2f(3 * Switch::CharSize/2.f + 2 * Switch::SpacingHorizontal, Switch::CharSize));
-    outerFrame.setFillColor(sf::Color::Blue);
     // frameRect must exactly match outerFrame
     frameRect.setWidth(static_cast<float>(3 * Switch::CharSize/2.f + 2 * Switch::SpacingHorizontal));
     frameRect.setHeight(static_cast<float>(Switch::CharSize));
+
+    // set correct positions, try to center the title
+    setPosition(x, y);
+  }
+
+  // copy constructor
+  Switch::Switch(const Switch& src_switch) {
+    Copy(src_switch);
+  }
+
+  // assigment operator
+  Switch& Switch::operator=(const Switch& src_switch) {
+    Copy(src_switch);
+    return *this;
+  }
+
+  // copy everthing, private method
+  void Switch::Copy(const Switch& src_switch) {
+    value = src_switch.value;
+    enabled = src_switch.enabled;
+    font = src_switch.font;
+    title.setFont(font);
+    title.setFillColor(src_switch.title.getFillColor());
+    title.setCharacterSize(src_switch.title.getCharacterSize());
+    title.setString(src_switch.title.getString());
+    title.setPosition(src_switch.title.getPosition());
+    statusText.setFont(font);
+    statusText.setFillColor(src_switch.statusText.getFillColor());
+    statusText.setCharacterSize(src_switch.statusText.getCharacterSize());
+    statusText.setString(src_switch.statusText.getString());
+    statusText.setPosition(src_switch.statusText.getPosition());
+    frameRect = pe::Rectf(src_switch.frameRect);
+    outerFrame.setSize(src_switch.outerFrame.getSize());
+    outerFrame.setFillColor(src_switch.outerFrame.getFillColor());
+    outerFrame.setPosition(src_switch.outerFrame.getPosition());
   }
 
   // set position
   void Switch::setPosition(float x, float y) {
     title.setPosition(x, y);
-    outerFrame.setPosition(x - title.getString().getSize() * Switch::CharSize/2.f, y + Switch::SpacingHorizontal);
-    frameRect.setPosition(pe::Vector2f(x - title.getString().getSize() * Switch::CharSize/2.f, y + Switch::SpacingHorizontal));
-    statusText.setPosition(x - title.getString().getSize() * Switch::CharSize/2.f + Switch::SpacingHorizontal, y + Switch::SpacingHorizontal + Switch::CharSize/2.f);
+    outerFrame.setPosition(x + title.getString().getSize() * Switch::CharSize/4.f - frameRect.getWidth()/2.f, y + Switch::SpacingVertical);
+    frameRect.setPosition(pe::Vector2f(x + title.getString().getSize() * Switch::CharSize/4.f - frameRect.getWidth()/2.f, y + Switch::SpacingVertical));
+    statusText.setPosition(x + title.getString().getSize() * Switch::CharSize/4.f - frameRect.getWidth()/2.f + Switch::SpacingHorizontal, y + Switch::SpacingVertical - 0.1 * Switch::CharSize);
   }
 
   // manually set value

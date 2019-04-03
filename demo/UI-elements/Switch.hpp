@@ -11,7 +11,7 @@
 #include <SFML/Graphics/RenderStates.hpp>
 
 
-#define FontPath "/fonts/Courier.ttf" /**< font file path, monospace font */
+#define FontPath "UI-elements/fonts/Courier.ttf" /**< font file path, monospace font */
 
 /**
   *   @namespace UI
@@ -47,9 +47,22 @@ namespace UI {
         *   @brief Constuctor which takes positional arguments
         *   @param x x coordinate position
         *   @param y y coordinate position
+        *   @param state tells whether Switch is on or off by default
         *   @remark x and y is the position for left corner of the title
         */
-      Switch(float x, float y, sf::String title);
+      Switch(float x, float y, sf::String title, bool state=true);
+
+      /**
+        *   @brief Copy constructor
+        *   @param switch to be copied
+        */
+      Switch(const Switch& src_switch);
+
+      /**
+        *   @brief Assignment operator
+        *   @param switch to be assigned
+        */
+      Switch& operator=(const Switch& src_switch);
 
       /**
         *   @brief Get value
@@ -104,6 +117,12 @@ namespace UI {
       bool tryToggle(float x, float y);
 
     private:
+
+      /**
+        *   @brief Copy everything from other Switch
+        *   @param switch to be copied
+        */
+      void Copy(const Switch& src_switch);
 
       bool value;
       bool enabled;
