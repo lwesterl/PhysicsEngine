@@ -15,7 +15,7 @@ namespace pe {
     bool calculateCollision(PhysicsObject* obj1, PhysicsObject* obj2) {
 
       // check if objects are even relatively close to one another
-      if (!objectsClose(obj1, obj2)) return false;
+      if ((!objectsClose(obj1, obj2)) || (!canCollide(obj1, obj2))) return false;
 
       // objects could collide, calculate possible collisions
       Shape* shape1 = obj1->getShape();
