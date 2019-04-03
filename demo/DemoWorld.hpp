@@ -53,6 +53,20 @@ class DemoWorld
       */
     void draw();
 
+    /**
+      *   @brief Toggle object removal on/off
+      *   @details This should be called from DemoUI
+      */
+    inline void toggleObjectRemoval() {
+      removeCollided ? removeCollided = false: removeCollided = true;
+    }
+
+    /**
+      *   @brief Toggle object collisions on/off
+      *   @details This should be called from DemoUI
+      */
+    void toggleCollisions();
+
   private:
     /**
       *   @brief Try to move DemoObject
@@ -66,8 +80,16 @@ class DemoWorld
       */
     void MousePress(sf::Event& event);
 
+    /**
+      *   @brief Remove collided PhysicsObjects and DemoObjects
+      *   @param collide struct containg collided PhysicsObject pointer
+      */
+    void RemoveCollided(struct pe::Collided& collided);
+
     sf::RenderWindow &window;
     pe::PhysicsWorld physWorld;
     pe::Shape *shape; /**< this will be replaced by a proper Shape allocator */
     std::list<DemoObject*> demoObjects;
+    bool removeCollided;
+    bool collisions;
 };

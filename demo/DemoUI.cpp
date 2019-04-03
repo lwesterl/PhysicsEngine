@@ -50,6 +50,12 @@ void DemoUI::drawUI() {
   window.draw(buttons[0]);
   window.draw(buttons[1]);
   window.setView(window.getDefaultView());
+  if (paused) {
+    // draw also UI-elements for pause menu
+    window.draw(pauseBackground);
+    window.draw(switches[0]);
+    window.draw(switches[1]);
+  }
 }
 
 // Update UI related events, private method
@@ -78,6 +84,15 @@ bool DemoUI::HandleMousePress(sf::Event& event) {
   if (event.mouseButton.button == sf::Mouse::Button::Left) {
     if (buttons[0].checkClicked(event.mouseButton.x, event.mouseButton.y - DemoUI::BottomToolStartHeight * DemoUI::WindowHeight)) return true;
     if (buttons[1].checkClicked(event.mouseButton.x, event.mouseButton.y - DemoUI::BottomToolStartHeight * DemoUI::WindowHeight)) return true;
+    if (paused) {
+      // check if pause menu UI-elements are pressed
+      if (switches[0].tryToggle(event.mouseButton.x, event.mouseButton.y)) {
+        demoWorld.toggleCollisions();
+      }
+      else if (switches[1].tryToggle(event.mouseButton.x, event.mouseButton.y)) {
+        demoWorld.toggleObjectRemoval();
+      }
+    }
   }
   return true;
 }
@@ -92,5 +107,9 @@ void DemoUI::CreateUI() {
   buttons[0] = UI::Button(10.f, 10.f, textureLoader.getTexture(UI::TextureName::StartStop), std::bind(&DemoUI::pauseSwitch, this));
   buttons[1] = UI::Button(100.f, 10.f, textureLoader.getTexture(UI::TextureName::Restart), std::bind(&DemoUI::pauseSwitch, this));
   toolbarBackground.setSize(bottomToolbarView.getSize());
-  toolbarBackground.setFillColor(sf::Color(0, 0, 0, 200));
+  toolbarBackground.setFillColor(sf::Color(0, 0, 0, 220));
+  pauseBackground.setSize(sf::Vector2f(DemoUI::WindowWidth, DemoUI::BottomToolStartHeight * DemoUI::WindowHeight));
+  pauseBackground.setFillColor(sf::Color(0, 0, 0, 220));
+  switches[0] = UI::Switch(0.35 * DemoUI::WindowWidth, DemoUI::BottomToolStartHeight * DemoUI::WindowHeight - 150.f, "Collisions");
+  switches[1] = UI::Switch(0.7 * DemoUI::WindowWidth, DemoUI::BottomToolStartHeight * DemoUI::WindowHeight - 150.f, "Remove collided", false);
 }

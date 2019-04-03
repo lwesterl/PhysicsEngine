@@ -84,7 +84,7 @@ class DemoUI
     UI::TextureLoader textureLoader;
     UI::Multichoice multiChoices[4];
     UI::Button buttons[2];
-    UI::Switch collisionSwitch;
+    UI::Switch switches[2];
     sf::RectangleShape toolbarBackground;
     sf::RectangleShape pauseBackground;
     sf::View bottomToolbarView;

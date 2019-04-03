@@ -13,7 +13,8 @@ float pe::PhysicsProperties::GravityY = 100.f;
 float pe::PhysicsProperties::GravityX = 10.f;
 
 // Constructor
-DemoWorld::DemoWorld(sf::RenderWindow& window): window(window), shape(nullptr) {}
+DemoWorld::DemoWorld(sf::RenderWindow& window): window(window), shape(nullptr),
+removeCollided(false), collisions(true) {}
 
 // Deconstructor
 DemoWorld::~DemoWorld() {
@@ -71,6 +72,8 @@ void DemoWorld::update() {
   std::list<struct pe::Collided>& collided = physWorld.getCollided();
   for (auto it = collided.begin(); it != collided.end(); it++) {
     num++;
+    // remove collided if removal true
+    if (removeCollided) RemoveCollided(*it);
   }
   std::cout << "Collisions: " << num << std::endl;
 }
@@ -91,4 +94,39 @@ void DemoWorld::MouseMove(sf::Event& event) {
 // Try to activate DemoObject, private method
 void DemoWorld::MousePress(sf::Event& event) {
   return;
+}
+
+// Remove collided objects, private method
+void DemoWorld::RemoveCollided(struct pe::Collided& collided) {
+  for (auto it = demoObjects.begin(); it != demoObjects.end(); ) {
+    if (((*it)->getPhysicsObject() == collided[0]) || ((*it)->getPhysicsObject() == collided[1])) {
+      delete *it;
+      it = demoObjects.erase(it);
+    }
+    else it++;
+  }
+  // now remove PhysicsObjects, demoObject removal should left those untact
+  if ((collided[0] != nullptr) && (!physWorld.removeObject(collided[0]))) {
+    std::cout << "PhysicsObject removal error" << std::endl;
+  }
+  if ((collided[1] != nullptr) && (!physWorld.removeObject(collided[1]))) {
+    std::cout << "PhysicsObject removal error" << std::endl;
+  }
+}
+
+// Toggle object collisions on/off, that is done by adjusting PhysicsObjects collision_masks
+void DemoWorld::toggleCollisions() {
+  uint8_t mask;
+  if (collisions) {
+    collisions = false;
+    mask = 0xFF; // no collisions
+  }
+  else {
+    collisions = true;
+    mask = 0x00; // all collisions
+  }
+  // update masks
+  for (auto& object : demoObjects) {
+    object->getPhysicsObject()->setCollisionMask(mask);
+  }
 }
