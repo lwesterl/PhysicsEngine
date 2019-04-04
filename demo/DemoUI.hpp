@@ -11,6 +11,19 @@
 #include "UI-elements/Multichoice.hpp"
 #include "UI-elements/Switch.hpp"
 #include <SFML/Graphics.hpp>
+#include <chrono>
+
+
+/**
+  *   @struct MousePressDetails
+  *   @brief Used to store information about mouse presses
+  *   @details This is needed for Multichoices to increment the value on mouse hold
+  */
+  struct MousePressDetails {
+    bool leftHold = false; /** tells whether left mouse button is being hold down */
+    std::chrono::steady_clock::time_point prevTime; /** time when the mouse press was previous time registered */
+    UI::Multichoice* multiChoice = nullptr; /** Multichoice which was pressed when hold started */
+  };
 
 /**
   *   @class DemoUI
@@ -23,6 +36,7 @@ class DemoUI
     const static unsigned WindowWidth = 800; /**< window width */
     const static unsigned WindowHeight = 600; /**< window height */
     constexpr static float BottomToolStartHeight = 0.875; /**< tells where bottom toolbar starts, must in range of 0 - 1 */
+    const static int PressDuration = 200; /**< after this duration of millis has elapsed mouse hold triggers a new press */
 
     /**
       *   @brief Constructor for DemoUI
@@ -77,6 +91,13 @@ class DemoUI
     bool HandleMousePress(sf::Event& event);
 
     /**
+      *   @brief Handle continous mouse hold for Multichoices
+      *   @details should be called when pause menu is active to update mousePressDetails
+      *   Access directly to mouse state via sf::Mouse
+      */
+    void HandleMouseHold();
+
+    /**
       *   @brief Create all UI elements
       *   @details This should be called only from the constructor
       */
@@ -92,6 +113,5 @@ class DemoUI
     sf::RectangleShape toolbarBackground;
     sf::RectangleShape pauseBackground;
     sf::View bottomToolbarView;
-
-
+    struct MousePressDetails mousePressDetails;
 };

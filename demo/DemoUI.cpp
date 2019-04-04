@@ -38,6 +38,7 @@ void DemoUI::run() {
         demoWorld.handleEvent(event);
       }
     }
+    if (paused) HandleMouseHold();
     // clear all draw objects
     window.clear(sf::Color::White);
     // update demoWorld if not paused
@@ -104,12 +105,35 @@ bool DemoUI::HandleMousePress(sf::Event& event) {
       }
       else {
         for (int i = 0; i < 4; i++) {
-          if (multiChoices[i]->tryToggle(event.mouseButton.x, event.mouseButton.y)) return true;
+          if (multiChoices[i]->tryToggle(event.mouseButton.x, event.mouseButton.y)) {
+            // update MousePressDetails
+            mousePressDetails.leftHold = true;
+            mousePressDetails.prevTime = std::chrono::steady_clock::now();
+            mousePressDetails.multiChoice = multiChoices[i];
+            return true;
+          }
         }
       }
     }
   }
   return true;
+}
+
+// Handle continous mouse holds, private method
+void DemoUI::HandleMouseHold() {
+  if (mousePressDetails.leftHold && (sf::Mouse::isButtonPressed(sf::Mouse::Left))) {
+    std::chrono::steady_clock::time_point time_now = std::chrono::steady_clock::now();
+    if (std::chrono::duration_cast<std::chrono::milliseconds> (time_now - mousePressDetails.prevTime).count() > DemoUI::PressDuration) {
+      // trigger a new mouse press
+      sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+      if (! mousePressDetails.multiChoice->tryToggle(mousePos.x, mousePos.y)) {
+        // Mouse not anymore above the Multichoice
+        mousePressDetails.leftHold = false;
+      }
+      mousePressDetails.prevTime = time_now;
+    }
+  }
+  else mousePressDetails.leftHold = false;
 }
 
 // Create UI for DemoUI, private method
