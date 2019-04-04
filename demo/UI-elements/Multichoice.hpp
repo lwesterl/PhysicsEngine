@@ -45,6 +45,7 @@ namespace UI {
       static float VerticalDistance; /**< vertical distance between buttons */
       static float TitleDistance; /**< vertical distance between title and frames */
       static float FrameSpace; /**< how much smaller innnerFrame is on the both sides */
+      static float TextDistance; /**< how much space is between innerFrame outside and valueText */
 
       /**
         *   @brief Empty constructor
@@ -65,6 +66,18 @@ namespace UI {
         *   @remark Positions are set based on title left corner
         */
         Multichoice(sf::String title, float x, float y, float width, float height, sf::Texture* upArrow, sf::Texture* downArrow);
+
+      /**
+        *   @brief Copy constructor
+        *   @param multichoice to be copied
+        */
+        Multichoice(const Multichoice& multichoice);
+
+      /**
+        *   @brief Assignment operator
+        *   @param multichoice to be assigned
+        */
+        Multichoice& operator=(const Multichoice& multichoice);
 
       /**
         *   @brief Set scale for Multichoice
@@ -109,7 +122,7 @@ namespace UI {
       /**
         *   @brief Set enabled
         *   @param enable true -> drawn and buttons can be clicked
-          */
+        */
         inline void setEnabled(bool enable) {
           enabled = enable;
         }
@@ -139,6 +152,12 @@ namespace UI {
         *   @brief Update innerFrame height when value (or scale) is changed
         */
       void UpdateInnerFrame();
+
+      /**
+        *   @brief Copy Multichoice
+        *   @param multichoice to be copied
+        */
+      void Copy(const Multichoice& multichoice);
 
       bool enabled;
       int32_t value;
