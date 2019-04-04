@@ -15,6 +15,13 @@ DemoUI::DemoUI(sf::RenderWindow& window): paused(true), window(window), demoWorl
   CreateUI();
 }
 
+// Deconstructor
+DemoUI::~DemoUI() {
+  for (int i = 0; i < 4; i++) {
+    delete multiChoices[i];
+  }
+}
+
 
 // Run DemoUI until window is closed
 void DemoUI::run() {
@@ -55,6 +62,9 @@ void DemoUI::drawUI() {
     window.draw(pauseBackground);
     window.draw(switches[0]);
     window.draw(switches[1]);
+    for (int i = 0; i < 4; i++) {
+      window.draw(*multiChoices[i]);
+    }
   }
 }
 
@@ -92,6 +102,11 @@ bool DemoUI::HandleMousePress(sf::Event& event) {
       else if (switches[1].tryToggle(event.mouseButton.x, event.mouseButton.y)) {
         demoWorld.toggleObjectRemoval();
       }
+      else {
+        for (int i = 0; i < 4; i++) {
+          if (multiChoices[i]->tryToggle(event.mouseButton.x, event.mouseButton.y)) return true;
+        }
+      }
     }
   }
   return true;
@@ -110,6 +125,19 @@ void DemoUI::CreateUI() {
   toolbarBackground.setFillColor(sf::Color(0, 0, 0, 220));
   pauseBackground.setSize(sf::Vector2f(DemoUI::WindowWidth, DemoUI::BottomToolStartHeight * DemoUI::WindowHeight));
   pauseBackground.setFillColor(sf::Color(0, 0, 0, 220));
-  switches[0] = UI::Switch(0.35 * DemoUI::WindowWidth, DemoUI::BottomToolStartHeight * DemoUI::WindowHeight - 150.f, "Collisions");
-  switches[1] = UI::Switch(0.7 * DemoUI::WindowWidth, DemoUI::BottomToolStartHeight * DemoUI::WindowHeight - 150.f, "Remove collided", false);
+
+  switches[0] = UI::Switch(0.35 * DemoUI::WindowWidth, DemoUI::BottomToolStartHeight * DemoUI::WindowHeight - 100.f, "Collisions");
+  switches[1] = UI::Switch(0.7 * DemoUI::WindowWidth, DemoUI::BottomToolStartHeight * DemoUI::WindowHeight - 100.f, "Remove collided", false);
+  multiChoices[0] = new UI::Multichoice("Gravity x-dimension", 0.35 * DemoUI::WindowWidth, 10.f, 80.f, 120.f,
+  textureLoader.getTexture(UI::TextureName::UpArrow), textureLoader.getTexture(UI::TextureName::DownArrow), std::bind(&DemoWorld::setGravityX, std::placeholders::_1));
+  multiChoices[0]->setScale(pe::PhysicsProperties::GravityX, 2000, -2000, 50);
+  multiChoices[1] = new UI::Multichoice("Gravity y-dimension", 0.35 * DemoUI::WindowWidth, 200.f, 80.f, 120.f,
+  textureLoader.getTexture(UI::TextureName::UpArrow), textureLoader.getTexture(UI::TextureName::DownArrow), std::bind(&DemoWorld::setGravityY, std::placeholders::_1));
+  multiChoices[1]->setScale(pe::PhysicsProperties::GravityY, 2000, -2000, 50);
+  multiChoices[2] = new UI::Multichoice("Threads", 0.7 * DemoUI::WindowWidth, 10.f, 80.f, 120.f,
+  textureLoader.getTexture(UI::TextureName::UpArrow), textureLoader.getTexture(UI::TextureName::DownArrow), std::bind(&pe::PhysicsWorld::setThreads, std::placeholders::_1));
+  multiChoices[2]->setScale(static_cast<int32_t> (pe::PhysicsWorld::getThreads()), static_cast<int32_t> (std::thread::hardware_concurrency()), 1, 1);
+  multiChoices[3] = new UI::Multichoice("Update period", 0.7 * DemoUI::WindowWidth, 200.f, 80.f, 120.f,
+  textureLoader.getTexture(UI::TextureName::UpArrow), textureLoader.getTexture(UI::TextureName::DownArrow), std::bind(&pe::PhysicsWorld::setIterationAmount, std::placeholders::_1));
+  multiChoices[3]->setScale(static_cast<int32_t> (pe::PhysicsWorld::getIterationAmount()), 100, 1, 5);
 }

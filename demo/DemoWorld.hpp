@@ -21,6 +21,18 @@ class DemoWorld
 {
   public:
     /**
+      *   @brief Set x dimensional gravity, static
+      *   @param gravity new gravity value as int
+      */
+    static void setGravityX(int);
+
+    /**
+      *   @brief Set y dimensional gravity, static
+      *   @param gravity new gravity value as int
+      */
+    static void setGravityY(int);
+
+    /**
       *   @brief Constructor for DemoWorld
       *   @param window active SFML RenderWindow
       */

@@ -10,7 +10,16 @@
 
 // set the gravity value
 float pe::PhysicsProperties::GravityY = 100.f;
-float pe::PhysicsProperties::GravityX = 10.f;
+float pe::PhysicsProperties::GravityX = 0.f;
+
+// static funtions, for setting gravity values
+void DemoWorld::setGravityX(int gravity){
+  pe::PhysicsProperties::GravityX = static_cast<float> (gravity);
+}
+
+void DemoWorld::setGravityY(int gravity) {
+  pe::PhysicsProperties::GravityY = static_cast<float> (gravity);
+}
 
 // Constructor
 DemoWorld::DemoWorld(sf::RenderWindow& window): window(window), shape(nullptr),

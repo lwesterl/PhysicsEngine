@@ -15,6 +15,7 @@
 /**
   *   @class DemoUI
   *   @brief Defines UI for demo
+  *   @details Non-copyable
   */
 class DemoUI
 {
@@ -32,7 +33,7 @@ class DemoUI
     /**
       *   @brief Deconstructor
       */
-    virtual ~DemoUI() {}
+    virtual ~DemoUI();
 
     /**
       *   @brief Update window, UI and DemoWorld until window is closed
@@ -53,6 +54,9 @@ class DemoUI
     }
 
   private:
+
+    NON_COPYABLE(DemoUI); /** make non-copyable, defined in TextureLoader.hpp */
+
     /**
       *   @brief Handle incoming UI related events
       *   @param event current sf::Event
@@ -82,7 +86,7 @@ class DemoUI
     sf::RenderWindow &window;
     DemoWorld demoWorld;
     UI::TextureLoader textureLoader;
-    UI::Multichoice multiChoices[4];
+    UI::Multichoice* multiChoices[4]; // these need to be pointers, otherwise they cannot be trusthworhy called via Button actions
     UI::Button buttons[2];
     UI::Switch switches[2];
     sf::RectangleShape toolbarBackground;
