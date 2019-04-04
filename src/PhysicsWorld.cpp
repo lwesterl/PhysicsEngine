@@ -12,10 +12,19 @@ namespace pe {
 
   // Init class variables
   const int PhysicsWorld::GridCellSize = 5000;
-  const unsigned PhysicsWorld::THREADS = std::thread::hardware_concurrency();
+  unsigned PhysicsWorld::THREADS = std::thread::hardware_concurrency() > 1 ? std::thread::hardware_concurrency() - 1 : 0;
   int PhysicsWorld::WorldWidth = 100000;
   int PhysicsWorld::WorldHeight = PhysicsWorld::WorldWidth;
   float PhysicsWorld::IterarationsInterval = 1.f / 60.f;
+
+  // Set amount of THREADS
+  void PhysicsWorld::setThreads(unsigned amount) {
+    if (amount <= std::thread::hardware_concurrency()) {
+      // this should also handle the possible overwarping issues
+      PhysicsWorld::THREADS = amount;
+    }
+    else PhysicsWorld::THREADS = 0; // no worker threads created
+  }
 
   // Set how many iterations / s
   void PhysicsWorld::setIterationAmount(float iterations) {

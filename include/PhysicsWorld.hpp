@@ -83,11 +83,36 @@ namespace pe {
   {
     public:
       /**
+        *   @brief Set how many worker threads PhysicsEngine uses during PhysicsWorld update
+        *   @remark PhysicsEngine actually uses one more thread which is the main thread
+        *   @param amount needs to be smaller or equal to std::thread::hardware_concurrency
+        */
+      static void setThreads(unsigned amount);
+
+      /**
+        *   @brief Return how many threads are used
+        *   @detaisl This is the actual value of threads used by PhysicsWorld::update
+        *   i.e. THREADS + 1
+        *   return TREADS + 1
+        */
+      inline static unsigned getThreads() {
+        return THREADS + 1;
+      }
+
+      /**
         *   @brief Set how many iterations is calculated each second
         *   @details Changes the class variable, PhysicsWorld::IterarationsInterval
         *   @param iterations How many iterations should be calculated per second
         */
       static void setIterationAmount(float iterations);
+
+      /**
+        *   @brief Get amount of iterations per second
+        *   @return amount of iterations / s
+        */
+      static inline float getIterationAmount() {
+        return 1.f / IterarationsInterval;
+      }
 
       /**
         *   @brief Constructor
@@ -156,7 +181,7 @@ namespace pe {
     private:
       // Class members
       static const int GridCellSize;
-      static const unsigned THREADS;
+      static unsigned THREADS;
       static int WorldWidth;
       static int WorldHeight;
       static float IterarationsInterval;
