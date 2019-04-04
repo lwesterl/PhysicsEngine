@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
 #include <cstdint>
+#include <functional>
 
 
 /**
@@ -40,7 +41,7 @@ namespace UI {
   class Multichoice: public sf::Drawable {
 
     public:
-      static unsigned FontSize; /**< font size used */
+      static unsigned FontSize; /**< font size used, numerical texts use half of this value */
       static float HorizontalDistance; /**< distance between main frame and buttons */
       static float VerticalDistance; /**< vertical distance between buttons */
       static float TitleDistance; /**< vertical distance between title and frames */
@@ -63,9 +64,12 @@ namespace UI {
         *   @param y y coordinate position
         *   @param width Multichoice frame width
         *   @param height Multichoice frame height
+        *   @param upArrow Texture for increase Button, use TextureLoader
+        *   @param downArrow Texture for decrease Button, use TextureLoader
+        *   @param function called after value is changed
         *   @remark Positions are set based on title left corner
         */
-        Multichoice(sf::String title, float x, float y, float width, float height, sf::Texture* upArrow, sf::Texture* downArrow);
+        Multichoice(sf::String title, float x, float y, float width, float height, sf::Texture* upArrow, sf::Texture* downArrow, std::function<void (int)> function);
 
       /**
         *   @brief Copy constructor
@@ -170,7 +174,7 @@ namespace UI {
       sf::Font font;
       Button increaseButton;
       Button decreaseButton;
-
+      std::function<void (int)> valueFunction;
   };
 
 }

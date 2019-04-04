@@ -5,6 +5,7 @@
 
 
 #include "Multichoice.hpp"
+#include <iostream>
 
 namespace UI {
 
@@ -22,8 +23,9 @@ namespace UI {
   Multichoice::Multichoice(): enabled(true), value(0), interval(0) {}
 
   // constructor
-  Multichoice::Multichoice(sf::String title, float x, float y, float width, float height, sf::Texture* upArrow, sf::Texture* downArrow):
-  enabled(true), value(0), interval(0) {
+  Multichoice::Multichoice(sf::String title, float x, float y, float width, float height,
+              sf::Texture* upArrow, sf::Texture* downArrow, std::function<void (int)> function):
+              enabled(true), value(0), interval(0), valueFunction(function) {
     // if font loading fails, none of the text are visible
     font.loadFromFile(FontPath);
 
@@ -31,13 +33,13 @@ namespace UI {
     this->title.setCharacterSize(Multichoice::FontSize);
     this->title.setString(title);
     limits.maxText.setFont(font);
-    limits.maxText.setCharacterSize(Multichoice::FontSize);
+    limits.maxText.setCharacterSize(Multichoice::FontSize / 2);
     limits.maxText.setFillColor(sf::Color::Black);
     limits.minText.setFont(font);
-    limits.minText.setCharacterSize(Multichoice::FontSize);
+    limits.minText.setCharacterSize(Multichoice::FontSize / 2);
     limits.minText.setFillColor(sf::Color::Black);
     valueText.setFont(font);
-    valueText.setCharacterSize(Multichoice::FontSize);
+    valueText.setCharacterSize(Multichoice::FontSize / 2);
 
     // set correct frame width and height
     outerFrame.setSize(sf::Vector2f(width, height));
@@ -111,7 +113,7 @@ namespace UI {
       // set also text positions
       valueText.setPosition(innerFrame.getPosition().x + innerFrame.getSize().x + Multichoice::TextDistance, innerFrame.getPosition().y);
       limits.maxText.setPosition(innerFrame.getPosition().x + 2.f, outerFrame.getPosition().y + 1.f);
-      limits.minText.setPosition(innerFrame.getPosition().x + 2.f, outerFrame.getPosition().y + outer_size.y - Multichoice::FontSize - 1.f);
+      limits.minText.setPosition(innerFrame.getPosition().x + 2.f, outerFrame.getPosition().y + outer_size.y - Multichoice::FontSize/2.f - 1.f);
     }
   }
 
@@ -141,6 +143,8 @@ namespace UI {
     if (value + interval < limits.max) value += interval;
     else value = limits.max;
     UpdateInnerFrame();
+    UpdateValueText();
+    valueFunction(value);
   }
 
   // decrease value if possible
@@ -148,11 +152,17 @@ namespace UI {
     if (value - interval > limits.min) value -= interval;
     else value = limits.min;
     UpdateInnerFrame();
+    UpdateValueText();
+    valueFunction(value);
   }
 
   // copy Multichoice, private method
   void Multichoice::Copy(const Multichoice& multichoice) {
     enabled = multichoice.enabled;
+    value = multichoice.value;
+    limits.max = multichoice.limits.max;
+    limits.min = multichoice.limits.min;
+    valueFunction = multichoice.valueFunction;
     font = multichoice.font;
     title.setFont(font);
     title.setCharacterSize(multichoice.title.getCharacterSize());
