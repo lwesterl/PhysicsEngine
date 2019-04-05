@@ -25,6 +25,60 @@
     UI::Multichoice* multiChoice = nullptr; /** Multichoice which was pressed when hold started */
   };
 
+
+#define ForceMultiplier 10000 /**< Used in MouseApplyForce to multiply mouse distance to get force */
+
+  /**
+    *   @struct MouseApplyForce
+    *   @brief Contains DemoObject force apply related info
+    */
+  struct MouseApplyForce {
+    bool leftHold = false; /**< left mouse currently pressed */
+    sf::Vertex start; /**< line start here */
+    sf::Vertex end; /**< line ends here */
+    DemoObject* demoObject = nullptr; /**< pointer to the DemoObject which force should be applied to */
+
+    /**
+      *   @brief Constructor
+      */
+    MouseApplyForce() {
+      start.color = sf::Color::Black;
+      end.color = sf::Color::Black;
+    }
+
+    /**
+      *   @brief Draw line
+      *   @param window where drawn to
+      */
+    void draw(sf::RenderWindow& window) {
+      sf::Vertex vertices[] = {start, end};
+      window.draw(vertices, 2, sf::Lines);
+    }
+
+    /**
+      *   @brief Set force for demoObject
+      */
+    void applyForce() {
+      if (demoObject) {
+        pe::Vector2f force((end.position.x - start.position.x) * ForceMultiplier,
+                           (end.position.y - start.position.y) * ForceMultiplier);
+        demoObject->getPhysicsObject()->setForce(force);
+      }
+    }
+
+    /**
+      *   @brief Update based on event
+      *   @param object to which force is applied
+      *   @param position new end position
+      */
+    void setEvent(DemoObject* object, sf::Vector2f position) {
+      demoObject = object;
+      leftHold = true;
+      start.position = position;
+    }
+  };
+
+
 /**
   *   @class DemoUI
   *   @brief Defines UI for demo
@@ -98,6 +152,12 @@ class DemoUI
     void HandleMouseHold();
 
     /**
+      *   @brief Apply force to DemoObject based on mouseApplyForce
+      *   @remark call only when not paused
+      */
+    void HandleForceApply();
+
+    /**
       *   @brief Create all UI elements
       *   @details This should be called only from the constructor
       */
@@ -114,4 +174,5 @@ class DemoUI
     sf::RectangleShape pauseBackground;
     sf::View bottomToolbarView;
     struct MousePressDetails mousePressDetails;
+    struct MouseApplyForce mouseApplyForce;
 };

@@ -52,8 +52,9 @@ class DemoWorld
     /**
       *   @brief Handle incoming events
       *   @param event SFML event
+      *   @return DemoObject pointer which was activated, otherwise nullptr
       */
-    void handleEvent(sf::Event &event);
+    DemoObject* handleEvent(sf::Event &event);
 
     /**
       *   @brief Update DemoObjects positions etc.
@@ -80,17 +81,13 @@ class DemoWorld
     void toggleCollisions();
 
   private:
-    /**
-      *   @brief Try to move DemoObject
-      *   @param event SFML MouseMove event
-      */
-    void MouseMove(sf::Event& event);
 
     /**
       *   @brief Try to activate DemoObject
       *   @param event SFML MouseButtonPressed event
+      *   @return DemoObject which was pressed, otherwise nullptr
       */
-    void MousePress(sf::Event& event);
+    DemoObject* MousePress(sf::Event& event);
 
     /**
       *   @brief Remove collided PhysicsObjects and DemoObjects

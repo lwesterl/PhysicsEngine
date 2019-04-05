@@ -58,16 +58,13 @@ void DemoWorld::initWorld() {
 }
 
 // Handle SFML window events
-void DemoWorld::handleEvent(sf::Event& event) {
+DemoObject* DemoWorld::handleEvent(sf::Event& event) {
   switch (event.type) {
-    case sf::Event::MouseMoved:
-      MouseMove(event);
     case sf::Event::MouseButtonPressed:
-      MousePress(event);
+      return MousePress(event);
     default:
-      return;
+      return nullptr;
   }
-
 }
 
 // Update DemoWorld periodically
@@ -95,14 +92,17 @@ void DemoWorld::draw() {
   }
 }
 
-// Try to move DemoObject, private method
-void DemoWorld::MouseMove(sf::Event& event) {
-  return;
-}
-
-// Try to activate DemoObject, private method
-void DemoWorld::MousePress(sf::Event& event) {
-  return;
+// Try to press DemoObject, private method
+DemoObject* DemoWorld::MousePress(sf::Event& event) {
+  if (event.mouseButton.button == sf::Mouse::Button::Left) {
+    for (DemoObject* object : demoObjects) {
+      if ((object->getPhysicsObject()->getObjectType() == pe::ObjectType::DynamicObject) &&
+          (object->isInside(pe::Vector2f(event.mouseButton.x, event.mouseButton.y)))) {
+        return object;
+      }
+    }
+  }
+  return nullptr;
 }
 
 // Remove collided objects, private method

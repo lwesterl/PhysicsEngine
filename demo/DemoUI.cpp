@@ -35,10 +35,15 @@ void DemoUI::run() {
       }
       if (! paused) {
         // Handle also DemoWorld events
-        demoWorld.handleEvent(event);
+        DemoObject* object;
+        if ((object = demoWorld.handleEvent(event))) {
+          mouseApplyForce.setEvent(object, object->getCenterPosition());
+        }
       }
     }
     if (paused) HandleMouseHold();
+    else HandleForceApply();
+
     // clear all draw objects
     window.clear(sf::Color::White);
     // update demoWorld if not paused
@@ -66,6 +71,9 @@ void DemoUI::drawUI() {
     for (int i = 0; i < 4; i++) {
       window.draw(*multiChoices[i]);
     }
+  }
+  else if (mouseApplyForce.leftHold) {
+    mouseApplyForce.draw(window);
   }
 }
 
@@ -134,6 +142,23 @@ void DemoUI::HandleMouseHold() {
     }
   }
   else mousePressDetails.leftHold = false;
+}
+
+// Handle changes in mouseApplyForce, private method
+void DemoUI::HandleForceApply() {
+  if (mouseApplyForce.leftHold) {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+      // update end and start position
+      mouseApplyForce.end.position = static_cast<sf::Vector2f> (sf::Mouse::getPosition(window));
+      mouseApplyForce.start.position = mouseApplyForce.demoObject->getCenterPosition();
+    }
+    else {
+      // applyForce and init
+      mouseApplyForce.applyForce();
+      mouseApplyForce.leftHold = false;
+      mouseApplyForce.demoObject = nullptr;
+    }
+  }
 }
 
 // Create UI for DemoUI, private method
