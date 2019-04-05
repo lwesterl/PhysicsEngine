@@ -24,6 +24,8 @@ DemoObject::DemoObject(pe::ObjectType::ObjectType type, pe::Shape* shape, sf::Co
   // create rectShape
   rectShape = sf::RectangleShape(sf::Vector2f(shape->getWidth(), shape->getHeight()));
   rectShape.setFillColor(color);
+  frame.setWidth(shape->getWidth());
+  frame.setHeight(shape->getHeight());
 }
 
 // Copy another DemoObject, private method
@@ -36,6 +38,7 @@ void DemoObject::Copy(const DemoObject& demoObject) {
     physicsObject = new pe::DynamicObject(*dyn);
   }
   rectShape = demoObject.rectShape;
+  frame = demoObject.frame;
 }
 
 // Copy constructor
@@ -60,6 +63,7 @@ void DemoObject::setPosition(float x, float y) {
   // both physicsObject and rectShape moved from left upper corner
   physicsObject->setPosition(pe::Vector2f(x, y));
   rectShape.setPosition(x, y);
+  frame.setPosition(pe::Vector2f(x, y));
 }
 
 // Update SFML position
@@ -67,9 +71,21 @@ void DemoObject::updatePosition() {
   // DynamicObject position already contains current origin_transform
   pe::Vector2f new_pos = physicsObject->getPosition();
   rectShape.setPosition(new_pos.getX(), new_pos.getY());
+  frame.setPosition(new_pos);
+}
+
+// Get center position
+sf::Vector2f DemoObject::getCenterPosition() const {
+  return sf::Vector2f(rectShape.getPosition().x + rectShape.getSize().x / 2.f,
+                      rectShape.getPosition().y + rectShape.getSize().y / 2.f);
 }
 
 // Set color for rectShape
 void DemoObject::setColor(sf::Color color) {
   rectShape.setFillColor(color);
+}
+
+// Check whether position is inside the DemoObject
+bool DemoObject::isInside(pe::Vector2f position) {
+  return frame.contains(position);
 }

@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "../utils/Rect.hpp"
 #include "../include/PhysicsObject.hpp"
 #include "../include/DynamicObject.hpp"
 #include "../include/StaticObject.hpp"
@@ -83,6 +84,12 @@ class DemoObject: public sf::Drawable
     void updatePosition();
 
     /**
+      *   @brief Get center position
+      *   @return rectShape position adjusted with DemoObject size
+      */
+    sf::Vector2f getCenterPosition() const;
+
+    /**
       *   @brief Set DemoObject color
       *   @param color new sf::Color
       */
@@ -96,6 +103,13 @@ class DemoObject: public sf::Drawable
       return physicsObject;
     }
 
+    /**
+      *   @brief Check if position is inside DemoObject frame
+      *   @param position to be checked
+      *   @return frame.contains(position)
+      */
+    bool isInside(pe::Vector2f position);
+
   private:
     /**
       *   @brief Copy another DemoObject
@@ -105,4 +119,5 @@ class DemoObject: public sf::Drawable
 
     pe::PhysicsObject* physicsObject;
     sf::RectangleShape rectShape;
+    pe::Rectf frame;
 };
