@@ -58,5 +58,18 @@ namespace pe {
         */
       virtual void updatePhysics(__attribute__((unused)) float elapsed_time) override {}
 
+      /**
+        *   @brief setCollisionDirection implementation, no need to implement
+        *   @param direction not used, neede to override PhysicsObject setCollisionDirection
+        */
+      virtual void setCollisionDirection(__attribute__((unused)) Vector2f direction) override {}
+
+      /**
+        *   @brief getPrevPosition implementation
+        *   @details StaticObject don't move so prev position == current position
+        *   @return physics.position
+        */
+      virtual Vector2f getPrevPosition() override;
+
   };
 }// enf of namespace pe

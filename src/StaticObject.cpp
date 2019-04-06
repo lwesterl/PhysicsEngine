@@ -15,4 +15,9 @@ namespace pe {
   StaticObject::StaticObject(Shape* shape):
   PhysicsObject(shape, 0.f, true, ObjectType::StaticObject) {}
 
+  // Get previous position
+  Vector2f StaticObject::getPrevPosition() {
+    return physics.position;
+  }
+
 }// end of namespace pe

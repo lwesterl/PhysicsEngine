@@ -99,6 +99,20 @@ namespace pe {
       virtual void updatePhysics(float elapsed_time) = 0;
 
       /**
+        *   @brief Set collision direction
+        *   @details implemented in lower classes
+        *   @param direction collision direction
+        */
+      virtual void setCollisionDirection(Vector2f direction) = 0;
+
+      /**
+        *   @brief Get object previous position
+        *   @details implemented in lower classes
+        *   @return previous position
+        */
+      virtual Vector2f getPrevPosition() = 0;
+
+      /**
         *   @brief Get ObjectType
         *   @return type
         */

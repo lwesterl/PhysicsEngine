@@ -6,6 +6,7 @@
 
 
 #include "../include/DynamicObject.hpp"
+#include <iostream>
 
 namespace pe {
 
@@ -30,10 +31,14 @@ namespace pe {
   // collisionAction implementation
   void DynamicObject::collisionAction(Vector2f position_change) {
     // move DynamicObject to inverse direction to counter collision
-    physics.position += inverse_direction_unit_vector * position_change;
-    // update velocity show that DynamicObject bouncess of the object it collided based on elasticity
+    Vector2f direction_unit_vector = Vector2f(ABS(inverse_direction.getX()), ABS(inverse_direction.getY()));
+    direction_unit_vector.normalize();
+    physics.position += direction_unit_vector * position_change * collision_direction;
+
+    // update velocity so that DynamicObject bouncess of the object it collided based on elasticity
     physics.velocity *= -physics.elasticity;
-    physics.acceloration.update(PhysicsProperties::GravityX, PhysicsProperties::GravityY);
+    physics.acceloration *= -physics.elasticity;
+    inverse_direction.update(0.f, 0.f);
   }
 
   // updatePhysics implementation
@@ -46,9 +51,18 @@ namespace pe {
     physics.movePosition(Vector2f(delta_x, delta_y));
     // decrease acceloration and velocity based on physics.resistance_factor
     physics.applyResistance(elapsed_time);
-    // update also inverse_direction_unit_vector to store inverse for current movement
-    inverse_direction_unit_vector = Vector2f(-delta_x, -delta_y);
-    inverse_direction_unit_vector.normalize();
+    inverse_direction = Vector2f(-delta_x, -delta_y);
+  }
+
+  // setCollisionDirection implementation
+  void DynamicObject::setCollisionDirection(Vector2f direction) {
+    direction.normalize();
+    collision_direction = direction;
+  }
+
+  // Get previous position
+  Vector2f DynamicObject::getPrevPosition() {
+    return physics.position + inverse_direction;
   }
 
 }// end of namespace pe

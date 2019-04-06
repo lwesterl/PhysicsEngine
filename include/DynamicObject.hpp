@@ -8,6 +8,8 @@
 
 #include "PhysicsObject.hpp"
 
+#define ABS(a) ((a) > 0 ? (a) : -(a)) /**< Macro for abs, use carefully */
+
 
 /**
   *   @namespace pe
@@ -69,10 +71,22 @@ namespace pe {
           */
         virtual void updatePhysics(float elapsed_time) override;
 
+        /**
+          *   @brief Set collision action direction, implemented from the base class
+          *   @param direction new collision_direction, this method will normalize direction
+          */
+        virtual void setCollisionDirection(Vector2f direction) override;
+
+        /**
+          *   @brief Get previous DynamicObject position, implemented form the base class
+          *   @return current position + inverse_direction
+          */
+        virtual Vector2f getPrevPosition() override;
+
 
       private:
-        Vector2f inverse_direction_unit_vector; /**< Unit vector ponting to the opposite direction than current movement */
-
+        Vector2f inverse_direction; /**< Vector ponting to the opposite direction than current movement */
+        Vector2f collision_direction; /**< Unit vector which tells direction for collision action */
 
     };
 
