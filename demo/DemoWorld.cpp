@@ -53,7 +53,6 @@ void DemoWorld::initWorld() {
     // add object to physWorld
     physWorld.addObject(obj->getPhysicsObject());
     demoObjects.push_back(obj);
-    obj->getPhysicsObject()->setForce(pe::Vector2f(4.f, 500000.f));
   }
 }
 
