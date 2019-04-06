@@ -101,6 +101,7 @@ namespace pe {
      std::list<PhysicsObject*> GetCollisionResult(PhysicsObject* obj1, PhysicsObject* obj2) {
       uint8_t mask1 = obj1->getCollisionMask();
       uint8_t mask2 = obj2->getCollisionMask();
+      setCollisionDirections(obj1, obj2);
       std::list<PhysicsObject*> objects;
       if (obj1->getObjectType() != ObjectType::StaticObject && mask1 <= mask2) {
         objects.push_back(obj1);
@@ -135,6 +136,25 @@ namespace pe {
       position_change *= mtv.amount / static_cast<float>(size);
       for (auto &object : objects) {
         object->collisionAction(position_change);
+      }
+    }
+
+    // Set correct collision direction for objecs, this is the dir where object should move after collision
+    void setCollisionDirections(PhysicsObject* obj1, PhysicsObject* obj2) {
+      if (obj1->getPrevPosition().getX() < obj2->getPrevPosition().getX()) {
+        if (obj1->getPrevPosition().getY() < obj2->getPrevPosition().getY()) {
+          obj1->setCollisionDirection(Vector2f(-1.f, -1.f));
+          obj2->setCollisionDirection(Vector2f(1.f, 1.f));
+        } else {
+          obj1->setCollisionDirection(Vector2f(-1.f, 1.f));
+          obj2->setCollisionDirection(Vector2f(1.f, -1.f));
+        }
+      } else if (obj1->getPrevPosition().getY() < obj2->getPrevPosition().getY()) {
+        obj1->setCollisionDirection(Vector2f(1.f, -1.f));
+        obj2->setCollisionDirection(Vector2f(-1.f, 1.f));
+      } else {
+        obj1->setCollisionDirection(Vector2f(1.f, 1.f));
+        obj2->setCollisionDirection(Vector2f(-1.f, -1.f));
       }
     }
 

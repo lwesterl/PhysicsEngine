@@ -138,5 +138,12 @@ namespace pe {
       */
     void collideObjects(std::list<PhysicsObject*>& objects, struct MTV& mtv);
 
+    /**
+      *   @brief Set correct collision direction for objects
+      *   @param obj1 1st collided object
+      *   @param obj2 2nd collided object
+      */
+    void setCollisionDirections(PhysicsObject* obj1, PhysicsObject* obj2);
+
   } // end of namespace CollisionDetection
 } // end of namespace pe
