@@ -38,8 +38,10 @@ namespace pe {
   template<typename T>
   void Vector2<T>::normalize() {
     float norm = std::sqrt(x * x + y * y);
-    x = x / norm;
-    y = y / norm;
+    if (norm) {
+      x = x / norm;
+      y = y / norm;
+    }
   }
 
   template<typename T>
