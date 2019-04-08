@@ -12,15 +12,24 @@ namespace UI {
 
   // class member initialization
   unsigned TextChoice::TitleSize = 20;
-  unsigned TextChoice::FontSize = 12;
+  unsigned TextChoice::FontSize = 14;
   float TextChoice::HorizontalDistance = 50.f;
-  float TextChoice::VerticalDistance = 50.f;
+  float TextChoice::VerticalDistance = 40.f;
   float TextChoice::TitleDistance = 30.f;
   float TextChoice::FreeSpace = 10.f;
   float TextChoice::CenteringSpace = 5.f;
+  float TextChoice::FontCompensation = 0.2f * TextChoice::FontSize;
 
   // constructor
   TextChoice::TextChoice(): enabled(false), index(0) {}
+
+  // deconstructor
+  TextChoice::~TextChoice() {
+    for (auto it = texts.begin(); it != texts.end(); ) {
+      delete *it;
+      it = texts.erase(it);
+    }
+  }
 
   // full constructor
   TextChoice::TextChoice(float x, float y, const char* title, std::list<const char*>& text_list,
@@ -29,7 +38,7 @@ namespace UI {
     font.loadFromFile(FontPath);
     unsigned max_len = strlen(title);
     for (auto& text : text_list) {
-      texts.push_back(sf::Text(text, font, TextChoice::FontSize));
+      texts.push_back(new sf::Text(text, font, TextChoice::FontSize));
       if (strlen(text) > max_len) max_len = strlen(text);
     }
     // create frame based on max_len
@@ -38,10 +47,10 @@ namespace UI {
     frame.setFillColor(sf::Color::Blue);
     highlight = sf::RectangleShape(sf::Vector2f(max_len * TextChoice::FontSize / 2.f + 2.f * TextChoice::CenteringSpace,
                                                 TextChoice::FontSize));
-    highlight.setFillColor(sf::Color(0, 0, 255, 200));
+    highlight.setFillColor(sf::Color(0, 0, 0, 170));
     this->title = sf::Text(title, font, TextChoice::TitleSize);
-    increaseButton = Button(x, y, upArrow, std::bind(&TextChoice::showNextText, this));
-    decreaseButton = Button(x, y, downArrow, std::bind(&TextChoice::showPrevText, this));
+    increaseButton = Button(x, y, upArrow, std::bind(&TextChoice::showPrevText, this));
+    decreaseButton = Button(x, y, downArrow, std::bind(&TextChoice::showNextText, this));
     setPosition(x, y);
     UpdateTextPositions();
   }
@@ -52,18 +61,19 @@ namespace UI {
     index = textChoice.index;
     font = textChoice.font;
     for (auto& text : textChoice.texts) {
-      sf::Text copy = sf::Text(text.getString(), font, text.getCharacterSize());
-      copy.setPosition(text.getPosition());
-      copy.setFillColor(text.getFillColor());
+      sf::Text* copy = new sf::Text(text->getString(), font, text->getCharacterSize());
+      copy->setPosition(text->getPosition());
+      copy->setFillColor(text->getFillColor());
       texts.push_back(copy);
     }
     frame.setSize(textChoice.frame.getSize());
     frame.setFillColor(textChoice.frame.getFillColor());
-    highlight.setSize(textChoice.frame.getSize());
-    highlight.setFillColor(textChoice.frame.getFillColor());
+    highlight.setSize(textChoice.highlight.getSize());
+    highlight.setFillColor(textChoice.highlight.getFillColor());
     increaseButton = textChoice.increaseButton;
     decreaseButton = textChoice.decreaseButton;
     title.setFont(font);
+    title.setCharacterSize(textChoice.title.getCharacterSize());
     title.setString(textChoice.title.getString());
     title.setFillColor(textChoice.title.getFillColor());
     setPosition(textChoice.title.getPosition().x, textChoice.title.getPosition().y);
@@ -76,7 +86,10 @@ namespace UI {
 
   // assignment operator
   TextChoice& TextChoice::operator=(const TextChoice& textChoice) {
-    texts.clear();
+    for (auto it = texts.begin(); it != texts.end(); ) {
+      delete *it;
+      it = texts.erase(it);
+    }
     Copy(textChoice);
     return *this;
   }
@@ -91,7 +104,7 @@ namespace UI {
       target.draw(decreaseButton, states);
       for (int i = index - 1; i <= index + 1; i++) {
         try {
-          target.draw(texts.at(i), states);
+          target.draw(*texts.at(i), states);
         } catch (std::out_of_range &e) {
           UNUSED(e); // no need to do anything
         }
@@ -102,7 +115,7 @@ namespace UI {
   // get current text
   std::string TextChoice::getCurrentText() const {
     try {
-      return texts.at(index).getString().toAnsiString();
+      return texts.at(index)->getString().toAnsiString();
     } catch (std::out_of_range &e) {
       // just return an empty string, cannot really do anything else
       UNUSED(e);
@@ -121,6 +134,7 @@ namespace UI {
   void TextChoice::setPosition(float x, float y) {
     title.setPosition(x, y);
     frame.setPosition(x, y + TextChoice::TitleDistance);
+    highlight.setPosition(x, y + TextChoice::TitleDistance + TextChoice::FontSize + TextChoice::FreeSpace);
     increaseButton.setPosition(x + frame.getSize().x + TextChoice::HorizontalDistance, y + TextChoice::VerticalDistance);
     decreaseButton.setPosition(x + frame.getSize().x + TextChoice::HorizontalDistance, y + 2.f * TextChoice::VerticalDistance);
   }
@@ -133,7 +147,7 @@ namespace UI {
 
   // try to show previous text and update text positions via UpdateTextPositions
   void TextChoice::showPrevText() {
-    if (index - 1 > 0) index--;
+    if (index - 1 >= 0) index--;
     UpdateTextPositions();
   }
 
@@ -144,7 +158,7 @@ namespace UI {
     int j = 0;
     for (int i = index - 1; i < index + 2; i++) {
       try {
-        texts.at(i).setPosition(pos.x + TextChoice::FreeSpace, pos.y + j * (TextChoice::FreeSpace + TextChoice::FontSize));
+        texts.at(i)->setPosition(sf::Vector2f(pos.x + TextChoice::FreeSpace, pos.y + j * (TextChoice::FreeSpace + TextChoice::FontSize - TextChoice::FontCompensation)));
       } catch (std::out_of_range &e) {
         // that text doesn't exist so just don't update it
         UNUSED(e);

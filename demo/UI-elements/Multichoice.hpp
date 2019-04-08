@@ -37,6 +37,7 @@ namespace UI {
     *   the current state (blue-white color theme). Aside the frame there is two
     *   Buttons: increase and decrease, mouse activated. Title is on top of the
     *   frame and it can be user defined.
+    *   @remark Create Multichoice as pointer so that Button clicks won't cause seg faults
     */
   class Multichoice: public sf::Drawable {
 

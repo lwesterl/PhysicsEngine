@@ -27,6 +27,7 @@ namespace UI {
     *   @brief UI element which contains texts that can be choiced
     *   @details TextChoice displays three texts: currently choosen, previous and
     *   following ones
+    *   @remark Create TextChoices as pointers so that Button click won't cause seg faults
     */
   class TextChoice: public sf::Drawable {
     public:
@@ -37,6 +38,7 @@ namespace UI {
       static float TitleDistance; /**< vertical distance between title and frame */
       static float FreeSpace; /**< free space between texts, see below */
       static float CenteringSpace; /**< space between frame and texts, see below */
+      static float FontCompensation; /**< this is needed because font vertical size is approximated */
 
       /**   __________________________________
             |[CS] text 1                 [CS]|
@@ -57,7 +59,7 @@ namespace UI {
       /**
         *   @brief Deconstructor
         */
-      virtual ~TextChoice() {}
+      virtual ~TextChoice();
 
       /**
         *   @brief Full constructor
@@ -153,7 +155,7 @@ namespace UI {
 
       bool enabled;
       int index;
-      std::deque<sf::Text> texts;
+      std::deque<sf::Text*> texts;
       Button increaseButton;
       Button decreaseButton;
       sf::RectangleShape frame;
