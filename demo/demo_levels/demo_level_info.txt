@@ -1,0 +1,13 @@
+* Levels saved as .csv *
+* Add levels to DemoLevelLoader *
+* Do not use extra space or characters *
+
+Format:
+
+ObjectType,x,y,width,height
+
+ObjectType: either DynamicObject or StaticObject
+x: x coordinate position, must be float (int)
+y: y coordinate position, must be float (int)
+width: object width, must be float (int)
+height: object height, must be float (int)
