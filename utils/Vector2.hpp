@@ -204,6 +204,16 @@ namespace pe {
       }
 
       /**
+        *   @brief substraction overload
+        *   @param vect1 the first passed Vector2
+        *   @param vect2 the second passed Vector2
+        *   @return Vector2 which is sum of the original vectors
+        */
+      friend Vector2<T> operator-(const Vector2<T>& vect1, const Vector2<T>& vect2) {
+        return Vector2<T>(vect1.x - vect2.x, vect1.y - vect2.y);
+      }
+
+      /**
         *   @brief <<-operator overload
         *   @param os output ostream
         *   @param vector2 Constant Vector2 instance
