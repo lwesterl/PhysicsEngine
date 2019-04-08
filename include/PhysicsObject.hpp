@@ -161,10 +161,10 @@ namespace pe {
 
       /**
         *   @brief Get PhysicsObject position
-        *   @return physics.position
-        *   @remark This position contains origin_transform
+        *   @return physics.position - origin_transform
+        *   @remark This position notifys origin_transform, so returns position in user set coordinates
         */
-      Vector2f& getPosition();
+      Vector2f getPosition();
 
       /**
         *   @brief Get PhysicsObject smallest edge position
@@ -183,9 +183,9 @@ namespace pe {
         *   @details PhysicsObject position is normally calculated in relation to shape
         *   center of mass. Use setOriginTransform to move the base point for position related
         *   calculation. e.g. want to move object from its left upper corner, set transform to be
-        *   Vector2f from the shape center to the left upper corner.
-        *   @param transform positive x values moves object origin to right and positive y values
-        *   downwards
+        *   Vector2f from the left upper corner to the shape central.
+        *   @param transform positive x values moves object origin to left and positive y values
+        *   upwards
         */
       void setOriginTransform(Vector2f transform);
 

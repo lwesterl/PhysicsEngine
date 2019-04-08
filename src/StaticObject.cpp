@@ -17,7 +17,7 @@ namespace pe {
 
   // Get previous position
   Vector2f StaticObject::getPrevPosition() {
-    return physics.position;
+    return physics.position - physics.origin_transform;
   }
 
 }// end of namespace pe

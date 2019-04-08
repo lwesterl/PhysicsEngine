@@ -67,7 +67,7 @@ namespace pe {
       /**
         *   @brief getPrevPosition implementation
         *   @details StaticObject don't move so prev position == current position
-        *   @return physics.position
+        *   @return physics.position - physics.origin_transform
         */
       virtual Vector2f getPrevPosition() override;
 

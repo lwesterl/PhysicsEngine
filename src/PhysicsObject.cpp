@@ -49,13 +49,8 @@ namespace pe {
   }
 
   // Get PhysicsObject position in PhysicsWorld
-  Vector2f& PhysicsObject::getPosition() {
-    return physics.position;
-  }
-
-  // Get object previous position
-  Vector2f PhysicsObject::getPrevPosition() {
-    return physics.position;
+  Vector2f PhysicsObject::getPosition() {
+    return physics.position - physics.origin_transform;
   }
 
   // Get min position in PhysicsWorld

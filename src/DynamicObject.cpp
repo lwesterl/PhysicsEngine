@@ -62,7 +62,7 @@ namespace pe {
 
   // Get previous position
   Vector2f DynamicObject::getPrevPosition() {
-    return physics.position + inverse_direction;
+    return physics.position - physics.origin_transform + inverse_direction;
   }
 
 }// end of namespace pe
