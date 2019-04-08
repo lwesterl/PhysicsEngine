@@ -58,7 +58,7 @@ namespace pe {
   // Assignment operator
   PhysicsWorld& PhysicsWorld::operator=(const PhysicsWorld& world) {
     collided.clear();
-    grid = world.grid;
+    *grid = *world.grid;
     collided = world.collided;
     return *this;
   }
