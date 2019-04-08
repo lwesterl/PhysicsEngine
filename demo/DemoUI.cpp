@@ -20,6 +20,7 @@ DemoUI::~DemoUI() {
   for (int i = 0; i < 4; i++) {
     delete multiChoices[i];
   }
+  delete levelSelect;
 }
 
 
@@ -71,6 +72,7 @@ void DemoUI::drawUI() {
     for (int i = 0; i < 4; i++) {
       window.draw(*multiChoices[i]);
     }
+    window.draw(*levelSelect);
   }
   else if (mouseApplyForce.leftHold) {
     mouseApplyForce.draw(window);
@@ -120,6 +122,9 @@ bool DemoUI::HandleMousePress(sf::Event& event) {
             mousePressDetails.multiChoice = multiChoices[i];
             return true;
           }
+        }
+        if (levelSelect->tryToggle(event.mouseButton.x, event.mouseButton.y)) {
+          demoWorld.loadDemoLevel(DemoLevelLoader::getLevelPath(levelSelect->getCurrentText().c_str()));
         }
       }
     }
@@ -189,4 +194,7 @@ void DemoUI::CreateUI() {
   multiChoices[3] = new UI::Multichoice("Update period", 0.7 * DemoUI::WindowWidth, 200.f, 80.f, 120.f,
   textureLoader.getTexture(UI::TextureName::UpArrow), textureLoader.getTexture(UI::TextureName::DownArrow), std::bind(&pe::PhysicsWorld::setIterationAmount, std::placeholders::_1));
   multiChoices[3]->setScale(static_cast<int32_t> (pe::PhysicsWorld::getIterationAmount()), 100, 1, 5);
+
+  levelSelect = new UI::TextChoice(50.f, 120.f, "Demo level", DemoLevelLoader::LevelNames, DemoLevelLoader::StartLevelIndex,
+  textureLoader.getTexture(UI::TextureName::UpArrow), textureLoader.getTexture(UI::TextureName::DownArrow));
 }

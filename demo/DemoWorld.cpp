@@ -22,38 +22,40 @@ void DemoWorld::setGravityY(int gravity) {
 }
 
 // Constructor
-DemoWorld::DemoWorld(sf::RenderWindow& window): window(window), shape(nullptr),
+DemoWorld::DemoWorld(sf::RenderWindow& window): window(window),
 removeCollided(false), collisions(true) {}
 
 // Deconstructor
 DemoWorld::~DemoWorld() {
-  if (shape) {
-    delete shape;
-  }
   for (auto it = demoObjects.begin(); it != demoObjects.end();) {
     delete *it;
     it = demoObjects.erase(it);
+  }
+  for (auto it = shapes.begin(); it != shapes.end(); ) {
+    delete it->second;
+    it = shapes.erase(it);
   }
 }
 
 // Init DemoWorld
 void DemoWorld::initWorld() {
-  shape = new pe::Shape(40.f, 20.f);
+  loadDemoLevel(DemoLevelLoader::getLevelPath(DemoLevelLoader::StartLevel));
+  /*shape = new pe::Shape(40.f, 20.f);
   // create couple DemoObjects
   for (int i = 0; i < 10; i++) {
-    DemoObject* obj = new DemoObject(pe::ObjectType::StaticObject, shape, sf::Color::Red);
+    DemoObject* obj = new DemoObject(pe::ObjectType::ObjectType::StaticObject, shape, sf::Color::Red);
     obj->setPosition(static_cast<float>(i * 50), static_cast<float>(i * 100));
     // add object to physWorld
     physWorld.addObject(obj->getPhysicsObject());
     demoObjects.push_back(obj);
   }
   for (int i=0; i < 10; i++) {
-    DemoObject* obj = new DemoObject(pe::ObjectType::DynamicObject, shape, sf::Color::Green);
+    DemoObject* obj = new DemoObject(pe::ObjectType::ObjectType::DynamicObject, shape, sf::Color::Green);
     obj->setPosition(static_cast<float>(i * 100), static_cast<float>(i * 50));
     // add object to physWorld
     physWorld.addObject(obj->getPhysicsObject());
     demoObjects.push_back(obj);
-  }
+  }*/
 }
 
 // Handle SFML window events
@@ -73,14 +75,14 @@ void DemoWorld::update() {
   for (auto& object : demoObjects) {
     object->updatePosition();
   }
-  int num = 0;
+  //int num = 0;
   std::list<struct pe::Collided>& collided = physWorld.getCollided();
   for (auto it = collided.begin(); it != collided.end(); it++) {
-    num++;
+    //num++;
     // remove collided if removal true
     if (removeCollided) RemoveCollided(*it);
   }
-  std::cout << "Collisions: " << num << std::endl;
+  //std::cout << "Collisions: " << num << std::endl;
 }
 
 // Draw DemoWorld
@@ -95,7 +97,7 @@ void DemoWorld::draw() {
 DemoObject* DemoWorld::MousePress(sf::Event& event) {
   if (event.mouseButton.button == sf::Mouse::Button::Left) {
     for (DemoObject* object : demoObjects) {
-      if ((object->getPhysicsObject()->getObjectType() == pe::ObjectType::DynamicObject) &&
+      if ((object->getPhysicsObject()->getObjectType() == pe::ObjectType::ObjectType::DynamicObject) &&
           (object->isInside(pe::Vector2f(event.mouseButton.x, event.mouseButton.y)))) {
         return object;
       }
@@ -137,4 +139,98 @@ void DemoWorld::toggleCollisions() {
   for (auto& object : demoObjects) {
     object->getPhysicsObject()->setCollisionMask(mask);
   }
+}
+
+// Clear all objects
+void DemoWorld::clearWorld() {
+  physWorld = pe::PhysicsWorld(); // assign new PhysicsWorld which effectively clears the old one
+  for (auto it = demoObjects.begin(); it != demoObjects.end(); ) {
+    delete *it;
+    it = demoObjects.erase(it);
+  }
+}
+
+// Load demo level: create demoObjecs and physicsWorld
+void DemoWorld::loadDemoLevel(const char* path) {
+  // clear previous objects
+  clearWorld();
+
+  std::string line;
+  std::ifstream file(path);
+  if (file.is_open()) {
+    while (getline(file, line)) {
+      // convert to string stream to separate values based on , -delimiter
+      float x, y, width, height;
+      pe::ObjectType::ObjectType object_type;
+      std::istringstream stream(line);
+      int i = 0;
+      std::string content;
+      while (getline(stream, content, ',')) {
+        try {
+          switch (i) {
+            case 0:
+              object_type = StrToObjectType(content);
+              break;
+            case 1:
+              x = std::stof(content);
+              break;
+            case 2:
+              y = std::stof(content);
+              break;
+            case 3:
+              width = std::stof(content);
+              break;
+            case 4:
+              height = std::stof(content);
+              break;
+            default:
+              std::cout << "Unexpected file read" << std::endl;
+          }
+          i++;
+          content = "";
+        } catch (std::invalid_argument& e) {
+          std::cout << "File load failed: " << e.what() << ", return" << std::endl;
+          return;
+        }
+      }
+      if (i > 4) {
+        // everything went right, we should now have one object to be added to world
+        DemoObject* obj;
+        if (object_type == pe::ObjectType::ObjectType::StaticObject) {
+          obj = new DemoObject(object_type, GetShape(width, height), sf::Color::Red);
+        } else obj = new DemoObject(object_type, GetShape(width, height), sf::Color::Green);
+
+        obj->setPosition(x, y);
+        // add object to physWorld
+        physWorld.addObject(obj->getPhysicsObject());
+        demoObjects.push_back(obj);
+
+      } else {
+        std::cout << "Cannot construct object, file " << path << " missing details" << std::endl;
+      }
+
+    }
+    file.close();
+  }
+  else {
+    std::cout << "file opening error: " << path << std::endl;
+  }
+}
+
+// Convert str to pe::ObjectType
+pe::ObjectType::ObjectType DemoWorld::StrToObjectType(std::string& str) const {
+  if (str == "DynamicObject") return pe::ObjectType::ObjectType::DynamicObject;
+  return pe::ObjectType::ObjectType::StaticObject;
+}
+
+// Get correct Shape
+pe::Shape* DemoWorld::GetShape(float width, float height) {
+  auto it = shapes.find(pe::Vector2f(width, height));
+  if (it == shapes.end()) {
+    // inset new Shape
+    pe::Shape* new_shape = new pe::Shape(width, height);
+    shapes.emplace(pe::Vector2f(width, height), new_shape);
+    return new_shape;
+  }
+  return it->second;
 }

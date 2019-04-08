@@ -8,9 +8,14 @@
 #pragma once
 #include "../include/PhysicsWorld.hpp"
 #include "DemoObject.hpp"
+#include "DemoLevelLoader.hpp"
 #include <SFML/Graphics.hpp>
 #include <list>
+#include <map>
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 
 /**
@@ -20,6 +25,7 @@
 class DemoWorld
 {
   public:
+
     /**
       *   @brief Set x dimensional gravity, static
       *   @param gravity new gravity value as int
@@ -80,6 +86,18 @@ class DemoWorld
       */
     void toggleCollisions();
 
+    /**
+      *   @brief Clear PhysicsWorld and delete all DemoObjects
+      */
+    void clearWorld();
+
+    /**
+      *   @brief Load demo level
+      *   @param path demo level path, use path provided by DemoLevelLoader::getLevelPath
+      */
+    void loadDemoLevel(const char* path);
+
+
   private:
 
     /**
@@ -95,10 +113,25 @@ class DemoWorld
       */
     void RemoveCollided(struct pe::Collided& collided);
 
+    /**
+      *   @brief Convert std::string to pe::ObjectType::ObjectType
+      *   @param str string that should be either "DynamicObject" or "StaticObject"
+      *   @return matching pe::ObjectType
+      */
+    pe::ObjectType::ObjectType StrToObjectType(std::string& str) const;
+
+    /**
+      *   @brief Get correct shape
+      *   @details If shape already exits, returns pointer to it. Otherwise this
+      *   will create the required pe::Shape
+      *   @return pe::Shape with correct size
+      */
+    pe::Shape* GetShape(float width, float height);
+
     sf::RenderWindow &window;
     pe::PhysicsWorld physWorld;
-    pe::Shape *shape; /**< this will be replaced by a proper Shape allocator */
     std::list<DemoObject*> demoObjects;
     bool removeCollided;
     bool collisions;
+    std::map<pe::Vector2f, pe::Shape*> shapes;
 };

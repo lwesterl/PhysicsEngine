@@ -6,10 +6,12 @@
 
 #pragma once
 #include "DemoWorld.hpp"
+#include "DemoLevelLoader.hpp"
 #include "UI-elements/TextureLoader.hpp"
 #include "UI-elements/Button.hpp"
 #include "UI-elements/Multichoice.hpp"
 #include "UI-elements/Switch.hpp"
+#include "UI-elements/TextChoice.hpp"
 #include <SFML/Graphics.hpp>
 #include <chrono>
 
@@ -170,6 +172,7 @@ class DemoUI
     UI::Multichoice* multiChoices[4]; // these need to be pointers, otherwise they cannot be trusthworhy called via Button actions
     UI::Button buttons[2];
     UI::Switch switches[2];
+    UI::TextChoice* levelSelect;
     sf::RectangleShape toolbarBackground;
     sf::RectangleShape pauseBackground;
     sf::View bottomToolbarView;
