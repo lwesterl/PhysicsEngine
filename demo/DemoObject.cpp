@@ -20,7 +20,7 @@ DemoObject::DemoObject(pe::ObjectType::ObjectType type, pe::Shape* shape, sf::Co
     physicsObject = new pe::DynamicObject(shape, 1.f);
   }
   // move physicsObject from left upper corner (like SFML rectShape)
-  physicsObject->setOriginTransform(pe::Vector2f(-shape->getWidth()/2.f, -shape->getHeight()/2.f));
+  physicsObject->setOriginTransform(pe::Vector2f(shape->getWidth()/2.f, shape->getHeight()/2.f));
   // create rectShape
   rectShape = sf::RectangleShape(sf::Vector2f(shape->getWidth(), shape->getHeight()));
   rectShape.setFillColor(color);
