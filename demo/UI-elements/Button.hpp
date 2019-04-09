@@ -87,6 +87,12 @@ namespace UI {
         */
       bool checkClicked(float x, float y);
 
+      /**
+        *   @brief Get Button size
+        *   @return size as pe::Vector2f
+        */
+      pe::Vector2f getSize() const;
+
     private:
 
       /**

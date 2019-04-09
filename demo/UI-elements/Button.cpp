@@ -66,5 +66,11 @@ namespace UI {
     return false;
   }
 
+  // get Button size
+  pe::Vector2f Button::getSize() const {
+    sf::Vector2u size = texture->getSize();
+    return pe::Vector2f(static_cast<float> (size.x), static_cast<float> (size.y));
+  }
+
 
 } // end of namespace Button
