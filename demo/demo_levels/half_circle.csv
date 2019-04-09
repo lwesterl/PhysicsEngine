@@ -1,0 +1,14 @@
+StaticObject,150,300,20,50
+StaticObject,170,350,40,50
+StaticObject,190,400,20,50
+StaticObject,210,450,20,50
+StaticObject,230,500,200,10
+StaticObject,430,450,20,50
+StaticObject,450,400,20,50
+StaticObject,470,350,20,50
+StaticObject,490,300,20,50
+DynamicObject,100,20,10,10
+DynamicObject,150,20,20,30
+DynamicObject,300,20,10,10
+DynamicObject,350,20,10,10
+DynamicObject,500,50,20,20
