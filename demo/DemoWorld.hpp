@@ -97,6 +97,28 @@ class DemoWorld
       */
     void loadDemoLevel(const char* path);
 
+    /**
+      *   @brief Set density for all objects in DemoWorld
+      *   @param density new density value, see @details
+      *   @details This will scale int value to range of [0, 5.f]:
+      *   input <= 0: 0.f
+      *   input <= 50: 5.f
+      *   Thus scaling resolution is 0.1
+      *   @remark This should be called via Button in DemoUI MultiChoices
+      */
+    void setObjectDensity(int density);
+
+    /**
+      *   @brief Set elasticity values for all objects
+      *   @details This will scale int value to range of [0, 1]:
+      *   input <= 0: 0.f
+      *   input <= 20: 1.f
+      *   Thus scaling resolution is 0.05
+      *   @remark This should be called via Button in DemoUI MultiChoices
+      *   @param elasticity see @details for scaling
+      */
+    void setObjectElasticity(int elasticity);
+
 
   private:
 

@@ -234,3 +234,23 @@ pe::Shape* DemoWorld::GetShape(float width, float height) {
   }
   return it->second;
 }
+
+// Set density for all objects
+void DemoWorld::setObjectDensity(int density) {
+  if (density < 0) density = 0;
+  else if (density > 50) density = 50;
+  float densityf = density * 0.1f;
+  for (auto& object : demoObjects) {
+    object->getPhysicsObject()->setDensity(static_cast<float> (densityf));
+  }
+}
+
+// Set elasticity for all objects
+void DemoWorld::setObjectElasticity(int elasticity) {
+  if (elasticity < 0) elasticity = 0;
+  else if (elasticity > 20) elasticity = 20;
+  float elasticityf = 0.05f * elasticity;
+  for (auto& object : demoObjects) {
+    object->getPhysicsObject()->setElasticity(elasticityf);
+  }
+}
