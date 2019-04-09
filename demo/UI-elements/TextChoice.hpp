@@ -5,6 +5,7 @@
   */
 
 #pragma once
+#include "../../utils/Rect.hpp"
 #include "Switch.hpp" // contains the font macro
 #include "Button.hpp"
 #include <SFML/Graphics.hpp>
@@ -158,6 +159,8 @@ namespace UI {
       std::deque<sf::Text*> texts;
       Button increaseButton;
       Button decreaseButton;
+      pe::Rectf increaseRect;
+      pe::Rectf decreaseRect;
       sf::RectangleShape frame;
       sf::RectangleShape highlight;
       sf::Text title;

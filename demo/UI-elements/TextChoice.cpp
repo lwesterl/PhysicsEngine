@@ -41,11 +41,15 @@ namespace UI {
       texts.push_back(new sf::Text(text, font, TextChoice::FontSize));
       if (strlen(text) > max_len) max_len = strlen(text);
     }
-    // create frame based on max_len
-    frame = sf::RectangleShape(sf::Vector2f(max_len * TextChoice::FontSize / 2.f + 2.f * TextChoice::CenteringSpace,
+    // create frame based on max_len, 0.6 is approx for courier
+    frame = sf::RectangleShape(sf::Vector2f(max_len * 0.6f * TextChoice::FontSize + 2.f * TextChoice::CenteringSpace,
                                             3.f * TextChoice::FontSize + 2.f * TextChoice::FreeSpace));
     frame.setFillColor(sf::Color::Blue);
-    highlight = sf::RectangleShape(sf::Vector2f(max_len * TextChoice::FontSize / 2.f + 2.f * TextChoice::CenteringSpace,
+    highlight = sf::RectangleShape(sf::Vector2f(max_len * 0.6f * TextChoice::FontSize + 2.f * TextChoice::CenteringSpace,
+                                                TextChoice::FontSize));
+    increaseRect.setSize(pe::Vector2f(max_len * 0.6f * TextChoice::FontSize + 2.f * TextChoice::CenteringSpace,
+                                                TextChoice::FontSize));
+    decreaseRect.setSize(pe::Vector2f(max_len * 0.6f * TextChoice::FontSize + 2.f * TextChoice::CenteringSpace,
                                                 TextChoice::FontSize));
     highlight.setFillColor(sf::Color(0, 0, 0, 170));
     this->title = sf::Text(title, font, TextChoice::TitleSize);
@@ -72,6 +76,8 @@ namespace UI {
     highlight.setFillColor(textChoice.highlight.getFillColor());
     increaseButton = textChoice.increaseButton;
     decreaseButton = textChoice.decreaseButton;
+    decreaseRect = textChoice.decreaseRect;
+    increaseRect = textChoice.increaseRect;
     title.setFont(font);
     title.setCharacterSize(textChoice.title.getCharacterSize());
     title.setString(textChoice.title.getString());
@@ -127,6 +133,14 @@ namespace UI {
   bool TextChoice::tryToggle(float x, float y) {
     if (increaseButton.checkClicked(x, y)) return true;
     if (decreaseButton.checkClicked(x, y)) return true;
+    if (increaseRect.contains(x,y)) {
+      showPrevText();
+      return true;
+    }
+    if (decreaseRect.contains(x,y)) {
+      showNextText();
+      return true;
+    }
     return false;
   }
 
@@ -135,8 +149,10 @@ namespace UI {
     title.setPosition(x, y);
     frame.setPosition(x, y + TextChoice::TitleDistance);
     highlight.setPosition(x, y + TextChoice::TitleDistance + TextChoice::FontSize + TextChoice::FreeSpace);
-    increaseButton.setPosition(x + frame.getSize().x + TextChoice::HorizontalDistance, y + TextChoice::VerticalDistance);
-    decreaseButton.setPosition(x + frame.getSize().x + TextChoice::HorizontalDistance, y + 2.f * TextChoice::VerticalDistance);
+    increaseButton.setPosition(x + frame.getSize().x / 2.f - increaseButton.getSize().getX() / 2.f, y + frame.getSize().y + TextChoice::VerticalDistance);
+    decreaseButton.setPosition(x + frame.getSize().x / 2.f - decreaseButton.getSize().getX() / 2.f, y + frame.getSize().y + 2.f * TextChoice::VerticalDistance);
+    increaseRect.setPosition(pe::Vector2f(x, y + TextChoice::TitleDistance));
+    decreaseRect.setPosition(pe::Vector2f(x, y + TextChoice::TitleDistance + 2.f * (TextChoice::FreeSpace + TextChoice::FontSize - TextChoice::FontCompensation)));
   }
 
   // try to show next text and update text positions accordingly
