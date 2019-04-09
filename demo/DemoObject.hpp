@@ -22,6 +22,8 @@
 class DemoObject: public sf::Drawable
 {
   public:
+    constexpr static float DynamicObjectDensity = 1.f; /**< density used for DynamicObjects */
+
     /**
       *   @brief Empty constructor
       */

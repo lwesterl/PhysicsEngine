@@ -17,7 +17,7 @@ DemoObject::DemoObject(pe::ObjectType::ObjectType type, pe::Shape* shape, sf::Co
     physicsObject = new pe::StaticObject(shape);
   } else {
     // use some density value
-    physicsObject = new pe::DynamicObject(shape, 1.f);
+    physicsObject = new pe::DynamicObject(shape, DemoObject::DynamicObjectDensity);
   }
   // move physicsObject from left upper corner (like SFML rectShape)
   physicsObject->setOriginTransform(pe::Vector2f(shape->getWidth()/2.f, shape->getHeight()/2.f));
