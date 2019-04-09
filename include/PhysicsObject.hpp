@@ -210,6 +210,14 @@ namespace pe {
       float getElasticity();
 
       /**
+        *   @brief Set PhysicsObject density
+        *   @remark Use this method to change density after PhysicsObject is created
+        *   This will set density using PhysicsProperties.setDensity()
+        *   @param density new density value, abs is taken
+        */
+      void setDensity(float density);
+
+      /**
         *   @brief Set collision mask
         *   @details 0xFF -> objects won't collide with anything. 0x00 -> objects collides
         *   with everything (default). Objects can't collide with others which have smaller collision_masks

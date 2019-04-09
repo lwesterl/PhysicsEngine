@@ -7,6 +7,7 @@
 #pragma once
 
 #include "../utils/Vector2.hpp"
+#include <limits>
 #include <cmath>
 
 
@@ -30,6 +31,7 @@ namespace pe {
         static float GravityX; /**< X dimansional gravity (- left) */
         static float GravityY; /**< Y dimansional gravity (- upwards) */
         static float SizeScale; /**< Scale between shape area to area used in physic calculations, this should be adjusted based on shape sizes used */
+        static constexpr float DefaultElasticity = 0.9f; /**< default value for elasticity */
 
         /**
           *   @brief Empty constructor
@@ -69,6 +71,17 @@ namespace pe {
           *   @remark resistance_factor should tell applied resistance per second
           */
         void applyResistance(float elapsed_time);
+
+        /**
+          *   @brief Set density value
+          *   @details inverse_mass needs to be recalculated after density is changed
+          *   @remark This is the only proper way to change density after object is constructed. This
+          *   should be called via PhysicsObject.setDensity(density)
+          *   @param density new density, this method takes abs
+          *   @param area Shape area
+          *   @static_object whether object is static or dynamic, true -> static
+          */
+        void setDensity(float density, float area, bool static_object);
 
         Vector2f velocity; /**< Velocity (x, y) */
         Vector2f acceloration; /**< Acceloration (x, y), this should not include gravity */

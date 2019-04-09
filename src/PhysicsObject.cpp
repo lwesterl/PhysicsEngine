@@ -83,6 +83,14 @@ namespace pe {
     return physics.elasticity;
   }
 
+  // Set density
+  void PhysicsObject::setDensity(float density) {
+    if (type == ObjectType::ObjectType::StaticObject) {
+      physics.setDensity(density, shape->getArea(), true);
+    }
+    else physics.setDensity(density, shape->getArea(), false);
+
+  }
   // Set collision_mask
   void PhysicsObject::setCollisionMask(uint8_t mask) {
     collision_mask = mask;

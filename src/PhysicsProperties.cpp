@@ -15,12 +15,12 @@ namespace pe {
   float PhysicsProperties::SizeScale = 0.1f;
 
   // Empty constructor
-  PhysicsProperties::PhysicsProperties(): angle(0.f), density(0.f), elasticity(0.f),
+  PhysicsProperties::PhysicsProperties(): angle(0.f), density(0.f), elasticity(PhysicsProperties::DefaultElasticity),
   inverse_mass(0.f), resistance_factor(1.2f) {}
 
   // Constructor
   PhysicsProperties::PhysicsProperties(float density, float area, bool static_object):
-  angle(0.f), density(std::abs(density)), elasticity(0.9f), resistance_factor(1.2f) {
+  angle(0.f), density(std::abs(density)), elasticity(PhysicsProperties::DefaultElasticity), resistance_factor(1.2f) {
     CalculateInverseMass(area, static_object);
   }
 
@@ -42,12 +42,22 @@ namespace pe {
                     acceloration.getY() * (1.f - elapsed_time / sqrt(resistance_factor)));
   }
 
-  // Calculate inverse of the object mass
+  // Calculate inverse of the object mass, private method
   void PhysicsProperties::CalculateInverseMass(float area, bool static_object) {
     if (static_object) inverse_mass = 0.f;
     else {
-      inverse_mass = 1.f / (area * density * PhysicsProperties::SizeScale);
+      if ((density != 0.f) && (area != 0.f)) {
+        inverse_mass = 1.f / (area * density * PhysicsProperties::SizeScale);
+      }
+     else inverse_mass = std::numeric_limits<float>::max();
     }
   }
+
+  // Set density
+  void PhysicsProperties::setDensity(float density, float area, bool static_object) {
+    this->density = density;
+    CalculateInverseMass(area, static_object);
+  }
+
 
 }// end of namespace pe
