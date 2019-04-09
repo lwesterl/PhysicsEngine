@@ -123,7 +123,13 @@ class DemoUI
       paused ? paused = false: paused = true;
     }
 
+    /**
+      *   @brif Restart current demo level
+      */
+    void restartSwitch();
+
   private:
+    const static unsigned MultiChoiceAmount = 6; /**< amount of Multichoices */
 
     NON_COPYABLE(DemoUI); /** make non-copyable, defined in TextureLoader.hpp */
 
@@ -169,10 +175,10 @@ class DemoUI
     sf::RenderWindow &window;
     DemoWorld demoWorld;
     UI::TextureLoader textureLoader;
-    UI::Multichoice* multiChoices[4]; // these need to be pointers, otherwise they cannot be trusthworhy called via Button actions
+    UI::Multichoice* multiChoices[DemoUI::MultiChoiceAmount]; // these need to be pointers, otherwise they cannot be trusthworhy called via Button actions
     UI::Button buttons[2];
     UI::Switch switches[2];
-    UI::TextChoice* levelSelect;
+    UI::TextChoice* levelSelect; // same pointer requirement as multiChoices
     sf::RectangleShape toolbarBackground;
     sf::RectangleShape pauseBackground;
     sf::View bottomToolbarView;

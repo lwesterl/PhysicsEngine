@@ -69,7 +69,7 @@ void DemoUI::drawUI() {
     window.draw(pauseBackground);
     window.draw(switches[0]);
     window.draw(switches[1]);
-    for (int i = 0; i < 4; i++) {
+    for (unsigned i = 0; i < DemoUI::MultiChoiceAmount; i++) {
       window.draw(*multiChoices[i]);
     }
     window.draw(*levelSelect);
@@ -114,7 +114,7 @@ bool DemoUI::HandleMousePress(sf::Event& event) {
         demoWorld.toggleObjectRemoval();
       }
       else {
-        for (int i = 0; i < 4; i++) {
+        for (unsigned i = 0; i < DemoUI::MultiChoiceAmount; i++) {
           if (multiChoices[i]->tryToggle(event.mouseButton.x, event.mouseButton.y)) {
             // update MousePressDetails
             mousePressDetails.leftHold = true;
@@ -174,14 +174,14 @@ void DemoUI::CreateUI() {
   bottomToolbarView.setCenter(sf::Vector2f(DemoUI::WindowWidth /2.f, (1.f - DemoUI::BottomToolStartHeight) * DemoUI::WindowHeight * 0.5f));
   // init UI-elements
   buttons[0] = UI::Button(10.f, 10.f, textureLoader.getTexture(UI::TextureName::StartStop), std::bind(&DemoUI::pauseSwitch, this));
-  buttons[1] = UI::Button(100.f, 10.f, textureLoader.getTexture(UI::TextureName::Restart), std::bind(&DemoUI::pauseSwitch, this));
+  buttons[1] = UI::Button(100.f, 10.f, textureLoader.getTexture(UI::TextureName::Restart), std::bind(&DemoUI::restartSwitch, this));
   toolbarBackground.setSize(bottomToolbarView.getSize());
   toolbarBackground.setFillColor(sf::Color(0, 0, 0, 220));
   pauseBackground.setSize(sf::Vector2f(DemoUI::WindowWidth, DemoUI::BottomToolStartHeight * DemoUI::WindowHeight));
   pauseBackground.setFillColor(sf::Color(0, 0, 0, 220));
 
-  switches[0] = UI::Switch(0.35 * DemoUI::WindowWidth, DemoUI::BottomToolStartHeight * DemoUI::WindowHeight - 100.f, "Collisions");
-  switches[1] = UI::Switch(0.7 * DemoUI::WindowWidth, DemoUI::BottomToolStartHeight * DemoUI::WindowHeight - 100.f, "Remove collided", false);
+  switches[0] = UI::Switch(50.f, 200.f, "Collisions");
+  switches[1] = UI::Switch(50.f, 300.f, "Remove collided", false);
   multiChoices[0] = new UI::Multichoice("Gravity x-dimension", 0.35 * DemoUI::WindowWidth, 10.f, 80.f, 120.f,
   textureLoader.getTexture(UI::TextureName::UpArrow), textureLoader.getTexture(UI::TextureName::DownArrow), std::bind(&DemoWorld::setGravityX, std::placeholders::_1));
   multiChoices[0]->setScale(pe::PhysicsProperties::GravityX, 2000, -2000, 50);
@@ -194,7 +194,18 @@ void DemoUI::CreateUI() {
   multiChoices[3] = new UI::Multichoice("Update period", 0.7 * DemoUI::WindowWidth, 200.f, 80.f, 120.f,
   textureLoader.getTexture(UI::TextureName::UpArrow), textureLoader.getTexture(UI::TextureName::DownArrow), std::bind(&pe::PhysicsWorld::setIterationAmount, std::placeholders::_1));
   multiChoices[3]->setScale(static_cast<int32_t> (pe::PhysicsWorld::getIterationAmount()), 100, 1, 5);
+  multiChoices[4] = new UI::Multichoice("Density",  0.35 * DemoUI::WindowWidth, 390.f, 80.f, 120.f,
+  textureLoader.getTexture(UI::TextureName::UpArrow), textureLoader.getTexture(UI::TextureName::DownArrow), std::bind(&DemoWorld::setObjectDensity, &demoWorld, std::placeholders::_1));
+  multiChoices[4]->setScale(static_cast<int32_t> (DemoObject::DynamicObjectDensity * 10.f), 50, 0, 2);
+  multiChoices[5] = new UI::Multichoice("Elasticity",  0.7 * DemoUI::WindowWidth, 390.f, 80.f, 120.f,
+  textureLoader.getTexture(UI::TextureName::UpArrow), textureLoader.getTexture(UI::TextureName::DownArrow), std::bind(&DemoWorld::setObjectElasticity, &demoWorld, std::placeholders::_1));
+  multiChoices[5]->setScale(static_cast<int32_t> (20.f * pe::PhysicsProperties::DefaultElasticity), 20, 0, 1);
 
-  levelSelect = new UI::TextChoice(50.f, 120.f, "Demo level", DemoLevelLoader::LevelNames, DemoLevelLoader::StartLevelIndex,
+  levelSelect = new UI::TextChoice(50.f, 10.f, "Demo level", DemoLevelLoader::LevelNames, DemoLevelLoader::StartLevelIndex,
   textureLoader.getTexture(UI::TextureName::UpArrow), textureLoader.getTexture(UI::TextureName::DownArrow));
+}
+
+// Restart current demo level
+void DemoUI::restartSwitch() {
+  demoWorld.loadDemoLevel(DemoLevelLoader::getLevelPath(levelSelect->getCurrentText().c_str()));
 }
