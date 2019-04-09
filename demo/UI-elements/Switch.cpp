@@ -25,7 +25,7 @@ namespace UI {
     // if loading fails, no texts are visible
     this->title.setFont(font);
     statusText.setFont(font);
-    this->title.setFillColor(sf::Color::Blue);
+    this->title.setFillColor(sf::Color::White);
     statusText.setFillColor(sf::Color::White);
     this->title.setCharacterSize(Switch::CharSize);
     statusText.setCharacterSize(Switch::CharSize);
@@ -85,9 +85,9 @@ namespace UI {
   // set position
   void Switch::setPosition(float x, float y) {
     title.setPosition(x, y);
-    outerFrame.setPosition(x + title.getString().getSize() * Switch::CharSize/4.f - frameRect.getWidth()/2.f, y + Switch::SpacingVertical);
-    frameRect.setPosition(pe::Vector2f(x + title.getString().getSize() * Switch::CharSize/4.f - frameRect.getWidth()/2.f, y + Switch::SpacingVertical));
-    statusText.setPosition(x + title.getString().getSize() * Switch::CharSize/4.f - frameRect.getWidth()/2.f + Switch::SpacingHorizontal, y + Switch::SpacingVertical - 0.1 * Switch::CharSize);
+    outerFrame.setPosition(x, y + Switch::SpacingVertical);
+    frameRect.setPosition(pe::Vector2f(x, y + Switch::SpacingVertical));
+    statusText.setPosition(x + Switch::SpacingHorizontal, y + Switch::SpacingVertical - 0.1 * Switch::CharSize);
   }
 
   // manually set value
