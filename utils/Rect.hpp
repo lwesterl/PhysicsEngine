@@ -86,6 +86,18 @@ namespace pe {
       T getHeight() const;
 
       /**
+        *   @brief Set size as Vector2
+        *   @param size new size
+        */
+      void setSize(const Vector2<T>size);
+
+      /**
+        *   @brief Get size as Vector2
+        *   @return Rect size
+        */
+      Vector2<T> getSize() const;
+
+      /**
         *   @brief Check if Rect contains a point
         *   @param x x coordinate
         *   @param y y coordinate

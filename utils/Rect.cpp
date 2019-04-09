@@ -67,6 +67,19 @@ namespace pe {
     return height;
   }
 
+  // Set size
+  template<typename T>
+  void Rect<T>::setSize(const Vector2<T> size) {
+    width = size.x;
+    height = size.y;
+  }
+
+  // Get size Vector2
+  template<typename T>
+  Vector2<T> Rect<T>::getSize() const {
+    return Vector2<T>(width, height);
+  }
+
   // Check if contains point
   template<typename T>
   bool Rect<T>::contains(T x, T y) const {
