@@ -31,7 +31,7 @@ namespace pe {
         static float GravityX; /**< X dimansional gravity (- left) */
         static float GravityY; /**< Y dimansional gravity (- upwards) */
         static float SizeScale; /**< Scale between shape area to area used in physic calculations, this should be adjusted based on shape sizes used */
-        static constexpr float DefaultElasticity = 0.9f; /**< default value for elasticity */
+        static constexpr float DefaultElasticity = 0.9f; /**< default value for elasticity, only for DynamicObjects */
 
         /**
           *   @brief Empty constructor
@@ -79,7 +79,8 @@ namespace pe {
           *   should be called via PhysicsObject.setDensity(density)
           *   @param density new density, this method takes abs
           *   @param area Shape area
-          *   @static_object whether object is static or dynamic, true -> static
+          *   @static_object whether object is static or dynamic, true -> static,
+          *   if static density isn't changed
           */
         void setDensity(float density, float area, bool static_object);
 
