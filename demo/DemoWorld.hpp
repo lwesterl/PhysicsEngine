@@ -17,6 +17,23 @@
 #include <string>
 #include <sstream>
 
+/**
+  *   @struct ShapeCMP
+  *   @brief Implement comparison for Vector2f which allows to distinguish unique shapes
+  */
+struct ShapeCMP {
+  /**
+    *   @brief Comparison used in shapes map
+    *   @details std::maps identify correct key by taking negative bools of
+    *   comparisons in both orders (!vect1<vect2 and !vect2<vect1)
+    *   @param vec1 1st Vector2f to be compared
+    *   @param vec2 2nd Vector2f to be compared
+    *   @return true if vec1 x or y value is smaller than those of vec2
+    */
+  bool operator()(const pe::Vector2f& vec1, const pe::Vector2f& vec2) {
+    return (vec1.getX() < vec2.getX()) || (vec1.getY() < vec2.getY());
+  }
+};
 
 /**
   *   @class DemoWorld
@@ -155,5 +172,5 @@ class DemoWorld
     std::list<DemoObject*> demoObjects;
     bool removeCollided;
     bool collisions;
-    std::map<pe::Vector2f, pe::Shape*> shapes;
+    std::map<pe::Vector2f, pe::Shape*, ShapeCMP> shapes;
 };
