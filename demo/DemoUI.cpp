@@ -124,7 +124,7 @@ bool DemoUI::HandleMousePress(sf::Event& event) {
           }
         }
         if (levelSelect->tryToggle(event.mouseButton.x, event.mouseButton.y)) {
-          demoWorld.loadDemoLevel(DemoLevelLoader::getLevelPath(levelSelect->getCurrentText().c_str()));
+          restartSwitch();
         }
       }
     }
@@ -208,4 +208,7 @@ void DemoUI::CreateUI() {
 // Restart current demo level
 void DemoUI::restartSwitch() {
   demoWorld.loadDemoLevel(DemoLevelLoader::getLevelPath(levelSelect->getCurrentText().c_str()));
+  // also elasticity ans density need to be reset (new objects created)
+  demoWorld.setObjectElasticity(multiChoices[5]->getValue());
+  demoWorld.setObjectDensity(multiChoices[4]->getValue());
 }
