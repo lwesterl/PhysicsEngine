@@ -20,6 +20,7 @@ int main() {
 
   // create some Shape
   pe::Shape shape(100.f, 100.f);
+  const float interval = 0.1f; // just some interval for updates
 
   std::cout << "collision detection test" << std::endl;
   pe::DynamicObject dyn1(&shape, 1.f);
@@ -30,12 +31,21 @@ int main() {
   dyn1.setPosition(pe::Vector2f(200.f, 200.f));
   assert(pe::CollisionDetection::calculateCollision(&dyn1, &dyn2));
   dyn2.setPosition(pe::Vector2f(250.f, 200.f));
+  // update (never designed to be called this way, normally PhysicsWorld takes care of updates)
+  // ^ makes also testing really difficult
+  dyn1.updatePhysics(interval);
+  dyn2.updatePhysics(interval);
   assert(pe::CollisionDetection::calculateCollision(&dyn1, &dyn2));
   dyn2.setPosition(pe::Vector2f(260.f, 290.f));
+  dyn1.updatePhysics(interval);
+  dyn2.updatePhysics(interval);
   assert(pe::CollisionDetection::calculateCollision(&dyn1, &dyn2));
-  dyn2.setPosition(pe::Vector2f(300.f, 100.f));
+  dyn1.updatePhysics(interval);
+  dyn2.updatePhysics(interval);
   assert(pe::CollisionDetection::calculateCollision(&dyn1, &dyn2));
   dyn2.setPosition(pe::Vector2f(300.5f, 100.f));
+  dyn1.updatePhysics(interval);
+  dyn2.updatePhysics(interval);
   assert(pe::CollisionDetection::calculateCollision(&dyn1, &dyn2) == false);
 
   pe::Shape shape2(2.f, 3.f);
@@ -43,6 +53,8 @@ int main() {
   dyn3.setPosition(pe::Vector2f(200.f, 200.f));
   assert(pe::CollisionDetection::calculateCollision(&dyn3, &dyn1));
   dyn3.setPosition(pe::Vector2f(255.f, 253.f));
+  dyn1.updatePhysics(interval);
+  dyn3.updatePhysics(interval);
   assert(pe::CollisionDetection::calculateCollision(&dyn3, &dyn1) == false);
   std::cout << "test successful" << std::endl;
 

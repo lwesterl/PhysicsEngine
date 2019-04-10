@@ -43,7 +43,6 @@ namespace pe {
       std::list<PhysicsObject*> collided = GetCollisionResult(obj1, obj2);
       // move collided according to MTV
       collideObjects(collided, mtv);
-
       return true;
     }
 
@@ -130,12 +129,14 @@ namespace pe {
 
     // Collide objects based on MTV
     void collideObjects(std::list<PhysicsObject*>& objects, struct MTV& mtv) {
+      bool dynamic_dynamic_collision = false;
       unsigned size = objects.size();
       if (!size) return;
+      if (size == 2) dynamic_dynamic_collision = true; // static objects are not added to objects so there must be two DynamicObjects
       Vector2f position_change = mtv.axis; // unit vector which tells direction
       position_change *= mtv.amount / static_cast<float>(size);
       for (auto &object : objects) {
-        object->collisionAction(position_change);
+        object->collisionAction(position_change, dynamic_dynamic_collision);
       }
     }
 
