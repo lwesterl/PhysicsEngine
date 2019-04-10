@@ -194,6 +194,26 @@ namespace pe {
       }
 
       /**
+        *   @brief multiplication by multiplier
+        *   @param vect to be muliplied
+        *   @param multiplier number multiplier
+        *   @return new Vector2 which is multiplied
+        */
+      friend Vector2<T> operator*(const Vector2<T>& vect, T multiplier) {
+        return Vector2<T>(vect.x * multiplier, vect.y * multiplier);
+      }
+
+      /**
+        *   @brief multiplication by multiplier
+        *   @param vect to be muliplied
+        *   @param multiplier number multiplier
+        *   @return new Vector2 which is multiplied
+        */
+      friend Vector2<T> operator*(T multiplier, const Vector2<T>& vect) {
+        return Vector2<T>(vect.x * multiplier, vect.y * multiplier);
+      }
+
+      /**
         *   @brief addition overload
         *   @param vect1 the first passed Vector2
         *   @param vect2 the second passed Vector2
