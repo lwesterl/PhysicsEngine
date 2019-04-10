@@ -49,8 +49,10 @@ namespace pe {
       /**
         *   @brief collisionAction implementation, no collision action for StaticObject
         *   @param position_change not used, needed to override PhysicsObject collisionAction
+        *   @param dynamic_dynamic_collision not used but needed to overwrite PhysicsObject collisionAction
         */
-      virtual void collisionAction(__attribute__((unused)) Vector2f position_change) override {}
+      virtual void collisionAction(__attribute__((unused)) Vector2f position_change,
+              __attribute__((unused)) bool dynamic_dynamic_collision = false) override {}
 
       /**
         *   @brief updatePhysics implementation, no active physics for StaticObject

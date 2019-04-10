@@ -7,6 +7,7 @@
 #pragma once
 
 #include "PhysicsObject.hpp"
+#include <limits>
 
 #define ABS(a) ((a) > 0 ? (a) : -(a)) /**< Macro for abs, use carefully */
 
@@ -56,20 +57,22 @@ namespace pe {
         /**
           *   @brief Implementation of collisionAction from PhysicsObjects
           *   @details pushes DynamicObject avoid from other object by position_change
-          *   @todo Physics could be tuned
+          *   @todo Physics could be tuned. The implementation isn't that trustworthy,
+          *   there may be still be cases when it doesn't work properly
           */
-        virtual void collisionAction(Vector2f position_change) override;
+        virtual void collisionAction(Vector2f position_change, bool dynamic_dynamic_collision = false) override;
 
         /**
           *   @brief Implementation of updatePhysics from PhysicObject
           *   @details Updates DynamicObject PhysicsProperties, physics, based
           *   on elapsed_time
           *   @param elapsed_time time elapsed from the last update (in seconds)
+          *   @param dynamic_dynamic_collision pass true if collision between two DynamicObjects
           *   @remark Gravity needs to be high value to make objects fall fast ->
           *   some scaling number could be used to make more realistic gravity values
           *   suitable
           */
-        virtual void updatePhysics(float elapsed_time) override;
+        virtual void updatePhysics(float elapsed_timebool) override;
 
         /**
           *   @brief Set collision action direction, implemented from the base class
@@ -79,14 +82,17 @@ namespace pe {
 
         /**
           *   @brief Get previous DynamicObject position, implemented form the base class
-          *   @return current position + inverse_direction
+          *   @return prev position with origin_transform removed
           */
         virtual Vector2f getPrevPosition() override;
 
 
       private:
-        Vector2f inverse_direction; /**< Vector ponting to the opposite direction than current movement */
+        Vector2f inverse_direction; /**< Vector pointing to the opposite direction than current movement */
         Vector2f collision_direction; /**< Unit vector which tells direction for collision action */
+        Vector2f prevPosition; /**< Stores previous position for the DynamicObject */
+        bool alreadyCollided; /**< Whether object is already collided during this update cycle */
+        unsigned updatesFromPrevCollision; /**< Tells basically how many updates ago object collided last time so that it's position wasn't reverted to prevPosition */
 
     };
 

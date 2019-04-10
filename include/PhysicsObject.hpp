@@ -88,8 +88,10 @@ namespace pe {
         *   @brief Calculate collision action for the object
         *   @details implemented in lower classes
         *   @param position_change change needed to avoid collision
+        *   @param dynamic_dynmic_collision whether collision is between two
+        *   DynamicObjects or StaticObject and DynamicObject (default)
         */
-      virtual void collisionAction(Vector2f position_change) = 0;
+      virtual void collisionAction(Vector2f position_change, bool dynamic_dynamic_collision = false) = 0;
 
       /**
         *   @brief Update objects physics
