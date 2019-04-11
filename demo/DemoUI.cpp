@@ -63,6 +63,8 @@ void DemoUI::drawUI() {
   window.draw(toolbarBackground);
   window.draw(buttons[0]);
   window.draw(buttons[1]);
+  window.draw(buttonText[0]);
+  window.draw(buttonText[1]);
   window.setView(window.getDefaultView());
   if (paused) {
     // draw also UI-elements for pause menu
@@ -97,6 +99,7 @@ bool DemoUI::HandleUIEvent(sf::Event& event) {
 bool DemoUI::HandleKeyPress(sf::Event& event) {
   if (event.key.code == sf::Keyboard::Escape) return false;
   if (event.key.code == sf::Keyboard::Space) pauseSwitch();
+  if ((event.key.code == sf::Keyboard::R) && (!mouseApplyForce.leftHold)) restartSwitch();
   return true;
 }
 
@@ -176,9 +179,17 @@ void DemoUI::CreateUI() {
   buttons[0] = UI::Button(10.f, 10.f, textureLoader.getTexture(UI::TextureName::StartStop), std::bind(&DemoUI::pauseSwitch, this));
   buttons[1] = UI::Button(100.f, 10.f, textureLoader.getTexture(UI::TextureName::Restart), std::bind(&DemoUI::restartSwitch, this));
   toolbarBackground.setSize(bottomToolbarView.getSize());
-  toolbarBackground.setFillColor(sf::Color(0, 0, 0, 220));
+  toolbarBackground.setFillColor(sf::Color(0, 0, 0, 235));
   pauseBackground.setSize(sf::Vector2f(DemoUI::WindowWidth, DemoUI::BottomToolStartHeight * DemoUI::WindowHeight));
-  pauseBackground.setFillColor(sf::Color(0, 0, 0, 220));
+  pauseBackground.setFillColor(sf::Color(0, 0, 0, 235));
+  font.loadFromFile(FontPath);
+  buttonText[0] = sf::Text("Space", font, 12);
+  buttonText[0].setFillColor(sf::Color::Blue);
+  pe::Vector2f button_size = buttons[0].getSize();
+  buttonText[0].setPosition(15.f, -7.f + button_size.getY());
+  buttonText[1] = sf::Text("R", font, 12);
+  buttonText[1].setFillColor(sf::Color::Blue);
+  buttonText[1].setPosition(105.f, -7.f + button_size.getY());
 
   switches[0] = UI::Switch(50.f, 200.f, "Collisions");
   switches[1] = UI::Switch(50.f, 300.f, "Remove collided", false);

@@ -182,6 +182,8 @@ class DemoUI
     sf::RectangleShape toolbarBackground;
     sf::RectangleShape pauseBackground;
     sf::View bottomToolbarView;
+    sf::Text buttonText[2];
+    sf::Font font;
     struct MousePressDetails mousePressDetails;
     struct MouseApplyForce mouseApplyForce;
 };
