@@ -3,7 +3,7 @@
 
 CC=g++ -std=c++17
 CFLAGS=-Wall -pedantic -Wextra -g -fPIC
-LINKER=-lpthread
+LINKER=-pthread
 UTILS=../utils/
 SOURCE=../src/
 TESTS=$(wildcard *_test.cpp)
