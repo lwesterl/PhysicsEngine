@@ -13,7 +13,8 @@ namespace DemoLevelLoader {
     { "Demo: flat ground", "demo_levels/flat_ground.csv" },
     { "Demo: downward slope", "demo_levels/downward_slope.csv" },
     { "Demo: half circle", "demo_levels/half_circle.csv" },
-    { "Demo: many objects", "demo_levels/many_objects.csv" }
+    { "Demo: many objects", "demo_levels/many_objects.csv" },
+    { "Demo: object mayhem", "demo_levels/object_mayhem.csv"}
   };
 
   std::list<const char*> LevelNames =
@@ -21,7 +22,8 @@ namespace DemoLevelLoader {
     "Demo: flat ground",
     "Demo: downward slope",
     "Demo: half circle",
-    "Demo: many objects"
+    "Demo: many objects",
+    "Demo: object mayhem"
   };
 
   const char* StartLevel = "Demo: flat ground";
