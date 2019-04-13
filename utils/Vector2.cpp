@@ -68,6 +68,11 @@ namespace pe {
   }
 
   template<typename T>
+  T Vector2<T>::getLength() const {
+    return std::sqrt(x * x + y * y);
+  }
+
+  template<typename T>
   Vector2<T>& Vector2<T>::operator=(const Vector2<T>& vector2) {
     x = vector2.x;
     y = vector2.y;

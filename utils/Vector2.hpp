@@ -107,6 +107,12 @@ namespace pe {
       T getAngle() const;
 
       /**
+        *   @brief Get Vector2 length
+        *   @return vector component based length (amplitude)
+        */
+      T getLength() const;
+
+      /**
         *   @brief Assignment operator
         *   @param vector2 Reference instance
         */
