@@ -111,7 +111,7 @@ bool DemoUI::HandleMousePress(sf::Event& event) {
     if (paused) {
       // check if pause menu UI-elements are pressed
       if (switches[0].tryToggle(event.mouseButton.x, event.mouseButton.y)) {
-        demoWorld.toggleCollisions();
+        demoWorld.toggleCollisions(switches[0].getValue());
       }
       else if (switches[1].tryToggle(event.mouseButton.x, event.mouseButton.y)) {
         demoWorld.toggleObjectRemoval();
@@ -222,4 +222,5 @@ void DemoUI::restartSwitch() {
   // also elasticity ans density need to be reset (new objects created)
   demoWorld.setObjectElasticity(multiChoices[5]->getValue());
   demoWorld.setObjectDensity(multiChoices[4]->getValue());
+  demoWorld.toggleCollisions(switches[0].getValue());
 }

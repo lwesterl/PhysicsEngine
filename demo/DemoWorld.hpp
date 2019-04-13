@@ -100,8 +100,9 @@ class DemoWorld
     /**
       *   @brief Toggle object collisions on/off
       *   @details This should be called from DemoUI
+      *   @param on true -> collisions on
       */
-    void toggleCollisions();
+    void toggleCollisions(bool on);
 
     /**
       *   @brief Clear PhysicsWorld and delete all DemoObjects
@@ -171,6 +172,5 @@ class DemoWorld
     pe::PhysicsWorld physWorld;
     std::list<DemoObject*> demoObjects;
     bool removeCollided;
-    bool collisions;
     std::map<pe::Vector2f, pe::Shape*, ShapeCMP> shapes;
 };

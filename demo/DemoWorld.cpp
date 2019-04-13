@@ -23,7 +23,7 @@ void DemoWorld::setGravityY(int gravity) {
 
 // Constructor
 DemoWorld::DemoWorld(sf::RenderWindow& window): window(window),
-removeCollided(false), collisions(true) {}
+removeCollided(false) {}
 
 // Deconstructor
 DemoWorld::~DemoWorld() {
@@ -109,16 +109,11 @@ void DemoWorld::RemoveCollided(struct pe::Collided& collided) {
 }
 
 // Toggle object collisions on/off, that is done by adjusting PhysicsObjects collision_masks
-void DemoWorld::toggleCollisions() {
+void DemoWorld::toggleCollisions(bool on) {
   uint8_t mask;
-  if (collisions) {
-    collisions = false;
-    mask = 0xFF; // no collisions
-  }
-  else {
-    collisions = true;
-    mask = 0x00; // all collisions
-  }
+  if (on) mask = 0x00; // all collisions
+  else mask = 0xFF; // no collisions
+
   // update masks
   for (auto& object : demoObjects) {
     object->getPhysicsObject()->setCollisionMask(mask);
