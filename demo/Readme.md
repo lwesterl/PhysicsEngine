@@ -1,8 +1,8 @@
-### Demo
+## Demo
 * Graphics are created using SFML
 * Uses PhysicsEngine, libphysengine, for physics
 
-## Makefile
+### Makefile
 
 Command | Description
 --------|-------------
@@ -13,7 +13,7 @@ make clean-objects  | remove all objects from demo folder
 
 Note: PhysicsEngine related objects are created to src and utils folders
 
-## Notes
+### Notes
 * demo.cpp is the entry point but central class is DemoUI
 * UI related classes can be found from UI-elements
 ___

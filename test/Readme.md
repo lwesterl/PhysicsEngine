@@ -1,9 +1,9 @@
-### Test
+## Test
 * Contains unit tests for Physicsengine
 * Shared object file, libphysengine, is created here by default
 
 
-## Makefile
+### Makefile
 
 Command | Description
 --------|-------------
@@ -13,20 +13,20 @@ make clean-objects  | remove all objects
 libphysengine.so    | create dynamic library
 
 Note: objects are created to src and utils folders
-## Running tests
+### Running tests
 Make sure execute permissions have been granted to TestAll.sh shell script. This can be done for example with:
 ```
 sudo chmod u+x TestAll.sh
 ```
 
 
-### Run all tests
+#### Run all tests
 ```
   ./TestAll.sh
 
 ```
 
-### Run also memory leak tests (valgrind must be installed)
+#### Run also memory leak tests (valgrind must be installed)
 
 ```
   ./TestAll.sh valgrind

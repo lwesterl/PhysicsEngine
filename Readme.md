@@ -21,7 +21,7 @@ sudo apt-get install libsfml-dev
 Notice: old SFML versions (< 2.4) don't work and in this case demo can't be compiled.
 However, PhysicsEngine itself will work just fine without SFML.
 
-### USAGE
+### Usage
 PhysicsEngine shared object file, libphysengine, can be compiled using test-directory Makefile. Then by including the headers (/include) and linking with libphysengine PhysicsEngine can be used in any application.
 
 /demo contains a demo which demonstrates capabilities of PhysicsEngine with graphics created with SFML. More info about demo can be found from demo-directory Readme.
