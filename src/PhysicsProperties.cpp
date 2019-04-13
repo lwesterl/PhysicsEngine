@@ -16,11 +16,11 @@ namespace pe {
 
   // Empty constructor
   PhysicsProperties::PhysicsProperties(): angle(0.f), density(0.f), elasticity(0.f),
-  inverse_mass(0.f), resistance_factor(1.2f) {}
+  inverse_mass(0.f), resistance_factor(1.2f), resistance_counter(0) {}
 
   // Constructor
   PhysicsProperties::PhysicsProperties(float density, float area, bool static_object):
-  angle(0.f), density(std::abs(density)), elasticity(PhysicsProperties::DefaultElasticity), resistance_factor(1.2f) {
+  angle(0.f), density(std::abs(density)), elasticity(PhysicsProperties::DefaultElasticity), resistance_factor(1.2f), resistance_counter(0) {
     CalculateInverseMass(area, static_object);
   }
 
@@ -36,10 +36,15 @@ namespace pe {
 
   // Apply resisting forces
   void PhysicsProperties::applyResistance(float elapsed_time) {
-    velocity.update(velocity.getX() * (1.f - elapsed_time / resistance_factor),
-                    velocity.getY() * (1.f - elapsed_time / resistance_factor));
-    acceloration.update(acceloration.getX() * (1.f - elapsed_time / sqrt(resistance_factor)),
-                    acceloration.getY() * (1.f - elapsed_time / sqrt(resistance_factor)));
+    if (resistance_counter % PhysicsProperties::ResistanceInterval == 0)
+    {
+      velocity.update(velocity.getX() * (1.f - elapsed_time / resistance_factor),
+                      velocity.getY() * (1.f - elapsed_time / resistance_factor));
+      acceloration.update(acceloration.getX() * (1.f - elapsed_time / sqrt(resistance_factor)),
+                      acceloration.getY() * (1.f - elapsed_time / sqrt(resistance_factor)));
+      resistance_counter = 0;
+    }
+    resistance_counter++;
   }
 
   // Calculate inverse of the object mass, private method

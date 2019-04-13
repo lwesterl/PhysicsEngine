@@ -32,6 +32,7 @@ namespace pe {
         static float GravityY; /**< Y dimansional gravity (- upwards) */
         static float SizeScale; /**< Scale between shape area to area used in physic calculations, this should be adjusted based on shape sizes used */
         static constexpr float DefaultElasticity = 0.9f; /**< default value for elasticity, only for DynamicObjects */
+        static const unsigned ResistanceInterval = 2; /**< How often resistance forces are applied, must be > 0 */
 
         /**
           *   @brief Empty constructor
@@ -85,6 +86,7 @@ namespace pe {
         void setDensity(float density, float area, bool static_object);
 
         Vector2f velocity; /**< Velocity (x, y) */
+        Vector2f collision_velocity; /**< This is used when DynamicObjects collide to calculate velocity after collision */
         Vector2f acceloration; /**< Acceloration (x, y), this should not include gravity */
         Vector2f position; /**< Actual position of the object in PhysicsWorld, normally relating to the center of mass of the Shape */
         Vector2f origin_transform; /**< Transform from the object center of mass to user defined point */
@@ -93,6 +95,7 @@ namespace pe {
         float elasticity; /**< Bounciness of the object, should be >= 0 */
         float inverse_mass; /**< Inverse of the object mass */
         float resistance_factor; /**< speed decreases to ~ resistance_factor and acc ~ sqrt(resistance_factor) */
+        unsigned resistance_counter; /**< how many updates have elapsed since resitance was applied */
 
       private:
 
