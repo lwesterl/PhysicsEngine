@@ -30,7 +30,7 @@ struct ShapeCMP {
     *   @param vec2 2nd Vector2f to be compared
     *   @return true if vec1 x or y value is smaller than those of vec2
     */
-  bool operator()(const pe::Vector2f& vec1, const pe::Vector2f& vec2) {
+  bool operator()(const pe::Vector2f& vec1, const pe::Vector2f& vec2) const {
     return (vec1.getX() < vec2.getX()) || (vec1.getY() < vec2.getY());
   }
 };
