@@ -37,6 +37,19 @@ namespace pe {
     };
   } // end of namespace ObjectType
 
+  /**
+    *   @struct CollisionDetails
+    *   @brief Contain the necessary info about collided objects so that correct
+    *   collision results can be calculated in DynamicObject
+    *   @remark no need to set oppentVelocity or opponentMass if collision between
+    *   DynamicObject and StaticObject
+    */
+  struct CollisionDetails {
+    bool dynamic_dynamic_collision = false; /**< whether collision is between two dynamicObjects, then the other values must be set */
+    Vector2f opponentVelocity; /**< opponent collision_velocity, no need to define if collision is between static and dynamic object */
+    float opponentMass; /**< mass of the opponent in collision, no need to define if collision is between static and dynamic object */
+  };
+
 
   /**
     *   @class PhysicsObject
@@ -88,10 +101,9 @@ namespace pe {
         *   @brief Calculate collision action for the object
         *   @details implemented in lower classes
         *   @param position_change change needed to avoid collision
-        *   @param dynamic_dynmic_collision whether collision is between two
-        *   DynamicObjects or StaticObject and DynamicObject (default)
+        *   @param collisionDetails CollisionDetails needed to calculate velocity after collision
         */
-      virtual void collisionAction(Vector2f position_change, bool dynamic_dynamic_collision = false) = 0;
+      virtual void collisionAction(Vector2f position_change, struct CollisionDetails& collisionDetails) = 0;
 
       /**
         *   @brief Update objects physics
@@ -131,7 +143,7 @@ namespace pe {
         *   @brief Get owner
         *   @return owner (void *, must be recasted)
         */
-      void* getOwner();
+      void* getOwner() const;
 
       /**
         *   @brief Get owner type
@@ -143,7 +155,7 @@ namespace pe {
         *   @brief Get Shape
         *   @return shape (Shape*)
         */
-      Shape* getShape();
+      Shape* getShape() const;
 
       /**
         *   @brief Get PhysicsProperties of the object
@@ -166,19 +178,19 @@ namespace pe {
         *   @return physics.position - origin_transform
         *   @remark This position notifys origin_transform, so returns position in user set coordinates
         */
-      Vector2f getPosition();
+      Vector2f getPosition() const;
 
       /**
         *   @brief Get PhysicsObject smallest edge position
         *   @return Shape min + getPosition
         */
-      Vector2f getMinPosition();
+      Vector2f getMinPosition() const;
 
       /**
         *   @brief Get PhysicsObject biggest edge position
         *   @return Shape max + getPosition
         */
-      Vector2f getMaxPosition();
+      Vector2f getMaxPosition() const;
 
       /**
         *   @brief Set origin transform
@@ -209,7 +221,7 @@ namespace pe {
         *   @brief Get elasticity of PhysicsObject
         *   @return physics.elasticity
         */
-      float getElasticity();
+      float getElasticity() const;
 
       /**
         *   @brief Set PhysicsObject density
@@ -231,7 +243,7 @@ namespace pe {
         *   @brief Get collision mask
         *   @return collision_mask
         */
-      uint8_t getCollisionMask();
+      uint8_t getCollisionMask() const;
 
       /**
         *   @brief Check if moved
@@ -248,6 +260,22 @@ namespace pe {
         this->moved = moved;
       }
 
+      /**
+        *   @brief Get object mass
+        *   @details if PhysicsProperties.inverse_mass == 0.f returns
+        *   std::numeric_limits<float>::max()
+        *   @return 1.f/inverse_mass
+        */
+      float getMass() const;
+
+      /**
+        *   @brief Get object current velocity, this is the velocity used in
+        *   collisions
+        *   @return physics.collision_velocity
+        */
+      inline Vector2f getVelocity() const {
+        return physics.collision_velocity;
+      }
 
     protected:
 

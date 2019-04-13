@@ -11,12 +11,12 @@ namespace pe {
 
   // Empty constructor
   DynamicObject::DynamicObject(): PhysicsObject(),
-  alreadyCollided(false), updatesFromPrevCollision(0) {}
+  alreadyCollided(false), updatesFromPrevCollision(2) {}
 
   // Constructor
   DynamicObject::DynamicObject(Shape *shape, float density):
   PhysicsObject(shape, density, false, ObjectType::DynamicObject),
-  alreadyCollided(false), updatesFromPrevCollision(0) {}
+  alreadyCollided(false), updatesFromPrevCollision(2) {}
 
   // setForce implementation
   void DynamicObject::setForce(Vector2f force) {
@@ -30,20 +30,31 @@ namespace pe {
   }
 
   // collisionAction implementation
-  void DynamicObject::collisionAction(Vector2f position_change, bool dynamic_dynamic_collision) {
+  void DynamicObject::collisionAction(Vector2f position_change, struct CollisionDetails& collisionDetails) {
     // move DynamicObject to inverse direction to counter collision
     Vector2f direction_unit_vector = Vector2f(ABS(inverse_direction.getX()), ABS(inverse_direction.getY()));
     direction_unit_vector.normalize();
     // update velocity and acceloration so that DynamicObject bouncess of the object it collided based on elasticity
-    physics.velocity = physics.velocity * physics.elasticity * collision_direction ;
-    physics.acceloration = physics.acceloration * physics.elasticity * collision_direction;
-
-    if (! alreadyCollided) {
-      physics.position += direction_unit_vector * position_change * collision_direction;
-      alreadyCollided = true;
-      if (! dynamic_dynamic_collision) updatesFromPrevCollision = 0; // these values indicate that object position may be non-valid and return to prevPosition is needed
+    if (collisionDetails.dynamic_dynamic_collision) {
+      physics.velocity = physics.elasticity * ((getMass() - collisionDetails.opponentMass) / (getMass() + collisionDetails.opponentMass) * physics.collision_velocity +
+                         (2 * collisionDetails.opponentMass) / (getMass() + collisionDetails.opponentMass) * collisionDetails.opponentVelocity);
     } else {
-      // just return DynamicObject to prev position to avoid glithing
+      /* collision with StaticObject need to be in own statement because mass
+        for StaticObject would be std::numeric_limits<float>::max() and cause
+        upredictable multiplication results */
+      physics.velocity = - physics.elasticity * physics.collision_velocity;
+    }
+    physics.acceloration.update(0.f, 0.f); // needs to be inited, all acceloration 'used' during the collision
+
+    if ((!alreadyCollided) || (collisionDetails.dynamic_dynamic_collision)) {
+      // take vector length, otherwise at least vertical collision tend to fail (caused by how position_change is calculated)
+      physics.position += direction_unit_vector * position_change.getLength() * collision_direction;
+      if (!collisionDetails.dynamic_dynamic_collision) {
+        alreadyCollided = true;
+        updatesFromPrevCollision = 0;
+      }
+    } else {
+      // just return DynamicObject to prev position to reduce glithing
       physics.setPosition(getPrevPosition());
       updatesFromPrevCollision++; // this need to be adjusted to indicate that prevPosition can be again updated
     }
@@ -61,6 +72,7 @@ namespace pe {
     physics.movePosition(Vector2f(delta_x, delta_y));
     // decrease acceloration and velocity based on physics.resistance_factor
     physics.applyResistance(elapsed_time);
+    physics.collision_velocity.update(delta_x / elapsed_time, delta_y / elapsed_time);
     inverse_direction = Vector2f(-delta_x, -delta_y);
     alreadyCollided = false;
   }

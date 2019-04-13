@@ -12,7 +12,6 @@
 #include "PhysicsProperties.hpp"
 #include <vector>
 #include <deque>
-#include <list>
 #include <limits>
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b)) /**< Macro for min value */
@@ -42,7 +41,7 @@ namespace pe {
 
     /**
       *   @struct MTV
-      *   @brief Minimum translation vector
+      *   z@brief Minimum translation vector
       */
     struct MTV {
       Vector2f axis; /**< direction of the translation */
@@ -109,9 +108,9 @@ namespace pe {
       *   StaticObjects cannot have collision action. Also, objects can only have action
       *   with objects which have smaller collision_masks
       *   @remark not optimal in terms of performance (copies std::list)
-      *   @return list of objects which should be moved etc as the result
+      *   @return deque of objects which should be moved etc as the result
       */
-    std::list<PhysicsObject*> GetCollisionResult(PhysicsObject* obj1, PhysicsObject* obj2);
+    std::deque<PhysicsObject*> GetCollisionResult(PhysicsObject* obj1, PhysicsObject* obj2);
 
     /**
       *   @brief Find overlap
@@ -133,10 +132,10 @@ namespace pe {
 
     /**
       *   @brief Collide ojects after collision is detected
-      *   @param objects list of objects that should be collided
+      *   @param objects deque of objects that should be collided
       *   @param mtv minimum translation vector
       */
-    void collideObjects(std::list<PhysicsObject*>& objects, struct MTV& mtv);
+    void collideObjects(std::deque<PhysicsObject*>& objects, struct MTV& mtv);
 
     /**
       *   @brief Set correct collision direction for objects

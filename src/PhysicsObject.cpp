@@ -23,7 +23,7 @@ namespace pe {
   }
 
   // Get owner
-  void* PhysicsObject::getOwner() {
+  void* PhysicsObject::getOwner() const {
     return owner.first;
   }
 
@@ -33,7 +33,7 @@ namespace pe {
   }
 
   // Get shape
-  Shape* PhysicsObject::getShape() {
+  Shape* PhysicsObject::getShape() const {
     return shape;
   }
 
@@ -49,17 +49,17 @@ namespace pe {
   }
 
   // Get PhysicsObject position in PhysicsWorld
-  Vector2f PhysicsObject::getPosition() {
+  Vector2f PhysicsObject::getPosition() const {
     return physics.position - physics.origin_transform;
   }
 
   // Get min position in PhysicsWorld
-  Vector2f PhysicsObject::getMinPosition() {
+  Vector2f PhysicsObject::getMinPosition() const {
     return getPosition() + shape->getMin();
   }
 
   // Get max position in PhysicsWorld
-  Vector2f PhysicsObject::getMaxPosition() {
+  Vector2f PhysicsObject::getMaxPosition() const {
     return getPosition() + shape->getMax();
   }
 
@@ -79,7 +79,7 @@ namespace pe {
   }
 
   // Get elasticity of PhysicsObject
-  float PhysicsObject::getElasticity() {
+  float PhysicsObject::getElasticity() const {
     return physics.elasticity;
   }
 
@@ -97,9 +97,13 @@ namespace pe {
   }
 
   // Get collision_mask
-  uint8_t PhysicsObject::getCollisionMask() {
+  uint8_t PhysicsObject::getCollisionMask() const {
     return collision_mask;
   }
 
+  // Get mass
+  float PhysicsObject::getMass() const {
+    return physics.inverse_mass ? 1.f / physics.inverse_mass : std::numeric_limits<float>::max();
+  }
 
 }// end of namespace pe

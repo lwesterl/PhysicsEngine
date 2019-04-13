@@ -60,7 +60,7 @@ namespace pe {
           *   @todo Physics could be tuned. The implementation isn't that trustworthy,
           *   there may be still be cases when it doesn't work properly
           */
-        virtual void collisionAction(Vector2f position_change, bool dynamic_dynamic_collision = false) override;
+        virtual void collisionAction(Vector2f position_change, struct CollisionDetails& collisionDetails) override;
 
         /**
           *   @brief Implementation of updatePhysics from PhysicObject

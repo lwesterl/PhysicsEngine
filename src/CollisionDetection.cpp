@@ -40,7 +40,7 @@ namespace pe {
         mtv = StoreMTV(mtv, axis[i], proj1, proj2);
       }
       // all projections overlap, collision detected
-      std::list<PhysicsObject*> collided = GetCollisionResult(obj1, obj2);
+      std::deque<PhysicsObject*> collided = GetCollisionResult(obj1, obj2);
       // move collided according to MTV
       collideObjects(collided, mtv);
       return true;
@@ -97,11 +97,11 @@ namespace pe {
     }
 
     // Get correct collision result
-     std::list<PhysicsObject*> GetCollisionResult(PhysicsObject* obj1, PhysicsObject* obj2) {
+     std::deque<PhysicsObject*> GetCollisionResult(PhysicsObject* obj1, PhysicsObject* obj2) {
       uint8_t mask1 = obj1->getCollisionMask();
       uint8_t mask2 = obj2->getCollisionMask();
       setCollisionDirections(obj1, obj2);
-      std::list<PhysicsObject*> objects;
+      std::deque<PhysicsObject*> objects;
       if (obj1->getObjectType() != ObjectType::StaticObject && mask1 <= mask2) {
         objects.push_back(obj1);
       }
@@ -128,15 +128,22 @@ namespace pe {
     }
 
     // Collide objects based on MTV
-    void collideObjects(std::list<PhysicsObject*>& objects, struct MTV& mtv) {
-      bool dynamic_dynamic_collision = false;
+    void collideObjects(std::deque<PhysicsObject*>& objects, struct MTV& mtv) {
+      struct CollisionDetails collisionDetails[2];
       unsigned size = objects.size();
       if (!size) return;
-      if (size == 2) dynamic_dynamic_collision = true; // static objects are not added to objects so there must be two DynamicObjects
+      if (size == 2) {
+        collisionDetails[0].dynamic_dynamic_collision = true; // static objects are not added to objects so there must be two DynamicObjects
+        collisionDetails[1].dynamic_dynamic_collision = true;
+        collisionDetails[0].opponentVelocity = objects[1]->getVelocity();
+        collisionDetails[1].opponentVelocity = objects[0]->getVelocity();
+        collisionDetails[0].opponentMass = objects[1]->getMass();
+        collisionDetails[1].opponentMass = objects[0]->getMass();
+      }
       Vector2f position_change = mtv.axis; // unit vector which tells direction
       position_change *= mtv.amount / static_cast<float>(size);
-      for (auto &object : objects) {
-        object->collisionAction(position_change, dynamic_dynamic_collision);
+      for (unsigned i = 0; i < size; i++) {
+        objects[i]->collisionAction(position_change, collisionDetails[i]);
       }
     }
 
