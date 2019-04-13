@@ -47,6 +47,7 @@ namespace UI {
         *   @brief Constuctor which takes positional arguments
         *   @param x x coordinate position
         *   @param y y coordinate position
+        *   @param title Switch title
         *   @param state tells whether Switch is on or off by default
         *   @remark x and y is the position for left corner of the title
         */
@@ -54,13 +55,13 @@ namespace UI {
 
       /**
         *   @brief Copy constructor
-        *   @param switch to be copied
+        *   @param src_switch to be copied
         */
       Switch(const Switch& src_switch);
 
       /**
         *   @brief Assignment operator
-        *   @param switch to be assigned
+        *   @param src_switch to be assigned
         */
       Switch& operator=(const Switch& src_switch);
 
@@ -120,7 +121,7 @@ namespace UI {
 
       /**
         *   @brief Copy everything from other Switch
-        *   @param switch to be copied
+        *   @param src_switch to be copied
         */
       void Copy(const Switch& src_switch);
 

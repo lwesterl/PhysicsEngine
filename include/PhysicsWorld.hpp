@@ -91,7 +91,7 @@ namespace pe {
 
       /**
         *   @brief Return how many threads are used
-        *   @detaisl This is the actual value of threads used by PhysicsWorld::update
+        *   @details This is the actual value of threads used by PhysicsWorld::update
         *   i.e. THREADS + 1
         *   return TREADS + 1
         */

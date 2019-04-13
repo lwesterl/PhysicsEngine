@@ -24,10 +24,10 @@ namespace UI {
     *   @brief Stores limits and describes those using sf::Texts
     */
   struct ValueLimits {
-    int32_t max = 0;
-    int32_t min = 0;
-    sf::Text maxText;
-    sf::Text minText;
+    int32_t max = 0; /**< max value for Multichoice */
+    int32_t min = 0;  /**< min value for Multichoice */
+    sf::Text maxText; /**< matching text for max value */
+    sf::Text minText; /**< matching text for min value */
   };
 
   /**
@@ -61,6 +61,7 @@ namespace UI {
 
       /**
         *   @brief Constructor
+        *   @param title Multichoice name used as title
         *   @param x x coordinate position
         *   @param y y coordinate position
         *   @param width Multichoice frame width

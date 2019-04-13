@@ -1,5 +1,5 @@
 /**
-  *   @file World.hpp
+  *   @file DemoWorld.hpp
   *   @author Lauri Westerholm
   *   @brief Header for demo DemoWorld
   */

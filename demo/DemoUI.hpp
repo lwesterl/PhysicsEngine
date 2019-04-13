@@ -22,9 +22,9 @@
   *   @details This is needed for Multichoices to increment the value on mouse hold
   */
   struct MousePressDetails {
-    bool leftHold = false; /** tells whether left mouse button is being hold down */
-    std::chrono::steady_clock::time_point prevTime; /** time when the mouse press was previous time registered */
-    UI::Multichoice* multiChoice = nullptr; /** Multichoice which was pressed when hold started */
+    bool leftHold = false; /**< tells whether left mouse button is being hold down */
+    std::chrono::steady_clock::time_point prevTime; /**< time when the mouse press was previous time registered */
+    UI::Multichoice* multiChoice = nullptr; /**< Multichoice which was pressed when hold started */
   };
 
 
@@ -124,7 +124,7 @@ class DemoUI
     }
 
     /**
-      *   @brif Restart current demo level
+      *   @brief Restart current demo level
       */
     void restartSwitch();
 

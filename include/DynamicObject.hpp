@@ -67,12 +67,11 @@ namespace pe {
           *   @details Updates DynamicObject PhysicsProperties, physics, based
           *   on elapsed_time
           *   @param elapsed_time time elapsed from the last update (in seconds)
-          *   @param dynamic_dynamic_collision pass true if collision between two DynamicObjects
           *   @remark Gravity needs to be high value to make objects fall fast ->
           *   some scaling number could be used to make more realistic gravity values
           *   suitable
           */
-        virtual void updatePhysics(float elapsed_timebool) override;
+        virtual void updatePhysics(float elapsed_time) override;
 
         /**
           *   @brief Set collision action direction, implemented from the base class
