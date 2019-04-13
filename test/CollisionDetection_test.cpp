@@ -81,7 +81,7 @@ int main() {
   dyn4.setCollisionMask(0x00);
   dyn5.setCollisionMask(0x00);
 
-  std::list<pe::PhysicsObject*> objects;
+  std::deque<pe::PhysicsObject*> objects;
   // Notice: position must not affect GetCollisionResult
   objects = pe::CollisionDetection::GetCollisionResult(&dyn5, &dyn4);
   for (auto& item : objects) {
