@@ -27,9 +27,19 @@ int main() {
   cell.entities.push_back(&dyn);
 
   pe::PhysicsGrid grid;
-  assert(grid.addCell(pe::Recti(pe::Vector2i(100, 200), 1000, 1000)));
+  grid.addCells(1000, 1000, 10);
   pe::PhysicsGrid grid2 = grid;
-  assert(!grid2.addCell(pe::Recti(pe::Vector2i(100, 200), 1000, 1000))); // shouldn't allow dulicate Cells
+  int x, y;
+  y = 0;
+  for (auto it = grid2.cbegin(); it != grid2.cend(); it++) {
+    y++;
+    x = 0;
+    for (auto it2 = it->cbegin(); it2 != it->cend(); it2++) {
+      x++;
+    }
+    assert(x == 100); // 100 == grid width / grid cell size
+  }
+  assert(y == 100); // 100 = grid height / grid cell size
 
   std::cout << "All test passed" << std::endl;
   return 0;

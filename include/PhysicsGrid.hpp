@@ -12,7 +12,7 @@
 #include "DynamicObject.hpp"
 #include "StaticObject.hpp"
 #include <list>
-#include <map>
+#include <vector>
 
 
 /**
@@ -30,45 +30,6 @@ namespace pe {
   struct Cell {
     std::list<T> entities; /**< list of entities Cell contains */
     bool active_cell; /**< Whether Cell is active or not */
-  };
-
-  /**
-    *   @struct CompareRectMap
-    *   @brief Used to hold comparison functions for std::map find
-    */
-  template<typename T>
-  struct CompareRectMap {
-    using is_transparent = void; /**< make template comparison overloads possible */
-
-    /**
-      *   @brief Standard comparison between Rects
-      *   @param rect1 1st Rect to be compared
-      *   @param rect2 2nd Rect to be compared
-      *   @return rect1 < rect2
-      */
-    bool operator() (const Rect<T>& rect1, const Rect<T>& rect2) const {
-      return rect1 < rect2;
-    }
-
-    /**
-      *   @brief Position based comparison between Rect and Vector2
-      *   @param pos Vector2 position
-      *   @param rect Rect to be compared
-      *   @return true if pos is smaller than rect left upper corner (min point)
-      */
-    bool operator() (const Vector2<T>& pos, const Rect<T>& rect) const {
-      return (pos.getX() < rect.getPosition().getX()) || (pos.getY() < rect.getPosition().getY());
-    }
-
-    /**
-      *   @brief Position based comparison between Rect and Vector2
-      *   @param pos Vector2 position
-      *   @param rect Rect to be compared
-      *   @return true if pos is greater than rect right lower corner (max point)
-      */
-    bool operator() (const Rect<T>& rect, const Vector2<T>& pos) const {
-      return (rect.getPosition().getX() + rect.getWidth() < pos.getX()) || (rect.getPosition().getY() + rect.getHeight() < pos.getY());
-    }
   };
 
   /**
@@ -105,14 +66,13 @@ namespace pe {
         PhysicsGrid& operator=(const PhysicsGrid& grid);
 
         /**
-          *   @brief Add cell to Grid
+          *   @brief Add cells to Grid, this must be called prior accessing PhysicsGrid
           *   @details After Cell is added, Grid maintains removal of the entities
-          *   and frees memory allocated for them
-          *   @param position where cell is added on 2D plane
-          *   @remark if Cell already exists at given position,
-          *   does nothing and returns false
+          *   @param gridWidth width of the whole grid, symmetrically distributed around zero
+          *   @param gridHeight height of the whole game area, symmetrically distributed around zero
+          *   @param cellSize size of one grid cell
           */
-        bool addCell(Recti position);
+        void addCells(int gridWidth, int gridHeight, int gridCellSize);
 
         /**
           *   @brief Add PhysicsObject to Cell in the Grid
@@ -146,7 +106,7 @@ namespace pe {
           *   @brief Get const iterator to the beginning of cell
           *   @return cells.cbegin()
           */
-        inline std::map<Recti, Cell<PhysicsObject*>*>::const_iterator cbegin() {
+        inline std::vector<std::vector<Cell<PhysicsObject*>*>>::const_iterator cbegin() {
           return cells.cbegin();
         }
 
@@ -154,14 +114,14 @@ namespace pe {
           *   @brief Get const iterator to the end of cell
           *   @return cells.cend()
           */
-        inline std::map<Recti, Cell<PhysicsObject*>*>::const_iterator cend() {
+        inline std::vector<std::vector<Cell<PhysicsObject*>*>>::const_iterator cend() {
           return cells.cend();
         }
         /**
           *   @brief Get iterator to the beginning of cell
           *   @return cells.begin()
           */
-        inline std::map<Recti, Cell<PhysicsObject*>*>::iterator begin() {
+        inline std::vector<std::vector<Cell<PhysicsObject*>*>>::iterator begin() {
           return cells.begin();
         }
 
@@ -169,7 +129,7 @@ namespace pe {
           *   @brief Get iterator to the end of cell
           *   @return cell.cend()
           */
-        inline std::map<Recti, Cell<PhysicsObject*>*>::iterator end() {
+        inline std::vector<std::vector<Cell<PhysicsObject*>*>>::iterator end() {
           return cells.end();
         }
 
@@ -228,8 +188,18 @@ namespace pe {
         void moveLooseCellObjects();
 
 
-        std::map<Recti, Cell<PhysicsObject*>*, CompareRectMap<int>> cells;
+        /**
+          *   @brief Get Cell that matches position
+          *   @param pos position vector
+          *   @return Cell or nullptr if no Cell found
+          */
+        Cell<PhysicsObject*>* GetCorrectCell(const Vector2f pos) const;
+
+        std::vector<std::vector<Cell<PhysicsObject*>*>> cells;
         Cell<PhysicsObject*>* loose_cell = nullptr; /**< Cell for all PhysicsObjects which are not in a single Cell, cells */
+        int gridWidth = 0;
+        int gridHeight = 0;
+        int gridCellSize = 0;
     };
 
 

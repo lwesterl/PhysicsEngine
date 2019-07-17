@@ -30,18 +30,21 @@ namespace pe {
     return *this;
   }
 
-  // Clear whole Grid, notice this is private method
+  // Clear whole Grid, notice this is a private method
   void PhysicsGrid::Clear() {
     // delete all Cells and memory allocated for them
-    for (auto it = cells.begin(); it != cells.end();) {
-      // delete all PhysicsObject pointers
-      for (auto object = it->second->entities.begin(); object != it->second->entities.end();) {
-        delete *object;
-        object = it->second->entities.erase(object);
+    for (auto it = cells.begin(); it != cells.end(); it++) {
+      for(auto it2 = it->begin(); it2 != it->end(); it2++) {
+        // delete all PhysicsObject pointers
+        for (auto object = (*it2)->entities.begin(); object != (*it2)->entities.end();) {
+          delete *object;
+          object = (*it2)->entities.erase(object);
+        }
+        delete *it2; // delete Cell
       }
-      delete it->second;
-      it = cells.erase(it);
+      it->clear();
     }
+    cells.clear();
     // delete also PhysicsObjects from loose_cell
     if (loose_cell != nullptr) {
       for (auto it = loose_cell->entities.begin(); it != loose_cell->entities.end();) {
@@ -54,18 +57,26 @@ namespace pe {
 
   // Copy whole Grid, hard copy, private method
   void PhysicsGrid::Copy(const PhysicsGrid& grid) {
+    gridWidth = grid.gridWidth;
+    gridHeight = grid.gridHeight;
+    gridCellSize = grid.gridCellSize;
+
     for (auto it = grid.cells.begin(); it != grid.cells.end(); it++) {
-      Cell<PhysicsObject*>* cell = new Cell<PhysicsObject*>;
-      for (auto object = it->second->entities.begin(); object != it->second->entities.end(); object++) {
-        if ((*object)->getObjectType() == ObjectType::DynamicObject) {
-          DynamicObject* dyn = static_cast<DynamicObject*> (*object);
-          cell->entities.push_back(new DynamicObject(*dyn));
-        } else {
-          StaticObject* stat = static_cast<StaticObject*> (*object);
-          cell->entities.push_back(new StaticObject(*stat));
+      cells.push_back(std::vector<Cell<PhysicsObject*>*>());
+      for (auto it2 = it->begin(); it2 != it->end(); it2++) {
+        Cell<PhysicsObject*>* cell = new Cell<PhysicsObject*>;
+        for (auto object = (*it2)->entities.begin(); object != (*it2)->entities.end(); object++) {
+          if ((*object)->getObjectType() == ObjectType::DynamicObject) {
+            DynamicObject* dyn = static_cast<DynamicObject*> (*object);
+            cell->entities.push_back(new DynamicObject(*dyn));
+          } else {
+            StaticObject* stat = static_cast<StaticObject*> (*object);
+            cell->entities.push_back(new StaticObject(*stat));
+          }
         }
+        cells.back().push_back(cell);
       }
-      cells.emplace(it->first, cell);
+
     }
     // copy also loose_cell content
     if (grid.loose_cell != nullptr) {
@@ -96,14 +107,14 @@ namespace pe {
 
   // Try to insert object to cell, private method
   bool PhysicsGrid::insertObject(PhysicsObject* object) {
-    auto it = cells.find((Vector2i) object->getMinPosition());
-    auto it2 = cells.find((Vector2i) object->getMaxPosition());
-    if ((it != cells.end()) && (it == it2)) {
+    Cell<PhysicsObject*>* cell1 = GetCorrectCell(object->getMinPosition());
+    Cell<PhysicsObject*>* cell2 = GetCorrectCell(object->getMaxPosition());
+    if ((cell1 == cell2) && (cell1 != nullptr)) {
       // PhysicsObject is completely inside one Cell
-      it->second->entities.push_back(object);
+      cell1->entities.push_back(object);
       object->setMoved(false);
       if (object->getObjectType() == ObjectType::DynamicObject) {
-        it->second->active_cell = true;
+        cell1->active_cell = true;
       }
       return true;
     }
@@ -126,15 +137,17 @@ namespace pe {
     }
   }
 
-  // Add Cell
-  bool PhysicsGrid::addCell(Recti position) {
-    auto it = cells.find(position);
-    if (it == cells.end()) {
-      // add new Cell
-      cells.emplace(position, new Cell<PhysicsObject*>);
-      return true;
+  // Add Cells
+  void PhysicsGrid::addCells(int gridWidth, int gridHeight, int gridCellSize) {
+    this->gridWidth = gridWidth;
+    this->gridHeight = gridHeight;
+    this->gridCellSize = gridCellSize;
+    for (int y = 0; y < gridHeight / gridCellSize; y++) {
+      cells.push_back(std::vector<Cell<PhysicsObject*>*>());
+      for (int x = 0; x < gridWidth / gridCellSize; x++) {
+        cells[y].push_back(new Cell<PhysicsObject*>());
+      }
     }
-    return false;
   }
 
   // Add object to Cell in PhysicsGrid
@@ -150,15 +163,15 @@ namespace pe {
 
   // Remove object from PhysicsGrid Cell
   bool PhysicsGrid::removeObject(PhysicsObject* object) {
-    auto it = cells.find((Vector2i) object->getPosition());
-    if (it != cells.end()) {
+    Cell<PhysicsObject*>* cell = GetCorrectCell(object->getPosition());
+    if (cell) {
       // remove object
-      for (auto item = it->second->entities.begin(); item != it->second->entities.end(); item++) {
+      for (auto item = cell->entities.begin(); item != cell->entities.end(); item++) {
         if (*item == object) {
-          it->second->entities.erase(item);
+          cell->entities.erase(item);
           delete object;
           // check if Cell still active, return value ignored (doesn't matter)
-          ActivateCell(it->second);
+          ActivateCell(cell);
           return true;
         }
       }
@@ -179,25 +192,44 @@ namespace pe {
 
   // Move PhysicsObjects to correct grid cells
   void PhysicsGrid::moveObjects() {
-    for (std::map<Recti, Cell<PhysicsObject*>*>::iterator it = cells.begin(); it != cells.end(); it++) {
-      std::list<PhysicsObject*>& physobjs = it->second->entities;
-      for (std::list<PhysicsObject*>::iterator i = physobjs.begin(); i != physobjs.end();) {
-        // active_cell isn't enough here because also StaticObjects could have been moved
-        if ((*i)->getMoved()) {
-          // check whether it needs to be moved
-          if ((!it->first.contains((*i)->getMinPosition())) || (!it->first.contains((*i)->getMaxPosition()))) {
-            // remove object from the current Cell
-            addObject(*i);
-            i = physobjs.erase(i);
-          } else {
-            (*i)->setMoved(false);
-            i++;
-          }
-        } else i++;
+    for (auto it = cells.begin(); it != cells.end(); it++) {
+      for (auto it2 = it->begin(); it2 != it->end(); it2++) {
+        std::list<PhysicsObject*>& physobjs = (*it2)->entities;
+        for (std::list<PhysicsObject*>::iterator i = physobjs.begin(); i != physobjs.end();) {
+          // active_cell isn't enough here because also StaticObjects could have been moved
+          if ((*i)->getMoved()) {
+            // check whether it needs to be moved
+            Cell<PhysicsObject*>* cell1 = GetCorrectCell((*i)->getMinPosition());
+            Cell<PhysicsObject*>* cell2 = GetCorrectCell((*i)->getMaxPosition());
+            if ((cell1 != cell2) || (cell1 == nullptr)) {
+              // remove object from the current Cell
+              addObject(*i);
+              i = physobjs.erase(i);
+            } else {
+              (*i)->setMoved(false);
+              i++;
+            }
+          } else i++;
+        }
       }
     }
     // Handle loose_cell
     moveLooseCellObjects();
+
+  }
+
+  // Get correct Cell, private method
+  Cell<PhysicsObject*>* PhysicsGrid::GetCorrectCell(const Vector2f pos) const {
+    int x = static_cast<int>(pos.getX());
+    int y = static_cast<int>(pos.getY());
+    if ((gridWidth <= 0) || (gridHeight <= 0) || (gridCellSize <= 0)) return nullptr;
+    int x_index = (gridWidth / 2 + x) / gridCellSize;
+    int y_index = (gridHeight / 2 + y) / gridCellSize;
+    try {
+      return cells.at(y_index).at(x_index);
+    } catch (std::out_of_range &e) {
+      return nullptr;
+    }
   }
 
 } // end of namespace pe
