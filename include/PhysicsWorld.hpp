@@ -101,7 +101,7 @@ namespace pe {
 
       /**
         *   @brief Set how many iterations is calculated each second
-        *   @details Changes the class variable, PhysicsWorld::IterarationsInterval
+        *   @details Changes the class variable, PhysicsWorld::IterationsInterval
         *   @param iterations How many iterations should be calculated per second
         */
       static void setIterationAmount(float iterations);
@@ -111,7 +111,7 @@ namespace pe {
         *   @return amount of iterations / s
         */
       static inline float getIterationAmount() {
-        return 1.f / IterarationsInterval;
+        return 1.f / IterationsInterval;
       }
 
       /**
@@ -184,7 +184,7 @@ namespace pe {
       static unsigned THREADS;
       static int WorldWidth;
       static int WorldHeight;
-      static float IterarationsInterval;
+      static float IterationsInterval;
 
       // Private functions
       /**
@@ -204,10 +204,10 @@ namespace pe {
         *   @brief Update PhysicsObjects
         *   @details Updates objects which are in the specific Cells given with
         *   iterators. Calls updatePhysics for DynamicObjects
-        *   @param begin iterator to the first Cell & Recti which should be updated
-        *   @param end iterator which must not be updated anymore
+        *   @param begin iterator to the first vector of the 2d Cell container
+        *   @param end iterator which must not be updated anymore (1st dimension)
         */
-      void UpdateObjects(std::map<Recti, Cell<PhysicsObject*>*>::const_iterator begin, std::map<Recti, Cell<PhysicsObject*>*>::const_iterator end);
+      void UpdateObjects(std::vector<std::vector<Cell<PhysicsObject*>*>>::const_iterator begin, std::vector<std::vector<Cell<PhysicsObject*>*>>::const_iterator end);
 
       /**
         *   @brief Update loose_cell PhysicsObjects
@@ -220,11 +220,11 @@ namespace pe {
         *   @details Goes through all objects that are located in same grid cell
         *   or are lose (these can also collide). Calls CollisionDetection::canCollide
         *   Updates also collided based on return value of canCollide
-        *   @param begin iterator to grid->cells where checking should be started
-        *   @param end iterator to grid->cells which must not be checked
+        *   @param begin iterator to grid vector 1st dimension
+        *   @param end iterator to grid vector 1st dimension which must not be checked
         *   @remark O*N^2 complexity, multithread support
         */
-      void CheckCollisions(std::map<Recti, Cell<PhysicsObject*>*>::const_iterator begin, std::map<Recti, Cell<PhysicsObject*>*>::const_iterator end);
+      void CheckCollisions(std::vector<std::vector<Cell<PhysicsObject*>*>>::const_iterator begin, std::vector<std::vector<Cell<PhysicsObject*>*>>::const_iterator end);
 
       /**
         *   @brief Check collisions for the loose PhysicsObjects
