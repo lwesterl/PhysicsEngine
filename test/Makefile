@@ -21,7 +21,7 @@ all:	$(EXE)
 
 # compile all tests
 %.exe:	%.cpp $(OBJ)
-		$(CC) $(CFLAGS) $(LINKER) $^ -o $@
+		$(CC) $(CFLAGS) $^ -o $@ $(LINKER)
 
 clean:
 	$(RM) *.o *.exe *.so $(SOURCE)*.o $(UTILS)*.o

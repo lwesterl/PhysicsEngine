@@ -26,7 +26,7 @@ $(TEST_DIR)libphysengine.so:
 
 # compile the main (demo.cpp)
 demo:	$(TEST_DIR)libphysengine.so demo.cpp $(OBJ)
-	$(CC) $(CFLAGS) $(LINKER) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ $(LINKER) $(TEST_DIR)libphysengine.so
 
 clean:
 	$(RM) *.o demo $(UI_dir)*.o
