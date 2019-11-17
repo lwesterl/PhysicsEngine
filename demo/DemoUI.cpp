@@ -200,8 +200,8 @@ void DemoUI::CreateUI() {
   textureLoader.getTexture(UI::TextureName::UpArrow), textureLoader.getTexture(UI::TextureName::DownArrow), std::bind(&DemoWorld::setGravityY, std::placeholders::_1));
   multiChoices[1]->setScale(pe::PhysicsProperties::GravityY, 2000, -2000, 50);
   multiChoices[2] = new UI::Multichoice("Threads", 0.7 * DemoUI::WindowWidth, 10.f, 80.f, 120.f,
-  textureLoader.getTexture(UI::TextureName::UpArrow), textureLoader.getTexture(UI::TextureName::DownArrow), std::bind(&pe::PhysicsWorld::setThreads, std::placeholders::_1));
-  multiChoices[2]->setScale(static_cast<int32_t> (pe::PhysicsWorld::getThreads()), static_cast<int32_t> (std::thread::hardware_concurrency()), 1, 1);
+  textureLoader.getTexture(UI::TextureName::UpArrow), textureLoader.getTexture(UI::TextureName::DownArrow), std::bind(&DemoWorld::setThreads, &demoWorld, std::placeholders::_1));
+  multiChoices[2]->setScale(static_cast<int32_t> (demoWorld.getThreads()), static_cast<int32_t> (std::thread::hardware_concurrency()), 1, 1);
   multiChoices[3] = new UI::Multichoice("Update period", 0.7 * DemoUI::WindowWidth, 200.f, 80.f, 120.f,
   textureLoader.getTexture(UI::TextureName::UpArrow), textureLoader.getTexture(UI::TextureName::DownArrow), std::bind(&pe::PhysicsWorld::setIterationAmount, std::placeholders::_1));
   multiChoices[3]->setScale(static_cast<int32_t> (pe::PhysicsWorld::getIterationAmount()), 100, 1, 5);

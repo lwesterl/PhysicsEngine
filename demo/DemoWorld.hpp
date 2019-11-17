@@ -73,6 +73,22 @@ class DemoWorld
     void initWorld();
 
     /**
+      *   @brief Set amount of threads used in the PhysicsWorld instance
+      *   @param thread amount of threads
+      */
+    inline void setThreads(unsigned threads) {
+      physWorld.setThreads(threads);
+    }
+
+    /**
+      *   @brief Get amount of threads used in the PhysicsWorld
+      *   @return physWorld.threads
+      */
+    inline unsigned getThreads() {
+      return physWorld.getThreads();
+    }
+
+    /**
       *   @brief Handle incoming events
       *   @param event SFML event
       *   @return DemoObject pointer which was activated, otherwise nullptr
