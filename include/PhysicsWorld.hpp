@@ -16,6 +16,7 @@
 #include <list>
 #include <thread>
 #include <mutex>
+#include <atomic>
 
 /**
   *   @namespace pe
@@ -66,6 +67,10 @@ namespace pe {
     };
   } // end of namespace WorkType
 
+  // Define status modes used to detect thread current state
+  #define WorkStatus_WAIT 0
+  #define WorkStatus_WORK 1
+  #define WorkStatus_EXIT 2
 
   /**
     *   @class PhysicsWorld
@@ -82,22 +87,6 @@ namespace pe {
   class PhysicsWorld
   {
     public:
-      /**
-        *   @brief Set how many worker threads PhysicsEngine uses during PhysicsWorld update
-        *   @remark PhysicsEngine actually uses one more thread which is the main thread
-        *   @param amount needs to be smaller or equal to std::thread::hardware_concurrency
-        */
-      static void setThreads(unsigned amount);
-
-      /**
-        *   @brief Return how many threads are used
-        *   @details This is the actual value of threads used by PhysicsWorld::update
-        *   i.e. THREADS + 1
-        *   return TREADS + 1
-        */
-      inline static unsigned getThreads() {
-        return THREADS + 1;
-      }
 
       /**
         *   @brief Set how many iterations is calculated each second
@@ -140,6 +129,23 @@ namespace pe {
         *   @return updated reference to the PhysicsWorld
         */
       PhysicsWorld& operator=(const PhysicsWorld& world);
+
+      /**
+        *   @brief Set how many worker threads PhysicsEngine uses during PhysicsWorld update
+        *   @remark PhysicsEngine actually uses one more thread which is the main thread
+        *   @param amount needs to be smaller or equal to std::thread::hardware_concurrency
+        */
+      void setThreads(unsigned amount);
+
+      /**
+        *   @brief Return how many threads are used
+        *   @details This is the actual value of threads used by PhysicsWorld::update
+        *   i.e. threads + 1
+        *   return threads + 1
+        */
+      inline unsigned getThreads() {
+        return threads + 1;
+      }
 
       /**
         *   @brief Add PhysicsObject to PhysicsWorld
@@ -186,7 +192,7 @@ namespace pe {
       static int WorldHeight;
       static float IterationsInterval;
 
-      // Private functions
+      // Private methods
       /**
         *   @brief Init grid to contain empty Cells
         *   @details This should be called from constructor to init grid
@@ -194,11 +200,47 @@ namespace pe {
       void InitGrid();
 
       /**
-        *   @brief Start threads to do specified work
+        *   @brief Create worker threads according to threads
+        *   @remark This must be called from setThreads
+        */
+      void CreateWorkers();
+
+      /**
+        *   @brief Remove current worker threads
+        *   @remark This must be called from setThreads and from the deconstructor
+        */
+      void RemoveWorkers();
+
+      /**
+        *   @brief Do work in the main thread
         *   @param worktype WorkType describing whether PhysicsObjects should be
         *   updated or collisions checked
         */
-      void DoWork(enum WorkType::WorkType worktype);
+      void WorkMainThread(enum WorkType::WorkType worktype);
+
+      /**
+        *   @brief Do work in the worker threads
+        *   @param begin iterator to the starting grid Cell
+        *   @param end iterator to the end grid Cell
+        *   @param threadID id used for the specific thread in workerStatus
+        *   @remark Thread exits after workerStatus[threadID] == WorkStatus_EXIT
+        */
+      void DoWork(std::vector<std::vector<Cell<PhysicsObject*>*>>::const_iterator begin,
+                std::vector<std::vector<Cell<PhysicsObject*>*>>::const_iterator end,
+                unsigned threadID);
+
+      /**
+        *   @brief Utility method that should be called from DoWork
+        *   @param begin iterator to the starting grid Cell
+        *   @param end iterator to the end grid Cell
+        *   @param threadID id used for the specific thread in workerStatus
+        *   @param workType either UpdateObjects or CheckCollisions
+        *   @return -1 if the thread should exit, otherwise 0
+        */
+      int ThreadExecute(std::vector<std::vector<Cell<PhysicsObject*>*>>::const_iterator begin,
+                        std::vector<std::vector<Cell<PhysicsObject*>*>>::const_iterator end,
+                        unsigned threadID,
+                        enum WorkType::WorkType workType);
 
       /**
         *   @brief Update PhysicsObjects
@@ -235,9 +277,12 @@ namespace pe {
       void CheckLooseCollisions();
 
       // Instance variables
+      unsigned threads = std::thread::hardware_concurrency() > 1 ? std::thread::hardware_concurrency() - 1 : 0;
       PhysicsGrid* grid;
       std::list<struct Collided> collided;
       std::mutex collided_mutex;
+      std::thread *workers = nullptr;
+      volatile std::atomic_ushort *workerStatus = nullptr;
 
   };
 
